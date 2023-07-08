@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Badge index{% endblock %}
+
+{% block body %}
+    <h1>Badge index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Description</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Enabled</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for badge in badges %}
+            <tr>
+                <td>{{ badge.id }}</td>
+                <td>{{ badge.libelle }}</td>
+                <td>{{ badge.description }}</td>
+                <td>{{ badge.createdAt ? badge.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ badge.updatedAt ? badge.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ badge.enabled ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_badge_show', {'id': badge.id}) }}">show</a>
+                    <a href="{{ path('app_badge_edit', {'id': badge.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_badge_new') }}">Create new</a>
+{% endblock %}
