@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Entity\User;
+
 use App\Form\EvaluationType;
+use App\Repository\UserRepository;
 use App\Repository\EvaluationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/evaluation')]
 class EvaluationController extends AbstractController
@@ -17,15 +21,39 @@ class EvaluationController extends AbstractController
     public function index(EvaluationRepository $evaluationRepository): Response
     {
         return $this->render('evaluation/index.html.twig', [
-            'evaluations' => $evaluationRepository->findAll(),
+            'evaluations' => $evaluationRepository
+            ->createQueryBuilder('u')
+
+            ->where('u.enabled = :bool')
+            ->setParameter('bool', 1)
+            ->andWhere('u.idUser = :id')
+            ->setParameter('id', "JDKSNCJ")
+            ->getQuery()
+            ->getResult()
+        ]);
+    }
+    #[Route('/admin', name: 'app_evaluation_admin', methods: ['GET'])]
+    public function adminlist(EvaluationRepository $evaluationRepository): Response
+    {
+        return $this->render('evaluation/index.html.twig', [
+            'evaluations' => $evaluationRepository
+            ->findAll()
         ]);
     }
 
+
     #[Route('/new', name: 'app_evaluation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EvaluationRepository $evaluationRepository): Response
+    public function new(Request $request, EvaluationRepository $evaluationRepository,UserRepository $userRepository): Response
     {
         $evaluation = new Evaluation();
         $form = $this->createForm(EvaluationType::class, $evaluation);
+       // $evaluation->setIdUser($userRepository->find("JDKSNCJ"));
+       $user=new User();
+        $user=$userRepository->find("JDKSNCJ");
+        $evaluation->setIdUser($user);
+        $evaluation->setEnabled(1);
+        $evaluation->setCreatedAt(new DateTime());
+        $evaluation->setUpdatedAt(new DateTime());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -55,6 +83,7 @@ class EvaluationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $evaluation->setUpdatedAt(new DateTime());
             $evaluationRepository->save($evaluation, true);
 
             return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
@@ -68,9 +97,11 @@ class EvaluationController extends AbstractController
 
     #[Route('/{id}', name: 'app_evaluation_delete', methods: ['POST'])]
     public function delete(Request $request, Evaluation $evaluation, EvaluationRepository $evaluationRepository): Response
-    {
+    {  $entityManager = $this->getDoctrine()->getManager();
         if ($this->isCsrfTokenValid('delete'.$evaluation->getId(), $request->request->get('_token'))) {
-            $evaluationRepository->remove($evaluation, true);
+            $evaluation->setEnabled(0);
+            $entityManager->persist($evaluation);
+            $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
