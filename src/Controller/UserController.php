@@ -10,8 +10,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 #[Route('/user')]
+
+/**
+ * @Route("/user")
+ * @IsGranted("ROLE_ADMIN")
+ */
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
@@ -23,7 +32,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher): Response
+    public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher,MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -48,6 +57,19 @@ class UserController extends AbstractController
             $user->setId($id);
             //dd($user);
             $userRepository->save($user, true);
+            $email = (new Email())
+            ->from(new Address('usersevaluation@gmail.com', 'Maktabti Application'))
+            ->to($user->getEmail())
+            ->subject("Votre compte a été créer avec succés!")
+            ->text("Cher/chère " . $user->getNom() . " " . $user->getPrenom() . ",\n" .
+                "\n" .
+                " voici vos coordonnée" .
+                "\n" .
+                "Sincèrement, \n" . "\n" . "\n\n-- \nMaktabti Application \nNuméro de téléphone : +216 52 329 813 \nAdresse e-mail : maktabti10@gmail.com \nSite web : www.maktabti.com");
+
+        $mailer->send($email);
+
+
             $this->addFlash('success', 'Utilisateur ajouté avec succés!');
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -101,11 +123,24 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(Request $request, User $user, UserRepository $userRepository,MailerInterface $mailer): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
         }
+
+        $email = (new Email())
+        ->from(new Address('usersevaluation@gmail.com', 'Maktabti Application'))
+        ->to($user->getEmail())
+        ->subject("Votre compte a été créer avec succés!")
+        ->text("Cher/chère " . $user->getNom() . " " . $user->getPrenom() . ",\n" .
+            "\n" .
+            " voici vos coordonnée" .
+            "\n" .
+            "Sincèrement, \n" . "\n" . "\n\n-- \nMaktabti Application \nNuméro de téléphone : +216 52 329 813 \nAdresse e-mail : maktabti10@gmail.com \nSite web : www.maktabti.com");
+
+    $mailer->send($email);
+
         $this->addFlash('success', 'Utilisateur supprimé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
