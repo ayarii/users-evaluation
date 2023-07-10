@@ -3,9 +3,10 @@
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<title>Dashboard | {% block title %}{% endblock %}</title>
-		<link
-		rel="icon" type="image/png" sizes="32x32" href="{{asset('dist/img/logo-esprit.png')}}">
+		<title>Dashboard |
+			{% block title %}{% endblock %}
+		</title>
+		<link rel="icon" type="image/png" sizes="32x32" href="{{asset('dist/img/logo-esprit.png')}}">
 
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"/>
 
@@ -44,6 +45,7 @@ f.zaraz.q.push({m: j, a: k});
 };
 for (const l of["track", "set", "debug"]) 
 f.zaraz[l] = f.zaraz._f(l);
+
 
 
 f.zaraz.init = () => {
@@ -89,7 +91,7 @@ n.referrerPolicy = "origin";
 n.src = "../../cdn-cgi/zaraz/sd0d9.js?z=" + btoa(encodeURIComponent(JSON.stringify(f[h])));
 m.parentNode.insertBefore(n, m);
 };
-;;
+;;;
 ["complete", "interactive"].includes(g.readyState) ? zaraz.init() : f.addEventListener("DOMContentLoaded", zaraz.init);
 }
 )(w, d, "zarazData", "script");
@@ -97,21 +99,14 @@ m.parentNode.insertBefore(n, m);
 )(window, document);
 </script>
 		</head>
-	
+		</head>
+
 
 		<body class="hold-transition sidebar-mini layout-fixed">
 			<div class="wrapper">
- <div
-        class="preloader flex-column justify-content-center align-items-center"
-      >
-        <img
-          class="animation__shake"
-          src="{{asset('dist/img/logo-esprit.png')}}"
-          alt="AdminLTELogo"
-          height="60"
-          width="60"
-        />
-      </div>
+				<div class="preloader flex-column justify-content-center align-items-center">
+					<img class="animation__shake" src="{{asset('dist/img/logo-esprit.png')}}" alt="AdminLTELogo" height="60" width="60"/>
+				</div>
 
 				<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 					<ul class="navbar-nav">
@@ -321,40 +316,40 @@ m.parentNode.insertBefore(n, m);
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
 											Evaluations
-											
+
 										</p>
 									</a>
-									
+
 								</li>
 								<li class="nav-item">
 									<a href="#" class="nav-link">
 										<i class="nav-icon fas fa-inbox"></i>
 										<p>
 											Critéres
-											
+
 										</p>
 									</a>
-									
+
 								</li>
 								<li class="nav-item">
 									<a href="#" class="nav-link">
 										<i class="nav-icon fas fa-sitemap"></i>
 										<p>
 											Departements
-										
+
 										</p>
 									</a>
-									
+
 								</li>
 								<li class="nav-item">
 									<a href="#" class="nav-link">
 										<i class="nav-icon fas fa-calendar-alt"></i>
 										<p>
 											Sessions
-											
+
 										</p>
 									</a>
-									
+
 								</li>
 								<li class="nav-header">Profil</li>
 								<li class="nav-item">
@@ -362,7 +357,7 @@ m.parentNode.insertBefore(n, m);
 										<i class="nav-icon fas fa-user"></i>
 										<p>
 											Mon Profil
-										
+
 										</p>
 									</a>
 								</li>
@@ -372,7 +367,7 @@ m.parentNode.insertBefore(n, m);
 										<p>Déconnecter</p>
 									</a>
 								</li>
-								
+
 							</ul>
 						</nav>
 					</div>
@@ -382,64 +377,98 @@ m.parentNode.insertBefore(n, m);
 						<div class="container-fluid">
 							<div class="row mb-2">
 								<div class="col-sm-6">
-									<h1 class="m-0">{% block titlepage %}{% endblock %}</h1>
-								</div>
-								<div class="col-sm-6">
-									<ol class="breadcrumb float-sm-right">
-										<li class="breadcrumb-item">
-											<a href="#">Acceuil</a>
-										</li>
-										<li class="breadcrumb-item active">{% block page %}{% endblock %}</li>
-									</ol>
+									<h1 class="m-0"> {% block titlepage %}{% endblock %}
+										</h1>
+									</div>
+									<div class="col-sm-6">
+										<ol class="breadcrumb float-sm-right">
+											<li class="breadcrumb-item">
+												<a href="#">Acceuil</a>
+											</li>
+											<li class="breadcrumb-item active"> {% block page %}{% endblock %}
+												</li>
+											</ol>
+										</div>
+									</div>
 								</div>
 							</div>
+							<section class="content">
+								<div class="container-fluid"> {% block content %}{% endblock %}
+									</div>
+								</section>
+							</div>
+							<footer class="main-footer">
+								<strong>Copyright &copy; 2023
+									<a href="https://adminlte.io/">AdminLTE.io</a>.</strong>
+								| made with
+								<i class="fas fa-heart text-danger"></i>
+								<div class="float-right d-none d-sm-inline-block"></div>
+							</footer>
+
+							<aside class="control-sidebar control-sidebar-dark"></aside>
 						</div>
-					</div>
-					<section class="content">
-						<div class="container-fluid"> {% block content %}{% endblock %}
-							</div>
-						</section>
-					</div>
-					<footer class="main-footer">
-						<strong>Copyright &copy; 2023
-							<a href="https://adminlte.io/">AdminLTE.io</a>.</strong>
-						| made with
-						<i class="fas fa-heart text-danger"></i>
-						<div class="float-right d-none d-sm-inline-block"></div>
-					</footer>
 
-					<aside class="control-sidebar control-sidebar-dark"></aside>
-				</div>
+						<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
 
-				<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+						<script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
 
-				<script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+						<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-				<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+						<script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
 
-				<script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
+						<script src="{{asset('plugins/sparklines/sparkline.js')}}"></script>
 
-				<script src="{{asset('plugins/sparklines/sparkline.js')}}"></script>
+						<script src="{{asset('plugins/jqvmap/jquery.vmap.min.js')}}"></script>
+						<script src="{{asset('plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
 
-				<script src="{{asset('plugins/jqvmap/jquery.vmap.min.js')}}"></script>
-				<script src="{{asset('plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
+						<script src="{{asset('plugins/jquery-knob/jquery.knob.min.js')}}"></script>
 
-				<script src="{{asset('plugins/jquery-knob/jquery.knob.min.js')}}"></script>
+						<script src="{{asset('plugins/moment/moment.min.js')}}"></script>
+						<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 
-				<script src="{{asset('plugins/moment/moment.min.js')}}"></script>
-				<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
+						<script src="{{asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 
-				<script src="{{asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+						<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
 
-				<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
+						<script src="{{asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 
-				<script src="{{asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+						<script src="{{asset('dist/js/adminlte2167.js?v=3.2.0')}}"></script>
 
-				<script src="{{asset('dist/js/adminlte2167.js?v=3.2.0')}}"></script>
+						<script src="{{asset('dist/js/demo.js')}}"></script>
 
-				<script src="{{asset('dist/js/demo.js')}}"></script>
-
-				<script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
-			</body>
-		</head>
-	</html>
+						<script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
+						<script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+						<script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+						<script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+						<script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+						<script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+						<script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+						<script>
+							$(function () {
+$("#example1").DataTable({
+"responsive": true,
+"lengthChange": false,
+"autoWidth": false,
+"buttons": [
+"copy",
+"csv",
+"excel",
+"pdf",
+"print",
+"colvis"
+]
+}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+$('#example2').DataTable({
+"paging": true,
+"lengthChange": false,
+"searching": false,
+"ordering": true,
+"info": true,
+"autoWidth": false,
+"responsive": true
+});
+});
+						</script>
+					</body>
+				</head>
+			</html>
