@@ -86,10 +86,14 @@ m.parentNode.insertBefore(n, m);
 )(window, document);
 </script>
 		</head>
-		</head>
-	</head>
+		
 
 	<body class="hold-transition login-page">
+	
+				<div class="preloader flex-column justify-content-center align-items-center">
+					<img class="animation__shake" src="{{asset('dist/img/logo-esprit.png')}}" alt="AdminLTELogo" height="100" width="150"/>
+				</div>
+				
 		<div class="login-box">
 			<div class="login-logo">
 				<img src="{{asset('dist/img/logo-esprit.png')}}" alt="LogoESPRIT" height="100" width="150"/>
@@ -97,6 +101,26 @@ m.parentNode.insertBefore(n, m);
 			<div class="card">
 				<div class="card-body login-card-body">
 					<p class="login-box-msg">Sign in to start your session</p>
+					<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
 					<form method="post">
 						{% if error %}
 							<div class="alert alert-danger"> <i class="fas fa-times-circle"style="padding-right: 10px"></i>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -109,6 +133,7 @@ m.parentNode.insertBefore(n, m);
 								<a href="{{ path('app_logout') }}">Logout</a>
 							</div>
 						{% endif %}
+
 
 
 						<div class="input-group mb-3">
@@ -151,7 +176,7 @@ m.parentNode.insertBefore(n, m);
 					<br>
 
 					<p class="mb-1">
-						<a href="forgot-password.html">I forgot my password</a>
+						<a href="{{path('forgotten_password')}}">I forgot my password</a>
 					</p>
 
 				</div>

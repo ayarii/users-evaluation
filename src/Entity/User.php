@@ -120,6 +120,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updatedAt;
 
+            /**
+     * @var string|null
+     *
+     * @ORM\Column(name="resetToken", type="text", length=0, nullable=false)
+     */
+    private $resetToken;
 
     public function getId(): ?string
     {
@@ -278,5 +284,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function preUpdate(): void
     {
         $this->updatedAt = new DateTime();
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
     }
 }
