@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Affectationnotes{% endblock %}
+
+{% block content %}
+    <h1>Edit Affectationnotes</h1>
+
+    {{ include('affectationnotes/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_affectationnotes_index') }}">back to list</a>
+
+    {{ include('affectationnotes/_delete_form.html.twig') }}
+{% endblock %}

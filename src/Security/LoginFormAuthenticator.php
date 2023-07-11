@@ -69,9 +69,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $user = $token->getUser();
         $userIdentifier=$user->getUserIdentifier();
         $users = $this->userRepository->findOneBy(['email' => $userIdentifier]);
-      
-       
-
+     
        
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);

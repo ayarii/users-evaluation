@@ -284,7 +284,7 @@ m.parentNode.insertBefore(n, m);
 
 						<nav class="mt-2">
 							<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-{% if app.user.roles=="Administrareur" %}
+{% if app.user.roles[0]=="ROLE_ADMIN" %}
 
 								<li class="nav-item">
 									<a href="{{path('index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'index'  %}active{% endif %}">
@@ -312,7 +312,28 @@ m.parentNode.insertBefore(n, m);
 									</a>
 
 								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_evaluation_admin') }}" class="nav-link">
+										<i class="nav-icon fas fa-chart-pie"></i>
+										<p>
+											Evaluations
+
+										</p>
+									</a>
+
+								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_affectationnotes_admin') }}" class="nav-link">
+										<i class="nav-icon fas fa-chart-pie"></i>
+										<p>
+											Affectation des notes
+
+										</p>
+									</a>
+
+								</li>
 								{% endif %}
+								{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
 								<li class="nav-item">
 									<a href="{{ path('app_evaluation_index') }}" class="nav-link">
 										<i class="nav-icon fas fa-chart-pie"></i>
@@ -323,8 +344,19 @@ m.parentNode.insertBefore(n, m);
 									</a>
 
 								</li>
-								
-								{% if app.user.roles=="Administrareur" %}
+								<li class="nav-item">
+									<a href="{{ path('app_affectationnotes_index') }}" class="nav-link">
+										<i class="nav-icon fas fa-chart-pie"></i>
+										<p>
+											Affectation des notes
+
+										</p>
+									</a>
+
+								</li>
+
+								{% endif %}
+								{% if app.user.roles[0]=="ROLE_ADMIN" %}
 								<li class="nav-item">
 									<a href="#" class="nav-link">
 										<i class="nav-icon fas fa-sitemap"></i>

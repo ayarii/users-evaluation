@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Affectation des Notes
+{% endblock %}
+{% block titlepage %}Affectation des Notes
+{% endblock %}
+
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Affectation des Notes</h3>
+                    
+					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
+                    {% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_affectationnotes_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
+                    {% endif %}
+				</div>
+				<div class="card-body">
+					<table id="example2" class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								
+								<th>Utilisateur</th>
+								<th>Critère</th>
+                                <th>Pondération du critère</th>
+								<th>Note</th>
+								<th>actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for aff in affectationnotes %}
+								<tr>
+									
+									<td>{{ aff.user.nom }} {{ aff.user.prenom }}</td>
+									<td>{{ aff.critere.libelle }}</td>
+									<td>{{ aff.critere.ponderation }}</td>
+									<td>{{aff.note }}</td>
+									<td>
+										<a href="{{ path('app_affectationnotes_show', {'id': aff.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+										{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}<a href="{{ path('app_affectationnotes_edit', {'id': aff.id}) }}"><i class="fas fa-edit text-warning"></i></a> {% endif %}
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="10">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<th>Utilisateur</th>
+								<th>Critère</th>
+                                <th>Pondération du critère</th>
+								<th>Note</th>
+								<th>actions</th>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
