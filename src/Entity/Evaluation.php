@@ -92,7 +92,7 @@ class Evaluation
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setLibelle(?string $libelle): static
     {
         $this->libelle = $libelle;
 
@@ -104,7 +104,7 @@ class Evaluation
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 

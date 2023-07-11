@@ -85,7 +85,7 @@ class Critere
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setLibelle(?string $libelle): static
     {
         $this->libelle = $libelle;
 
@@ -97,7 +97,7 @@ class Critere
         return $this->ponderation;
     }
 
-    public function setPonderation(int $ponderation): static
+    public function setPonderation(?int $ponderation): static
     {
         $this->ponderation = $ponderation;
 
@@ -109,7 +109,7 @@ class Critere
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 

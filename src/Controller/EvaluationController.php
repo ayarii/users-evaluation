@@ -27,7 +27,7 @@ class EvaluationController extends AbstractController
             ->where('u.enabled = :bool')
             ->setParameter('bool', 1)
             ->andWhere('u.idUser = :id')
-            ->setParameter('id', "JDKSNCJ")
+            ->setParameter('id', $this->getUser())
             ->getQuery()
             ->getResult()
         ]);
@@ -49,7 +49,7 @@ class EvaluationController extends AbstractController
         $form = $this->createForm(EvaluationType::class, $evaluation);
        // $evaluation->setIdUser($userRepository->find("JDKSNCJ"));
        $user=new User();
-        $user=$userRepository->find("JDKSNCJ");
+        $user=$userRepository->find($this->getUser());
         $evaluation->setIdUser($user);
         $evaluation->setEnabled(1);
         $evaluation->setCreatedAt(new DateTime());
