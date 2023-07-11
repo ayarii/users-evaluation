@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Critere
@@ -22,21 +23,22 @@ class Critere
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
+    #[Assert\NotBlank(message: 'Libelle obligatoire!')]
     /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
     private $libelle;
-
+    #[Assert\NotBlank(message: 'pondération obligatoire!')]
     /**
      * @var int
      *
      * @ORM\Column(name="ponderation", type="integer", nullable=false)
      */
-    private $ponderation;
 
+    private $ponderation;
+    #[Assert\NotBlank(message: 'Description obligatoire!')]
     /**
      * @var string
      *
@@ -64,7 +66,7 @@ class Critere
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
-
+    #[Assert\NotBlank(message: 'Evaluation obligatoire!')]
     /**
      * @var Evaluation
      *
@@ -164,5 +166,8 @@ class Critere
         return $this;
     }
 
-
+    public function __toString()
+    {
+        return $this->getLibelle() . ": " . $this->getDescription() ;
+    }
 }

@@ -6,6 +6,8 @@ use App\Entity\Critere;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 class CritereType extends AbstractType
 {
@@ -15,9 +17,7 @@ class CritereType extends AbstractType
             ->add('libelle')
             ->add('ponderation')
             ->add('description')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('enabled')
+
             ->add('idEvaluation')
         ;
     }

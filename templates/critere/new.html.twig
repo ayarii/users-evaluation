@@ -1,11 +1,20 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}New Critere{% endblock %}
 
-{% block body %}
+{% block content %}
+<div class="row">
+		<div class="col-12">
+			<div class="card">
+            <div class="card-body">
+<a href="{{ path('app_critere_index', {'id': critere.idEvaluation.id}) }}">back to list</a>
     <h1>Create new Critere</h1>
 
     {{ include('critere/_form.html.twig') }}
-
-    <a href="{{ path('app_critere_index') }}">back to list</a>
+</div>
+    </div>
+    </div>
+    </div>
 {% endblock %}
+
