@@ -284,7 +284,7 @@ m.parentNode.insertBefore(n, m);
 
 						<nav class="mt-2">
 							<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
+{% if app.user.roles=="Administrareur" %}
 
 								<li class="nav-item">
 									<a href="{{path('index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'index'  %}active{% endif %}">
@@ -292,7 +292,7 @@ m.parentNode.insertBefore(n, m);
 										<p>Tableau de Bord</p>
 									</a>
 								</li>
-							{% if app.user.roles=="Administrareur" %}
+							
 								<li class="nav-item ">
 									<a href="{{path('app_user_index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'app_user_index'  %}active{% endif %}">
 										<i class="nav-icon fas fa-users"></i>
@@ -314,7 +314,7 @@ m.parentNode.insertBefore(n, m);
 								</li>
 								{% endif %}
 								<li class="nav-item">
-									<a href="#" class="nav-link">
+									<a href="{{ path('app_evaluation_index') }}" class="nav-link">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
 											Evaluations
@@ -323,16 +323,7 @@ m.parentNode.insertBefore(n, m);
 									</a>
 
 								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="nav-icon fas fa-inbox"></i>
-										<p>
-											Critéres
-
-										</p>
-									</a>
-
-								</li>
+								
 								{% if app.user.roles=="Administrareur" %}
 								<li class="nav-item">
 									<a href="#" class="nav-link">
