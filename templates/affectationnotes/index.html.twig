@@ -32,8 +32,11 @@
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Affectation des Notes</h3>
+                    
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
+                    {% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
 					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_affectationnotes_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
+                    {% endif %}
 				</div>
 				<div class="card-body">
 					<table id="example2" class="table table-bordered table-hover table-striped">
@@ -57,7 +60,7 @@
 									<td>{{aff.note }}</td>
 									<td>
 										<a href="{{ path('app_affectationnotes_show', {'id': aff.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-										<a href="{{ path('app_affectationnotes_edit', {'id': aff.id}) }}"><i class="fas fa-edit text-warning"></i></a>
+										{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}<a href="{{ path('app_affectationnotes_edit', {'id': aff.id}) }}"><i class="fas fa-edit text-warning"></i></a> {% endif %}
 									</td>
 								</tr>
 							{% else %}
