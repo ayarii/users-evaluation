@@ -69,25 +69,23 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $user = $token->getUser();
         $userIdentifier=$user->getUserIdentifier();
         $users = $this->userRepository->findOneBy(['email' => $userIdentifier]);
-      
-       if($user instanceof UserInterface){
-      // dd($users);
-        if($users->getRoles()[0]=="ROLE_ADMIN"){
-             return new RedirectResponse($this->urlGenerator->generate('index'));
-            }
-        else if ($users->getRoles()[0]=="ROLE_GESTIONNAIRE"){ 
-            return new RedirectResponse($this->urlGenerator->generate('app_evaluation_index'));
-        } 
-         else if ($users->getRoles()[0]=="ROLE_Utilisateur"){ 
-            return new RedirectResponse($this->urlGenerator->generate(''));
-        }
-
-       }
+     
+       
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        
-        return new RedirectResponse($this->urlGenerator->generate('index'));
+        if($user instanceof UserInterface){
+             dd($users);
+              if($users->getRoles()[0]=="ROLE_ADMINISTRATEUR"){
+                   return new RedirectResponse($this->urlGenerator->generate('index'));
+                  }
+              else if ($users->getRoles()[0]=="ROLE_GESTIONNAIRE"){ 
+                  return new RedirectResponse($this->urlGenerator->generate('app_evaluation_index'));
+              } 
+               else if ($users->getRoles()[0]=="ROLE_UTILISATEUR"){ 
+                  return new RedirectResponse($this->urlGenerator->generate('list_users'));
+              }
+            }
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);

@@ -17,12 +17,13 @@ use Symfony\Component\Mime\Email;
 
 #[Route('/user')]
 
-/**
- * @Route("/user")
- * @IsGranted("ROLE_ADMIN")
- */
+
 class UserController extends AbstractController
 {
+    /**
+ * 
+ * @IsGranted("ROLE_ADMIN")
+ */
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
@@ -31,6 +32,10 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+ * 
+ * @IsGranted("ROLE_ADMIN")
+ */
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher,MailerInterface $mailer): Response
     {
@@ -79,11 +84,21 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
     }
-
+/**
+ * 
+ * @IsGranted("ROLE_ADMIN")
+ */
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET'])]
+    public function profile(User $user): Response
+    {
+        return $this->render('user/profile.html.twig', [
             'user' => $user,
         ]);
     }
@@ -121,7 +136,10 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
     }
-
+/**
+ * 
+ * @IsGranted("ROLE_ADMIN")
+ */
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository,MailerInterface $mailer): Response
     {
@@ -132,7 +150,7 @@ class UserController extends AbstractController
         $email = (new Email())
         ->from(new Address('usersevaluation@gmail.com', 'Maktabti Application'))
         ->to($user->getEmail())
-        ->subject("Votre compte a été créer avec succés!")
+        ->subject("Votre compte a été supprimer par!")
         ->text("Cher/chère " . $user->getNom() . " " . $user->getPrenom() . ",\n" .
             "\n" .
             " voici vos coordonnée" .
