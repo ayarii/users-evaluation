@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Critere index
+{% block title %}Evaluation index
 {% endblock %}
-{% block titlepage %}Critere index
+{% block titlepage %}Evaluation index
 {% endblock %}
-{% block page %}Critere index
+{% block page %}Evaluation index
 {% endblock %}
 
 {% block content %}
@@ -32,9 +32,9 @@
 			<br>
 			<div class="card">
 				<div class="card-header">
-					<h3 class="card-title">Critere List</h3>
+					<h3 class="card-title">Evaluation List</h3>
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
-					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_critere_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_evaluation_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
 				</div>
 				<div class="card-body">
 					<table id="example2" class="table table-bordered table-hover table-striped">
@@ -43,24 +43,23 @@
 								
 								<th>Libelle</th>
 								<th>Description</th>
-								<th>Pondération</th>
-								<th>Created At</th>
-                                <th>Updated At</th>
+								<th>CreatedAt</th>
+								<th>UpdatedAt</th>
 								<th>actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							{% for critere in criteres %}
+							{% for ev in evaluations %}
 								<tr>
 									
-									<td>{{ critere.libelle }}</td>
-									<td>{{ critere.description }}</td>
-									<td>{{ critere.ponderation }}</td>
-									<td>{{ critere.createdAt ? critere.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-									<td>{{ critere.updatedAt ? critere.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+									<td>{{ ev.libelle }}</td>
+									<td>{{ ev.description }}</td>
+									
+									<td>{{ ev.createdAt ? ev.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+									<td>{{ ev.updatedAt ? ev.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 									<td>
-										<a href="{{ path('app_critere_show', {'id': critere.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-										<a href="{{ path('app_critere_edit', {'id': critere.id}) }}"><i class="fas fa-edit text-warning"></i></a>
+										<a href="{{ path('app_evaluation_show', {'id': ev.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+										<a href="{{ path('app_evaluation_edit', {'id': ev.id}) }}"><i class="fas fa-edit text-warning"></i></a>
 									</td>
 								</tr>
 							{% else %}
@@ -70,11 +69,10 @@
 							{% endfor %}
 						</tbody>
 						<tfoot>
-						<th>Libelle</th>
+							<th>Libelle</th>
 								<th>Description</th>
-								<th>Pondération</th>
-								<th>Created At</th>
-                                <th>Updated At</th>
+								<th>CreatedAt</th>
+								<th>UpdatedAt</th>
 								<th>actions</th>
 						</tfoot>
 					</table>
@@ -83,7 +81,6 @@
 		</div>
 	</div>
 </div>
-
 
 
 

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Critere;
 use App\Form\CritereType;
 use App\Repository\CritereRepository;
+
 use DateTime;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/critere')]
 class CritereController extends AbstractController
 {
+
     #[Route('/evaluation/{id}', name: 'app_critere_index', methods: ['GET'])]
     public function index($id,CritereRepository $critereRepository): Response
     {
@@ -27,6 +30,7 @@ class CritereController extends AbstractController
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult()
+
         ]);
     }
 
@@ -38,12 +42,14 @@ class CritereController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+<
             $critere->setCreatedAt(new DateTime());
             $critere->setUpdatedAt(new DateTime());
             $critere->setEnabled(1);
             $critereRepository->save($critere, true);
             $this->addFlash('success', 'Critere ajouté avec succés!');
             return $this->redirectToRoute('app_critere_index', ['id'=>$critere->getIdEvaluation()->getId()], Response::HTTP_SEE_OTHER);
+
         }
 
         return $this->renderForm('critere/new.html.twig', [
@@ -73,6 +79,7 @@ class CritereController extends AbstractController
             return $this->redirectToRoute('app_critere_index', ['id'=>$critere->getIdEvaluation()->getId()], Response::HTTP_SEE_OTHER);
         }
        // dd($critere->getIdEvaluation()->getId());
+
         return $this->renderForm('critere/edit.html.twig', [
             'critere' => $critere,
             'form' => $form,
@@ -89,4 +96,5 @@ class CritereController extends AbstractController
         }
         return $this->redirectToRoute('app_critere_index', ['id'=>$critere->getIdEvaluation()->getId()], Response::HTTP_SEE_OTHER);
         }
+
 }

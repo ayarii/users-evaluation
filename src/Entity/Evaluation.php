@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Evaluation
  *
@@ -21,6 +21,7 @@ class Evaluation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    
     private $id;
 
     /**
@@ -28,6 +29,7 @@ class Evaluation
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank(null,"Vous devez saisir un libelle")]
     private $libelle;
 
     /**
@@ -35,6 +37,7 @@ class Evaluation
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank(null,"Vous devez saisir une description")]
     private $description;
 
     /**
@@ -76,6 +79,7 @@ class Evaluation
      *   @ORM\JoinColumn(name="id_departement", referencedColumnName="id")
      * })
      */
+    #[Assert\NotBlank(null,"Vous devez choisir un département")]
     private $idDepartement;
 
     public function getId(): ?int
@@ -88,7 +92,7 @@ class Evaluation
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setLibelle(?string $libelle): static
     {
         $this->libelle = $libelle;
 
@@ -100,7 +104,7 @@ class Evaluation
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
