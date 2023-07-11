@@ -58,7 +58,7 @@ class EvaluationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $evaluationRepository->save($evaluation, true);
-
+            $this->addFlash('success', 'Evaluation ajoutée avec succés!');
             return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -85,7 +85,7 @@ class EvaluationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $evaluation->setUpdatedAt(new DateTime());
             $evaluationRepository->save($evaluation, true);
-
+            $this->addFlash('success', 'Evaluation modifiée avec succés!');
             return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
         }
 

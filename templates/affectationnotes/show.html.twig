@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Affectation des Notes{% endblock %}
+
+{% block content %}
+    <h1>Affectation des Notes</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Utilisateur</th>
+                <td>{{ affectationnote.user.nom }} {{ affectationnote.user.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Critère</th>
+                <td>{{ affectationnote.critere.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ affectationnote.note }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_affectationnotes_index') }}">back to list</a>
+
+    <a href="{{ path('app_affectationnotes_edit', {'id': affectationnote.id}) }}">edit</a>
+
+    {{ include('affectationnotes/_delete_form.html.twig') }}
+{% endblock %}

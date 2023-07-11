@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\BadgeRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,63 +10,50 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="badge")
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\BadgeRepository")
  */
 class Badge
 {
-      /**
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * 
      */
     private $id;
 
-     /**
-     * Undocumented variable
-     *
+    /**
      * @var string
+     *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
     private $libelle;
 
-     /**
-     * Undocumented variable
-     *
+    /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
 
-     /**
-     * Undocumented variable
+    /**
+     * @var \DateTime
      *
-     * @var \DateTimeInterface
-     * 
-     * @ORM\Column(name = "created_at", type = "datetime")
-     * 
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
-      /**
-     * Undocumented variable
+    /**
+     * @var \DateTime
      *
-     * @var \DateTimeInterface
-     * 
-     * @ORM\Column(name = "updated_at", type = "datetime")
-     * 
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     private $updatedAt;
 
-     /**
-     * Undocumented variable
-     *
+    /**
      * @var bool
-     * 
-     * @ORM\Column(name = "enabled", type = "boolean")
-     * 
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
 
@@ -99,24 +86,24 @@ class Badge
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -134,5 +121,6 @@ class Badge
 
         return $this;
     }
-}
 
+
+}
