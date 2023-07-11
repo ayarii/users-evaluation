@@ -5,8 +5,14 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\AccessType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeInterface;
+use Doctrine\DBAL\Types\DateTimeType;
+use DateTime;
 
 /**
  * User
@@ -14,17 +20,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
+ * 
  */
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['id'], message: 'There is already an account with this email')]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="id", type="string", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      * 
      */
+    #[Assert\Regex(
+        pattern: '/^\d{3}[A-Z]{3}\d{4}$/',
+        message: 'Le format de l\'ID doit être de 3 chiffres, 3 lettres majuscules, 4 chiffres.'
+    )]
     private $id;
 
     /**
@@ -33,7 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string
      * @ORM\Column(name="nom", type="string", length=255, nullable=false)
      */
-    private ?string $nom;
+    #[Assert\Length(min:4, max:15)]
+    #[Assert\NotBlank(message: 'Nom obligatoire!')]
+    private $nom;
 
 
     /**
@@ -42,6 +58,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string
      * @ORM\Column(name="prenom", type="string", length=255, nullable=false)
      */
+    #[Assert\Length(min:4, max:15)]
+    #[Assert\NotBlank(message: 'Prénom obligatoire!')]
     private $prenom;
 
     /**
@@ -50,11 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
+    #[Assert\Length(min:4, max:30)]
+    #[Assert\NotBlank(message: 'Email obligatoire!')]
+    #[Assert\Email(message: 'Email Invalide!')]
     private $email;
 
     /**
      * @ORM\Column(name="roles",type = "array")
      */
+    #[Assert\NotBlank(message: 'Role obligatoire!')]
     private $roles = [];
 
     /**
@@ -62,6 +84,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * 
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
+    #[Assert\Length(min:4, max:15)]
+    #[Assert\NotBlank(message: 'Mot de passe obligatoire!')]
     private $password;
 
 
@@ -81,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @var \DateTimeInterface
      * 
-     * @ORM\Column(name = "created_at", type = "datetime")
+     * @ORM\Column(name = "created_at", type = "datetime", options={"default": "CURRENT_TIMESTAMP"})
      * 
      */
     private $createdAt;
@@ -91,15 +115,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @var \DateTimeInterface
      * 
-     * @ORM\Column(name = "updated_at", type = "datetime")
+     * @ORM\Column(name = "updated_at", type = "datetime", options={"default": "CURRENT_TIMESTAMP"})
      * 
      */
     private $updatedAt;
 
+            /**
+     * @var string|null
+     *
+     * @ORM\Column(name="resetToken", type="text", length=0, nullable=false)
+     */
+    private $resetToken;
 
     public function getId(): ?string
     {
         return $this->id;
+    }
+    public function setId(string $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -230,5 +266,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(): void
+    {
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new DateTime();
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
     }
 }

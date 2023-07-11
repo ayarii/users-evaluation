@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index
+{% endblock %}
+{% block titlepage %}User index
+{% endblock %}
+{% block page %}User index
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Users List</h3>
+					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_user_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
+				</div>
+				<div class="card-body">
+					<table id="example2" class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Nom</th>
+								<th>Prenom</th>
+								<th>Email</th>
+								<th>Roles</th>
+								<th>Image</th>
+								<th>CreatedAt</th>
+								<th>UpdatedAt</th>
+								<th>actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in users %}
+								<tr>
+									<td>{{ user.id }}</td>
+									<td>{{ user.nom }}</td>
+									<td>{{ user.prenom }}</td>
+									<td>{{ user.email }}</td>
+									<td>{{ user.roles ? user.roles|join(', ') : '' }}</td>
+									<td>{{ user.image }}</td>
+									<td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+									<td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+									<td>
+										<a href="{{ path('app_user_show', {'id': user.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+										<a href="{{ path('app_user_edit', {'id': user.id}) }}"><i class="fas fa-edit text-warning"></i></a>
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="10">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+						<th>Id</th>
+								<th>Nom</th>
+								<th>Prenom</th>
+								<th>Email</th>
+								<th>Roles</th>
+								<th>Image</th>
+								<th>CreatedAt</th>
+								<th>UpdatedAt</th>
+								<th>actions</th>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}

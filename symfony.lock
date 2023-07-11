@@ -119,6 +119,12 @@
             "./src/Kernel.php"
         ]
     },
+    "symfony/google-mailer": {
+        "version": "5.4",
+        "recipe": {
+            "version": "4.4"
+        }
+    },
     "symfony/mailer": {
         "version": "5.4",
         "recipe": {
@@ -278,6 +284,9 @@
         "files": [
             "./config/packages/messenger.yaml"
         ]
+    },
+    "symfonycasts/reset-password-bundle": {
+        "version": "v1.17.0"
     },
     "twig/extra-bundle": {
         "version": "v3.6.1"
