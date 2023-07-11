@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="session")
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\SessionRepository")
  */
 class Session
 {
