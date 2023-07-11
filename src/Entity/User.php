@@ -45,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Undocumented variable
      *
      * @var string
-     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
+     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
      */
     #[Assert\Length(min:4, max:15)]
     #[Assert\NotBlank(message: 'Nom obligatoire!')]

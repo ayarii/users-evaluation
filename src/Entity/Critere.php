@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Critere
@@ -22,21 +23,22 @@ class Critere
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
+    #[Assert\NotBlank(message: 'Libelle obligatoire!')]
     /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
     private $libelle;
-
+    #[Assert\NotBlank(message: 'pondération obligatoire!')]
     /**
      * @var int
      *
      * @ORM\Column(name="ponderation", type="integer", nullable=false)
      */
-    private $ponderation;
 
+    private $ponderation;
+    #[Assert\NotBlank(message: 'Description obligatoire!')]
     /**
      * @var string
      *
@@ -64,7 +66,6 @@ class Critere
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
-
     /**
      * @var Evaluation
      *
@@ -85,7 +86,7 @@ class Critere
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setLibelle(?string $libelle): static
     {
         $this->libelle = $libelle;
 
@@ -97,7 +98,7 @@ class Critere
         return $this->ponderation;
     }
 
-    public function setPonderation(int $ponderation): static
+    public function setPonderation(?int $ponderation): static
     {
         $this->ponderation = $ponderation;
 
@@ -109,7 +110,7 @@ class Critere
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -164,5 +165,8 @@ class Critere
         return $this;
     }
 
-
+    public function __toString()
+    {
+        return $this->getLibelle() . ": " . $this->getDescription() ;
+    }
 }
