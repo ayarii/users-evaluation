@@ -1,0 +1,12 @@
+{{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+    {{ form_label(form.libelle,"Libelle") }}
+    {{ form_widget(form.libelle) }}
+    {{ form_errors(form.libelle) }}
+    {{ form_label(form.description,"Description") }}
+    {{ form_widget(form.description) }}
+    {{ form_errors(form.description) }}
+    {{ form_label(form.idDepartement,"Département") }}
+    {{ form_widget(form.idDepartement) }}
+    {{ form_errors(form.idDepartement) }}
+    <button class="btn">{{ button_label|default('Ajouter') }}</button>
+{{ form_end(form) }}
