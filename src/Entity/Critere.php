@@ -66,7 +66,6 @@ class Critere
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
-    #[Assert\NotBlank(message: 'Evaluation obligatoire!')]
     /**
      * @var Evaluation
      *

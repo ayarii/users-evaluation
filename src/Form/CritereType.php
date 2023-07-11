@@ -18,7 +18,7 @@ class CritereType extends AbstractType
             ->add('ponderation')
             ->add('description')
 
-            ->add('idEvaluation')
+           
         ;
     }
 

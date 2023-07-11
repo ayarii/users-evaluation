@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Critere;
 use App\Form\CritereType;
+
 use App\Repository\CritereRepository;
 
-use DateTime;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\EvaluationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/critere')]
 class CritereController extends AbstractController
@@ -29,23 +30,25 @@ class CritereController extends AbstractController
             ->andWhere('u.idEvaluation = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getResult()
+            ->getResult(),
+            'id'=>$id
 
         ]);
     }
 
-    #[Route('/new', name: 'app_critere_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, CritereRepository $critereRepository): Response
+    #[Route('/{id}/new', name: 'app_critere_new', methods: ['GET', 'POST'])]
+    public function new($id,Request $request, CritereRepository $critereRepository,EvaluationRepository $evaluationRepository): Response
     {
         $critere = new Critere();
         $form = $this->createForm(CritereType::class, $critere);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-<
+
             $critere->setCreatedAt(new DateTime());
             $critere->setUpdatedAt(new DateTime());
             $critere->setEnabled(1);
+            $critere->setIdEvaluation($evaluationRepository->find($id));
             $critereRepository->save($critere, true);
             $this->addFlash('success', 'Critere ajouté avec succés!');
             return $this->redirectToRoute('app_critere_index', ['id'=>$critere->getIdEvaluation()->getId()], Response::HTTP_SEE_OTHER);

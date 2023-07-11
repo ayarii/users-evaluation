@@ -34,7 +34,7 @@
 				<div class="card-header">
 					<h3 class="card-title">Critere List</h3>
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
-					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_critere_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_critere_new', {'id': id}) }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
 				</div>
 				<div class="card-body">
 					<table id="example2" class="table table-bordered table-hover table-striped">
@@ -78,6 +78,8 @@
 								<th>actions</th>
 						</tfoot>
 					</table>
+            <a href="{{ path('app_evaluation_show', {'id': id}) }}">Retour aux détails de l'évaluation</a>
+
 				</div>
 			</div>
 		</div>
