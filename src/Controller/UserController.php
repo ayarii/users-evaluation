@@ -58,7 +58,7 @@ class UserController extends AbstractController
             //dd($user);
             $userRepository->save($user, true);
             $email = (new Email())
-            ->from(new Address('usersevaluation@gmail.com', 'Maktabti Application'))
+            ->from(new Address('usersevaluation@gmail.com', 'Users Evaluation'))
             ->to($user->getEmail())
             ->subject("Votre compte a été créer avec succés!")
             ->text("Cher/chère " . $user->getNom() . " " . $user->getPrenom() . ",\n" .

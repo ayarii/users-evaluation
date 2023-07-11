@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\ResetPasswordRequestFormType;
+use App\Form\ResetPasswordFormType;
 use App\Repository\UserRepository;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-
+use App\Form\ResetPasswordRequestFormType;
 
 class SecurityController extends AbstractController
 {
@@ -43,13 +43,13 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-    #[Route(path: '/oubli-pass', name: 'forgotten_password')]
+    #[Route(path: '/reset-password', name: 'forgotten_password')]
     public function forgottenPassword(
         Request $request,
         UserRepository $usersRepository,
         TokenGeneratorInterface $tokenGenerator,
         EntityManagerInterface $entityManager,
-        MailerInterface $mail
+        SendMailService $mail
 
     ): Response {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -65,20 +65,18 @@ class SecurityController extends AbstractController
 
                 $url = $this->generateUrl('reset_pass', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-                $context = compact('url', 'user');
-              
-                $email = (new Email())
-                    ->from(new Address('usersevaluation@gmail.com', 'Users Evaluation'))
-                    ->to($user->getEmail())
-                    ->subject("Récuperer mon mot de passe!")
-                    ->text("Cher/chère " . $user->getNom() . " " . $user->getPrenom() . ",\n" .
-                        "\n" .
-                        "Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :" .
-                        "\n" .
-                        "Sincèrement, \n" . "\n" . "\n\n-- \nMaktabti Application \nNuméro de téléphone : +216 52 329 813 \nAdresse e-mail : maktabti10@gmail.com \nSite web : www.maktabti.com");
-
-                $mail->send($email);
                 
+                $context = compact('url', 'user');
+            
+             
+                $mail->send(
+                  
+                    $user->getEmail(),
+                    'Reset Password',
+                    'emailForgotPassword',
+                    $context
+                  );
+  
 
                 //dd($email);
                 $this->addFlash('success', 'Email envoyé avec succès');
@@ -89,7 +87,7 @@ class SecurityController extends AbstractController
             'requestPassForm' => $form->createView()
         ]);
     }
-    #[Route('/oubli-pass/{token}', name: 'reset_pass')]
+    #[Route('/reset-password/{token}', name: 'reset_pass')]
     public function resetPass(
         string $token,
         Request $request,
@@ -108,12 +106,7 @@ class SecurityController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 // On efface le token
                 $user->setResetToken('');
-                $user->setMotDePasse(
-                    $passwordHasher->encodePassword(
-                        $user,
-                        $form->get('password')->getData()
-                    )
-                );
+               
                 $user->setPassword(
                     $passwordHasher->encodePassword(
                         $user,
@@ -132,5 +125,6 @@ class SecurityController extends AbstractController
             ]);
         }
         $this->addFlash('danger', 'Jeton invalide');
+        return $this->redirectToRoute('app_login');
     }
 }
