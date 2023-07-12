@@ -115,12 +115,7 @@ m.parentNode.insertBefore(n, m);
 								<i class="fas fa-bars"></i>
 							</a>
 						</li>
-						<li class="nav-item d-none d-sm-inline-block">
-							<a href="index3.html" class="nav-link">Acceuil</a>
-						</li>
-						<li class="nav-item d-none d-sm-inline-block">
-							<a href="#" class="nav-link">Contact</a>
-						</li>
+						
 					</ul>
 
 					<ul class="navbar-nav ml-auto">
@@ -256,8 +251,8 @@ m.parentNode.insertBefore(n, m);
 
 				<aside class="main-sidebar sidebar-dark-primary elevation-4">
 					<a href="index3.html" class="brand-link">
-						<img src="{{asset('dist/img/logo-esprit.png')}}" alt="ESPRIT Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8"/>
-						<span class="brand-text font-weight-light">AdminLTE 3</span>
+						<img src="{{asset('dist/img/logo-esprit.png')}}" alt="ESPRIT Logo" class="brand-image elevation-3" style="opacity: 0.8"/>
+						<span class="brand-text font-weight-light">Users Evaluation</span>
 					</a>
 				{% if app.user %}
 					<div class="sidebar">
@@ -380,7 +375,7 @@ m.parentNode.insertBefore(n, m);
 								{% endif %}
 								<li class="nav-header">Profil</li>
 								<li class="nav-item">
-									<a href="{{ path('app_user_profile', {'id': app.user.id}) }}" class="nav-link">
+									<a href="{{ path('app_user_profile', {'id': app.user.id}) }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_user_profile'  %}active{% endif %}">
 										<i class="nav-icon fas fa-user"></i>
 										<p>
 											Mon Profil
