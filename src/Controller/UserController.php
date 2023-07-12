@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\EditProfileType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,11 +96,27 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
-    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET'])]
-    public function profile(User $user): Response
+    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
+    public function profile(Request $request, User $user): Response
     {
+
+        $form = $this->createForm(EditProfileType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle form submission and update the entity
+
+            // Persist changes to the database
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
+            return $this->redirectToRoute('app_user_profile', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('user/profile.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -162,4 +179,10 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Utilisateur supprimé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+
+ 
+
+
+
+
 }
