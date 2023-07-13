@@ -46,6 +46,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if (!$user) {
             throw new CustomUserMessageAuthenticationException('email ou mot de passe invalide');
         }
+        if(!$user->isEnabled()){
+            throw new CustomUserMessageAuthenticationException('Votre compte est désactivé');
+        }
     
         // Verify that the provided password matches with the user's encoded password
         $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $password);
@@ -53,6 +56,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if (!$isPasswordValid) {
             throw new CustomUserMessageAuthenticationException('mot de passe invalide');
         }
+       
 
         return new Passport(
             new UserBadge($email),
