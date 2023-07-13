@@ -23,8 +23,8 @@ use DateTime;
  * @ORM\HasLifecycleCallbacks
  * 
  */
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-#[UniqueEntity(fields: ['id'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'il y a un compte existant avec cet email')]
+#[UniqueEntity(fields: ['id'], message: 'cet identitfiant existe déjà')]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -126,6 +126,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(name="resetToken", type="text", length=0, nullable=false)
      */
     private $resetToken;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     */
+    private $enabled;
 
     public function getId(): ?string
     {
@@ -297,6 +304,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): static
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
     public function __toString()
     {
         return $this->getNom() . ": " . $this->getPrenom() ;
