@@ -72,7 +72,7 @@ class SecurityController extends AbstractController
                 $mail->send(
                   
                     $user->getEmail(),
-                    'Reset Password',
+                    'Réinitialiser mot de passe',
                     'emailForgotPassword',
                     $context
                   );
@@ -116,7 +116,7 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Mot de passe changé avec succès');
+                $this->addFlash('success', 'Mot de passe modifé avec succès');
                 return $this->redirectToRoute('app_login');
             }
 
