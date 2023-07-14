@@ -20,6 +20,7 @@ class EditProfileType extends AbstractType
     {
         $builder
         ->add('id', null, [
+            'label' => 'Identifiant',
             'disabled' => true,
         ])
             ->add('nom', TextType::class,  [
@@ -38,43 +39,23 @@ class EditProfileType extends AbstractType
                     '%class%' => 'is-invalid',
                 ],
             ])
-            ->add('email',EmailType::class)
-           
-            ->add('password' ,PasswordType::class,[
-
-                'required' => true,
-                'constraints' => [new Regex([
-                    'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
-                    'message' => 'Votre mot de passe doit comporter au moins 8 caractères et contenir au moins une lettre et un numéro!',
-                ]),
-                new NotBlank([
-                    'message' => 'Mot de passe Obligatoire!',
-                ])
-            ],
-
+            ->add('email',EmailType::class ,  [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'invalid_message_parameters' => [
+                    '%class%' => 'is-invalid',
+                ],
             ])
+           
             ->add('image', FileType::class, [
                 'required' => false, 
                 'mapped' => false, 
                 'label' => 'Image (JPG, PNG)', 
                 'attr' => [
-                    'accept' => '.jpg,.jpeg,.png' 
+                    'accept' => '.jpg,.jpeg,.png' ,
                 ]
             ])
-          /*  ->add('createdAt',  DateType::class, [
-                'widget' => 'single_text',
-                'attr' => ['class' => 'form-control datepicker'],
-                'invalid_message_parameters' => [
-                    '%class%' => 'is-invalid',
-                ],
-            ])
-            ->add('updatedAt',  DateType::class, [
-                'widget' => 'single_text',
-                'attr' => ['class' => 'form-control datepicker'],
-                'invalid_message_parameters' => [
-                    '%class%' => 'is-invalid',
-                ],
-            ])*/
         ;
     }
 

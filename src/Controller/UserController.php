@@ -167,7 +167,7 @@ class UserController extends AbstractController
      * 
      * @IsGranted("ROLE_ADMIN")
      */
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+  /*  #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -187,7 +187,12 @@ class UserController extends AbstractController
 
         $this->addFlash('success', 'Utilisateur bloqué avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-    }
+    }*/
+
+    /**
+     * 
+     * @IsGranted("ROLE_ADMIN")
+     */
 
     #[Route('/activate/{id}', name: 'app_user_activate', methods: ['GET'])]
     public function activate(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
@@ -210,6 +215,30 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Utilisateur activé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+/**
+     * 
+     * @IsGranted("ROLE_ADMIN")
+     */
+    #[Route('/desactivate/{id}', name: 'app_user_desactivate', methods: ['GET'])]
+    public function desactivate(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
+            $user->setEnabled(0);
+            $entityManager->persist($user);
+            $entityManager->flush();
+       // }
+        $context = compact('user');
+        $mail->send(
 
+            $user->getEmail(),
+            'Blockage de compte !',
+            'emailBlockUser',
+            $context
+        );
+
+        $this->addFlash('success', 'Utilisateur bloqué avec succés!');
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
 
 }
