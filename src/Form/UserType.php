@@ -22,8 +22,17 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id')
+            ->add('id', TextType::class,[
+                'label' => 'Identifiant',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'invalid_message_parameters' => [
+                    '%class%' => 'is-invalid',
+                ],
+            ])
             ->add('nom', TextType::class,  [
+                
                 'attr' => [
                     'class' => 'form-control',
                 ],
@@ -47,7 +56,6 @@ class UserType extends AbstractType
                 ],
                 'choices' => [
                     'Utilisateur' => 'ROLE_Utilisateur',
-                    'Administrateur' => 'ROLE_ADMIN',
                     'Gestionnaire' => 'ROLE_GESTIONNAIRE',
                 ],
                 'expanded' => false,

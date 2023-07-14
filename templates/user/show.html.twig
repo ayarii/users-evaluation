@@ -94,9 +94,10 @@
     </div>
 		<div class="col-md-2">
 	{% if user.enabled == true %}
-		{{ include('user/_delete_form.html.twig') }}
+				<a href="{{ path('app_user_desactivate', {'id': user.id}) }}" class="btn btn-danger"> <i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Bloquer</a>
+
 	{% else %}
-		<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success"> <i class="fas fa-user-check text-success" style="padding-right:3px"></i>Débloquer</a>
+		<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success"> <i class="fas fa-user-check text-white" style="padding-right:3px"></i>Débloquer</a>
 	{% endif %}
     </div>
 	</div>
