@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block content %}
-	<h1>User</h1>
 
 	<table class="table">
 		<tbody>
@@ -37,6 +36,10 @@
 				<td>{{ user.email }}</td>
 			</tr>
 			<tr>
+				<th>Departement</th>
+				<td>{{ user.idDepartement.libelle }}</td>
+			</tr>
+			<tr>
 				<th>Statut</th>
 				{% if user.enabled == true %}
 					<td>
@@ -52,6 +55,7 @@
 					</td>
 				{% endif %}
 			</tr>
+			
 			<tr>
 				<th>Role</th>
 				<td>
