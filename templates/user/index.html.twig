@@ -46,8 +46,8 @@
 									<th>Prenom</th>
 									<th>Role</th>
 									<th>Statut</th>
+									<th>Département</th>
 									<th>Date de création</th>
-									<th>Date de derniére mise à jour</th>
 									<th>actions</th>
 								</tr>
 							</thead>
@@ -80,8 +80,10 @@
 												<span class="badge badge-danger">Désactivé <i class="fas fa-user-lock text-white"></i></span>
 											</td>
 										{% endif %}
+
+										<td>{{ user.idDepartement.libelle }}</td>
 										<td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-										<td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+										
 										<td>
 											<a href="{{ path('app_user_show', {'id': user.id}) }}">
 												<i class="fas fa-info-circle text-info"></i>
@@ -111,8 +113,8 @@
 								<th>Prenom</th>
 								<th>Role</th>
 								<th>Statut</th>
+								<th>Département</th>
 								<th>Date de création</th>
-								<th>Date de derniére mise à jour</th>
 								<th>actions</th>
 							</tfoot>
 						</table>

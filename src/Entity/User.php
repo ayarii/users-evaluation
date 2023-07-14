@@ -142,6 +142,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
      */
     private $authCode;
 
+        /**
+     * @var Departement
+     *
+     * @ORM\ManyToOne(targetEntity="Departement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_departement", referencedColumnName="id")
+     * })
+     */
+    #[Assert\NotBlank( message :"Vous devez choisir un département")]
+    private $idDepartement;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -321,6 +332,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
     public function setEnabled(bool $enabled): static
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+    public function getIdDepartement(): ?Departement
+    {
+        return $this->idDepartement;
+    }
+
+    public function setIdDepartement(?Departement $idDepartement): static
+    {
+        $this->idDepartement = $idDepartement;
 
         return $this;
     }
