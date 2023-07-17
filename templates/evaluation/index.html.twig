@@ -8,9 +8,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+               
                 <th>Libelle</th>
-                <th>Description</th>
+               
                 <th>CreatedAt</th>
                 <th>UpdatedAt</th>
                 <th>Enabled</th>
@@ -20,9 +20,9 @@
         <tbody>
         {% for evaluation in evaluations %}
             <tr>
-                <td>{{ evaluation.id }}</td>
+                
                 <td>{{ evaluation.libelle }}</td>
-                <td>{{ evaluation.description }}</td>
+               
                 <td>{{ evaluation.createdAt ? evaluation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ evaluation.updatedAt ? evaluation.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ evaluation.enabled ? 'Yes' : 'No' }}</td>
