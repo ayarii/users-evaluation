@@ -1,0 +1,40 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+{{form_label(form.libelle)}}
+{{form_widget(form.libelle)}}
+{{form_errors(form.libelle,{'attr': {'class': 'invalid-feedback'}})}}
+<br>
+
+{{form_label(form.description)}}
+{{form_widget(form.description)}}
+{{form_errors(form.description,{'attr': {'class': 'invalid-feedback'}})}}
+<br>
+{{form_label(form.enabled)}}
+{{form_widget(form.enabled)}}
+{{form_errors(form.enabled,{'attr': {'class': 'invalid-feedback'}})}}
+
+<br>
+{{form_label(form.createdAt)}}
+{{form_widget(form.createdAt)}}
+{{form_errors(form.createdAt,{'attr': {'class': 'invalid-feedback'}})}}
+
+<br>
+{{form_label(form.updatedAt)}}
+{{form_widget(form.updatedAt)}}
+{{form_errors(form.updatedAt,{'attr': {'class': 'invalid-feedback'}})}}
+
+
+<br>
+{{form_label(form.dateDebut)}}
+{{form_widget(form.dateDebut)}}
+{{form_errors(form.dateDebut,{'attr': {'class': 'invalid-feedback'}})}}
+
+<br>
+{{form_label(form.dateFin)}}
+{{form_widget(form.dateFin)}}
+{{form_errors(form.dateFin,{'attr': {'class': 'invalid-feedback'}})}}
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+<br>
+<br>
+
+{{ form_end(form) }}
