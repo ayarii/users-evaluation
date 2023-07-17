@@ -41,7 +41,7 @@
 								<th>Utilisateur</th>
 								{% set tot = 0 %}
                                 {% for cr in criteres %}
-								<th> {{cr.libelle }} ?/{{cr.ponderation }}</th>
+								<th> {{cr.libelle }} /{{cr.ponderation }}</th>
                                 
 								{% set tot = tot + cr.ponderation %}
 								{% endfor %}
@@ -105,11 +105,12 @@
 }
 
 const inputs = document.querySelectorAll('input[data-form]');
+
 inputs.forEach(input => {
-  const formId = input.dataset.form;
-  const form = document.getElementById(formId);
- const userId = formId.split('-')[1]; 
-  const critereId = input.id.replace(userId, ''); 
+  	const formId = input.dataset.form;
+  	const form = document.getElementById(formId);
+ 	const userId = formId.split('-')[1]; 
+  	const critereId = input.id.replace(userId, ''); 
 
  
   
@@ -119,22 +120,30 @@ inputs.forEach(input => {
 	  const row = input.closest('tr');
       updateRowTotal(row);
     });
+
   input.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
-       submitFormWithAjax(form);
+      submitFormWithAjax(form);
 	  
-  fetchInitialValues(userId, critereId)
-    .then(initialValue => {
-      input.value = initialValue;
-	   input.blur();
-	   const row = input.closest('tr');
-    updateRowTotal(row);
-    });
-    }
-  });
+ 	  fetchInitialValues(userId, critereId)
+      .then(initialValue => {
+            input.value = initialValue;
+	        input.blur();
+	        const row = input.closest('tr');
+            updateRowTotal(row);
+           });
+
+
+      }
+  }
+  );
   
 });
+
+
+
+
 function checkInputValue(input,max) {
   const maxLimit = max; 
   if (input.value > maxLimit) {
@@ -144,6 +153,11 @@ function checkInputValue(input,max) {
     input.value = 0;
   }
 }
+
+
+
+
+
 function fetchInitialValues(userId, critereId) {
   const url = `/affectationnotes/${userId}/${critereId}`;
 
