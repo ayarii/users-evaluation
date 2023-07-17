@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Session{% endblock %}
-
-{% block body %}
-    <h1>Edit Session</h1>
+{% block title %}Modifier Session{% endblock %}
+{% block titlepage %}Modifier Session
+{% endblock %}
+{% block page %}Modifier Session
+{% endblock %}
+{% block content %}
 
     {{ include('session/_form.html.twig', {'button_label': 'Update'}) }}
 

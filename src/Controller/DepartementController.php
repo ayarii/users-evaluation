@@ -19,7 +19,7 @@ class DepartementController extends AbstractController
     {
         $departements= $departementRepository->findAll();
         return $this->render('departement/index.html.twig', [
-            'departements' => $$departements,
+            'departements' => $departements,
         ]);
     }
 

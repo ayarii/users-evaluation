@@ -4,7 +4,8 @@
 
 {% block content %}
     <h1>Session index</h1>
-
+    <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_session_new') }}">
+        <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
     <table class="table">
         <thead>
             <tr>
@@ -31,8 +32,9 @@
                 <td>{{ session.updatedAt ? session.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ session.enabled ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+                    <a href="{{ path('app_session_show', {'id': session.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">	<i class="fas fa-edit text-warning"></i>
+                    </a>
                 </td>
             </tr>
         {% else %}
@@ -43,5 +45,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_session_new') }}">Create new</a>
 {% endblock %}
