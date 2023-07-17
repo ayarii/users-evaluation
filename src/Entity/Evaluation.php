@@ -35,7 +35,7 @@ class Evaluation
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @ORM\Column(name="description", type="text",  nullable=false)
      */
     #[Assert\NotBlank(null,"Vous devez saisir une description")]
     private $description;

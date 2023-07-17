@@ -8,10 +8,7 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ critere.id }}</td>
-            </tr>
+           
             <tr>
                 <th>Libelle</th>
                 <td>{{ critere.libelle }}</td>
@@ -22,7 +19,7 @@
             </tr>
             <tr>
                 <th>Description</th>
-                <td>{{ critere.description }}</td>
+                <td>{{ critere.description|raw }}</td>
             </tr>
             <tr>
                 <th>CreatedAt</th>
