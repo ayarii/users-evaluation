@@ -38,8 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
      */
     #[Assert\Regex(
         pattern: '/^\d{3}[A-Z]{3}\d{4}$/',
-        message: 'Le format de l\'ID doit être de 3 chiffres, 3 lettres majuscules, 4 chiffres.'
+        message: 'Le format de l\'identitfiant doit être de 3 chiffres, 3 lettres majuscules, 4 chiffres.'
     )]
+    #[Assert\NotBlank(message: 'Identifiant obligatoire!')]
     private $id;
 
     /**
@@ -150,7 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
      *   @ORM\JoinColumn(name="id_departement", referencedColumnName="id")
      * })
      */
-    #[Assert\NotBlank( message :"Vous devez choisir un département")]
+    #[Assert\NotBlank( message :"Vous devez choisir un département !")]
     private $idDepartement;
 
     public function getId(): ?string

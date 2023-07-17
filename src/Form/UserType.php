@@ -54,6 +54,9 @@ class UserType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
+                'invalid_message_parameters' => [
+                    '%class%' => 'is-invalid',
+                ],
                 'choices' => [
                     'Utilisateur' => 'ROLE_Utilisateur',
                     'Gestionnaire' => 'ROLE_GESTIONNAIRE',
@@ -64,15 +67,7 @@ class UserType extends AbstractType
             ->add('password', PasswordType::class, [
 
                 'required' => true,
-                'constraints' => [
-                    new Regex([
-                        'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
-                        'message' => 'Votre mot de passe doit comporter au moins 8 caractères et contenir au moins une lettre et un numéro!',
-                    ]),
-                    new NotBlank([
-                        'message' => 'Mot de passe Obligatoire!',
-                    ])
-                ],
+                
 
             ])
             ->add('image', FileType::class, [
