@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
 
 /**
  * Badge
@@ -27,26 +29,28 @@ class Badge
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank(null,"Libelle Obligatoire!")]
     private $libelle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @ORM\Column(name="description", type="text", nullable=false)
      */
+    #[Assert\NotBlank(null,"Description Obligatoire!")]
     private $description;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false, options={"default": "CURRENT_TIMESTAMP"})
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false, options={"default": "CURRENT_TIMESTAMP"})
      */
     private $updatedAt;
 
@@ -120,6 +124,22 @@ class Badge
         $this->enabled = $enabled;
 
         return $this;
+    }
+      /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(): void
+    {
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new DateTime();
     }
 
 
