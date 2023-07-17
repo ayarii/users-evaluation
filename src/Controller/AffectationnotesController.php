@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Affectationnotes;
 use App\Entity\Evaluation;
 use App\Entity\User;
+use App\Entity\Critere;
+use App\Entity\Evaluation;
 
 use App\Form\AffectationnotesType;
 use App\Form\ChoiceEvType;
@@ -20,8 +22,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 #[Route('/affectationnotes')]
 class AffectationnotesController extends AbstractController
 {
-    #[Route('/', name: 'app_affectationnotes_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/admin', name: 'app_affectationnotes_admin', methods: ['GET'])]
+    public function indexAdmin(EntityManagerInterface $entityManager): Response
     { 
         $affectationnotes = $entityManager
             ->getRepository(Affectationnotes::class)
@@ -41,7 +43,34 @@ class AffectationnotesController extends AbstractController
             'affectationnotes' => $affectationnotes,
         ]);
     }
+    #[Route('/', name: 'app_affectationnotes_index', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager): Response
+    { 
+        $affectationnotes = $entityManager
+            ->getRepository(Affectationnotes::class)
+            
+            ->createQueryBuilder('u')
+            ->join(Critere::class,'c')
+            ->join(Evaluation::class,'e')
+            ->where('c.id=u.critere')
+            ->andWhere('e.id=c.idEvaluation')
+            ->andWhere('e.idUser = :id')
+            ->setParameter('id', $this->getUser())
+            ->andWhere('u.enabled = 1')
+        
+           
+            
+           
+            ->getQuery()
+            ->getResult();
+            
 
+    
+
+        return $this->render('affectationnotes/index.html.twig', [
+            'affectationnotes' => $affectationnotes,
+        ]);
+    }
     #[Route('/new', name: 'app_affectationnotes_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

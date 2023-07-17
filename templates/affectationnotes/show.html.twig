@@ -21,10 +21,15 @@
             </tr>
         </tbody>
     </table>
-
+{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
     <a href="{{ path('app_affectationnotes_index') }}">back to list</a>
-
+    {% endif %}
+    {% if app.user.roles[0]=="ROLE_ADMIN" %}
+     <a href="{{ path('app_affectationnotes_admin') }}">back to list</a>
+     {% endif %}
+{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
     <a href="{{ path('app_affectationnotes_edit', {'id': affectationnote.id}) }}">edit</a>
+    {% endif %}
 
     {{ include('affectationnotes/_delete_form.html.twig') }}
 {% endblock %}

@@ -27,7 +27,10 @@
 {{form_widget(form.image)}}
 {{form_errors(form.image)}}
 <br>
-
+{{form_label(form.idDepartement)}}
+{{form_widget(form.idDepartement)}}
+{{form_errors(form.idDepartement,{'attr': {'class': 'invalid-feedback'}})}}
+<br>
 
 <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 <br>

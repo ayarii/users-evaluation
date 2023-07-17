@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\AccessType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeInterface;
@@ -23,10 +24,10 @@ use DateTime;
  * @ORM\HasLifecycleCallbacks
  * 
  */
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-#[UniqueEntity(fields: ['id'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'il y a un compte existant avec cet email')]
+#[UniqueEntity(fields: ['id'], message: 'cet identitfiant existe déjà')]
 
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFactorInterface
 {
     /**
      * @var string
@@ -126,6 +127,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(name="resetToken", type="text", length=0, nullable=false)
      */
     private $resetToken;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     */
+    private $enabled;
+
+       /**
+     * @var string|null
+     *
+     * @ORM\Column(name="authCode", type="string", nullable=true)
+     */
+    private $authCode;
+
+        /**
+     * @var Departement
+     *
+     * @ORM\ManyToOne(targetEntity="Departement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_departement", referencedColumnName="id")
+     * })
+     */
+    #[Assert\NotBlank( message :"Vous devez choisir un département")]
+    private $idDepartement;
 
     public function getId(): ?string
     {
@@ -297,6 +323,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): static
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+    public function getIdDepartement(): ?Departement
+    {
+        return $this->idDepartement;
+    }
+
+    public function setIdDepartement(?Departement $idDepartement): static
+    {
+        $this->idDepartement = $idDepartement;
+
+        return $this;
+    }
+
+
+ /**
+     * Return true if the user should do two-factor authentication.
+     */
+    public function isEmailAuthEnabled(): bool{
+        return true;
+    }
+
+    /**
+     * Return user email address.
+     */
+    public function getEmailAuthRecipient(): string{
+        return $this->email;
+    }
+
+    /**
+     * Return the authentication code.
+     */
+    public function getEmailAuthCode(): string{
+        if (null == $this->authCode){
+            throw new \LogicException('The emailauthentification was not set');
+        }
+        return $this->authCode;
+    }
+
+    /**
+     * Set the authentication code.
+     */
+    public function setEmailAuthCode(string $authCode): void{
+        $this->authCode = $authCode;
+    }
+
+
     public function __toString()
     {
         return $this->getNom() . ": " . $this->getPrenom() ;
