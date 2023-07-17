@@ -6,7 +6,9 @@ use App\Entity\User;
 use App\Form\EditProfileType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\DefaultImageGenerator as ServiceDefaultImageGenerator;
 use App\Service\SendMailService;
+use AppBundle\Service\DefaultImageGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +41,7 @@ class UserController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail): Response
+    public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail,ServiceDefaultImageGenerator $defaultImageGenerator): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -50,13 +52,20 @@ class UserController extends AbstractController
             $id = $form->get('id')->getData();
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $imageData = $user->getNom() . '-' . $user->getPrenom() . '.' . $imageFile->guessExtension();
+                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData() .$form->get('id')->getData() . '.' . $imageFile->guessExtension();
                 $imageFile->move(
                     $this->getParameter('users_directory'),
                     $imageData
                 );
                 $user->setImage($imageData);
+            }else{
+                $user->setImage("");
+                $defaultImageGenerator->generateImage($form->get('nom')->getData(), $form->get('prenom')->getData(),$form->get('id')->getData());
+                
+                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData()  .$form->get('id')->getData(). '.png';
+                $user->setImage($imageData);
             }
+
             $user->setPassword($userPasswordHasher->encodePassword(
                 $user,
                 $form->get('password')->getData()
@@ -98,7 +107,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request, User $user): Response
+    public function profile(Request $request, User $user,ServiceDefaultImageGenerator $defaultImageGenerator): Response
     {
 
         $form = $this->createForm(EditProfileType::class, $user);
@@ -107,6 +116,16 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle form submission and update the entity
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData() .$form->get('id')->getData() . '.' . $imageFile->guessExtension();
+
+                $imageFile->move(
+                    $this->getParameter('users_directory'),
+                    $imageData
+                );
+                $user->setImage($imageData);
+            }
 
             // Persist changes to the database
             $entityManager = $this->getDoctrine()->getManager();
@@ -122,7 +141,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail): Response
+    public function edit(Request $request, User $user, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail,ServiceDefaultImageGenerator $defaultImageGenerator): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -130,7 +149,8 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $imageData = $user->getNom() . '-' . $user->getPrenom() . '.' . $imageFile->guessExtension();
+                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData() .$form->get('id')->getData() . '.' . $imageFile->guessExtension();
+
                 $imageFile->move(
                     $this->getParameter('users_directory'),
                     $imageData
