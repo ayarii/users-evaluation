@@ -32,6 +32,7 @@
 		<link rel="stylesheet" href="{{asset('dist/css/adminlte.min2167.css?v=3.2.0')}}">
 
 		<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.min.css')}}"/>
+		<style> {% block style %}{% endblock %} </style>
 		<script nonce="b04a9010-a137-4e57-bafe-3ec3f9a5cf18">
 			(function (w, d) {
 !(function (f, g, h, i) {
@@ -525,8 +526,10 @@ $('#example2').DataTable({
 "responsive": true
 });
 });
-					</script>
-				</body>
-			</html>
-		</head>
+
+						</script>
+						<script>{% block scripts %}{% endblock %}</script>
+					</body>
+				</head>
+
 	</html>
