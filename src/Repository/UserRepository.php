@@ -89,4 +89,32 @@ public function findOneByEmail($getData)
         ->getOneOrNullResult(); // will return only one result or null 'getResult' will return a collection
 
 }
+public function findUsersCountPerDepartment()
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id) as userCount, d.libelle')
+        ->leftJoin('u.departement', 'd')
+        ->groupBy('u.idDepartement')
+        ->getQuery()
+        ->getResult();
+}
+
+public function findUserCountPerRole()
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id) as userCount, u.roles')
+        ->groupBy('u.roles')
+        ->getQuery()
+        ->getResult();
+}
+public function findUserCountPerEnabledStatus()
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id) as userCount, u.enabled')
+        ->groupBy('u.enabled')
+        ->getQuery()
+        ->getResult();
+}
+
+
 }
