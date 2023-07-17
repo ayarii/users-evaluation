@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Badge{% endblock %}
+{% block title %}Modifier un badge
+{% endblock %}
+{% block titlepage %}Modifier un badge
+{% endblock %}
+{% block page %}Modifier un badge
+{% endblock %}
 
-{% block body %}
-    <h1>Edit Badge</h1>
+{% block content %}
+    
 
-    {{ include('badge/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('badge/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_badge_index') }}">back to list</a>
+    
 
-    {{ include('badge/_delete_form.html.twig') }}
+   
 {% endblock %}
