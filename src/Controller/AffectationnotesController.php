@@ -7,7 +7,6 @@ use App\Entity\Evaluation;
 use App\Entity\User;
 use App\Entity\Critere;
 
-
 use App\Form\AffectationnotesType;
 use App\Form\ChoiceEvType;
 use App\Repository\CritereRepository;

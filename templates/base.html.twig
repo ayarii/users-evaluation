@@ -376,7 +376,7 @@ $('#example2').DataTable({
 
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_affectationnotes_index') }}" class="nav-link">
+									<a href="{{ path('app_affectationnotes_ev') }}" class="nav-link">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
 											Affectation des notes
@@ -389,7 +389,7 @@ $('#example2').DataTable({
 							{% endif %}
 							{% if app.user.roles[0]=="ROLE_ADMIN" %}
 								<li class="nav-item">
-									<a href="#" class="nav-link">
+									<a href="{{ path('app_departement_index') }}" class="nav-link">
 										<i class="nav-icon fas fa-sitemap"></i>
 										<p>
 											Departements
@@ -399,7 +399,7 @@ $('#example2').DataTable({
 
 								</li>
 								<li class="nav-item">
-									<a href="#" class="nav-link">
+									<a href="{{ path('app_session_index') }}" class="nav-link">
 										<i class="nav-icon fas fa-calendar-alt"></i>
 										<p>
 											Sessions
