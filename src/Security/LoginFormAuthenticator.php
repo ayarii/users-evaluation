@@ -28,7 +28,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private $passwordEncoder;
     private $userRepository;
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator,UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->userRepository = $userRepository;
@@ -37,26 +37,26 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
-        $password= $request->request->get('password', '');
-        
+        $password = $request->request->get('password', '');
+
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
         $user = $this->userRepository->findOneBy(['email' => $email]);
-    
+
         if (!$user) {
-            throw new CustomUserMessageAuthenticationException('email ou mot de passe invalide');
+            throw new CustomUserMessageAuthenticationException('Email ou mot de passe invalide!');
         }
-        if(!$user->isEnabled()){
-            throw new CustomUserMessageAuthenticationException('Votre compte est désactivé');
+        if (!$user->isEnabled()) {
+            throw new CustomUserMessageAuthenticationException('Votre compte est désactivé!');
         }
-    
+
         // Verify that the provided password matches with the user's encoded password
         $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $password);
-    
+
         if (!$isPasswordValid) {
-            throw new CustomUserMessageAuthenticationException('mot de passe invalide');
+            throw new CustomUserMessageAuthenticationException('Mot de passe invalide!');
         }
-       
+
 
         return new Passport(
             new UserBadge($email),
@@ -71,25 +71,23 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         $user = $token->getUser();
-        $userIdentifier=$user->getUserIdentifier();
+        $userIdentifier = $user->getUserIdentifier();
         $users = $this->userRepository->findOneBy(['email' => $userIdentifier]);
-     
-       
+
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        if($user instanceof UserInterface){
-            
-              if($users->getRoles()[0]=="ROLE_ADMIN"){
-                   return new RedirectResponse($this->urlGenerator->generate('index'));
-                  }
-              else if ($users->getRoles()[0]=="ROLE_GESTIONNAIRE"){ 
-                  return new RedirectResponse($this->urlGenerator->generate('app_evaluation_index'));
-              } 
-               else if ($users->getRoles()[0]=="ROLE_Utilisateur"){ 
-                  return new RedirectResponse($this->urlGenerator->generate(''));
-              }
+        if ($user instanceof UserInterface) {
+
+            if ($users->getRoles()[0] == "ROLE_ADMIN") {
+                return new RedirectResponse($this->urlGenerator->generate('index'));
+            } else if ($users->getRoles()[0] == "ROLE_GESTIONNAIRE") {
+                return new RedirectResponse($this->urlGenerator->generate('app_evaluation_index'));
+            } else if ($users->getRoles()[0] == "ROLE_Utilisateur") {
+                return new RedirectResponse($this->urlGenerator->generate(''));
             }
+        }
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);

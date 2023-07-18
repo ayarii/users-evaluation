@@ -41,7 +41,7 @@ class UserController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail,ServiceDefaultImageGenerator $defaultImageGenerator): Response
+    public function new(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail, ServiceDefaultImageGenerator $defaultImageGenerator): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -52,17 +52,17 @@ class UserController extends AbstractController
             $id = $form->get('id')->getData();
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData() .$form->get('id')->getData() . '.' . $imageFile->guessExtension();
+                $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
                 $imageFile->move(
                     $this->getParameter('users_directory'),
                     $imageData
                 );
                 $user->setImage($imageData);
-            }else{
+            } else {
                 $user->setImage("");
-                $defaultImageGenerator->generateImage($form->get('nom')->getData(), $form->get('prenom')->getData(),$form->get('id')->getData());
-                
-                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData()  .$form->get('id')->getData(). '.png';
+                $defaultImageGenerator->generateImage($form->get('nom')->getData(), $form->get('prenom')->getData(), $form->get('id')->getData());
+
+                $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData()  . $form->get('id')->getData() . '.png';
                 $user->setImage($imageData);
             }
 
@@ -75,7 +75,7 @@ class UserController extends AbstractController
             //dd($user);
             $userRepository->save($user, true);
             $password = $form->get('password')->getData();
-            $context = compact('user','password');
+            $context = compact('user', 'password');
             $mail->send(
 
                 $user->getEmail(),
@@ -93,6 +93,7 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
     }
+
     /**
      * 
      * @IsGranted("ROLE_ADMIN")
@@ -107,7 +108,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request, User $user,ServiceDefaultImageGenerator $defaultImageGenerator): Response
+    public function profile(Request $request, User $user, ServiceDefaultImageGenerator $defaultImageGenerator): Response
     {
 
         $form = $this->createForm(EditProfileType::class, $user);
@@ -118,7 +119,7 @@ class UserController extends AbstractController
             // Handle form submission and update the entity
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData() .$form->get('id')->getData() . '.' . $imageFile->guessExtension();
+                $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
 
                 $imageFile->move(
                     $this->getParameter('users_directory'),
@@ -140,8 +141,12 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * 
+     * @IsGranted("ROLE_ADMIN")
+     */
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail,ServiceDefaultImageGenerator $defaultImageGenerator): Response
+    public function edit(Request $request, User $user, UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordHasher, SendMailService $mail, ServiceDefaultImageGenerator $defaultImageGenerator): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -149,7 +154,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $imageData = $form->get('nom')->getData() . '-' .$form->get('prenom')->getData() .$form->get('id')->getData() . '.' . $imageFile->guessExtension();
+                $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
 
                 $imageFile->move(
                     $this->getParameter('users_directory'),
@@ -183,11 +188,12 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
     }
+
     /**
      * 
      * @IsGranted("ROLE_ADMIN")
      */
-  /*  #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    /*  #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -219,10 +225,10 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
-            $user->setEnabled(1);
-            $entityManager->persist($user);
-            $entityManager->flush();
-       // }
+        $user->setEnabled(1);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        // }
         $context = compact('user');
         $mail->send(
 
@@ -235,7 +241,8 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Utilisateur activé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-/**
+    
+    /**
      * 
      * @IsGranted("ROLE_ADMIN")
      */
@@ -244,10 +251,10 @@ class UserController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
-            $user->setEnabled(0);
-            $entityManager->persist($user);
-            $entityManager->flush();
-       // }
+        $user->setEnabled(0);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        // }
         $context = compact('user');
         $mail->send(
 
@@ -260,5 +267,4 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Utilisateur bloqué avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-
 }

@@ -76,7 +76,8 @@ class UserType extends AbstractType
                 'label' => 'Image (JPG, PNG)',
                 
                 'attr' => [
-                    'accept' => '.jpg,.jpeg,.png'
+                    'accept' => '.jpg,.jpeg,.png',
+                    'placeholder' => 'choisir une image (JPG, PNG)',
                 ]
             ])
 
