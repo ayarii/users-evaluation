@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<title>Log in</title>
+		<title>Se connecter</title>
 
 		<link rel="icon" type="image/png" sizes="32x32" href="{{asset('dist/img/logo-esprit.png')}}">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"/>
@@ -100,7 +100,7 @@ m.parentNode.insertBefore(n, m);
 			</div>
 			<div class="card">
 				<div class="card-body login-card-body">
-					<p class="login-box-msg">Sign in to start your session</p>
+					<p class="login-box-msg">Connectez-vous pour démarrer votre session</p>
 					<br>
 			{% for type, messages in app.flashes %}
 				{% for message in messages %}
@@ -128,16 +128,16 @@ m.parentNode.insertBefore(n, m);
 
 						{% if app.user %}
 							<div class="mb-3">
-								You are logged in as
+								Vous êtes connecté en tant que
 								{{ app.user.userIdentifier }},
-								<a href="{{ path('app_logout') }}">Logout</a>
+								<a href="{{ path('app_logout') }}">Déconnexion</a>
 							</div>
 						{% endif %}
 
 
 
 						<div class="input-group mb-3">
-							<input type="email" value="{{ last_username }}" placeholder="Email address" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+							<input type="email" value="{{ last_username }}" placeholder="username@exemple.com" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
 							<div class="input-group-append">
 								<div class="input-group-text">
 									<span class="fas fa-envelope"></span>
@@ -145,7 +145,7 @@ m.parentNode.insertBefore(n, m);
 							</div>
 						</div>
 						<div class="input-group mb-3">
-							<input type="password" placeholder="Enter your password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+							<input type="password" placeholder="votre mot de passe" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 							<div class="input-group-append">
 								<div class="input-group-text">
 									<span class="fas fa-lock"></span>
@@ -157,18 +157,18 @@ m.parentNode.insertBefore(n, m);
 
 
 						<div class="row">
-							<div class="col-8">
+							<div class="col-7">
 								<div class="icheck-primary">
 									<label>
 										<input type="checkbox" name="_remember_me">
-										Remember me
+										se souvenir de moi
 									</label>
 								</div>
 							</div>
 
-							<div class="col-4">
+							<div class="col-5">
 								<button type="submit" class="btn btn-primary btn-block">
-									Sign In
+									S'identifier
 								</button>
 							</div>
 						</div>
@@ -176,7 +176,7 @@ m.parentNode.insertBefore(n, m);
 					<br>
 
 					<p class="mb-1">
-						<a href="{{path('forgotten_password')}}">I forgot my password</a>
+						<a href="{{path('forgotten_password')}}">Mot de passe oublié ?</a>
 					</p>
 
 				</div>
