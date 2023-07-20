@@ -51,6 +51,7 @@ class EvaluationController extends AbstractController
        $user=new User();
         $user=$userRepository->find($this->getUser());
         $evaluation->setIdUser($user);
+        $evaluation->setIdDepartement($user->getIdDepartement());
         $evaluation->setEnabled(1);
         $evaluation->setCreatedAt(new DateTime());
         $evaluation->setUpdatedAt(new DateTime());
