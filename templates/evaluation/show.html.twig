@@ -45,4 +45,90 @@
     <a href="{{ path('app_evaluation_edit', {'id': evaluation.id}) }}">edit</a>
 
     {{ include('evaluation/_delete_form.html.twig') }}
+
+    <div class="row">
+		<div class="col-12">
+			<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Users</h3>
+					
+				<div class="card-body">
+					<table id="example1" class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								
+								<th>Utilisateur</th>
+								{% set tot = 0 %}
+                                {% for cr in criteres %}
+								<th> {{cr.libelle }} /{{cr.ponderation }}</th>
+                                
+								{% set tot = tot + cr.ponderation %}
+								{% endfor %}
+                                <th> SCORE TOTAL / {{tot}} </th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in users %}
+								<tr>
+									
+									<td>{{ user.nom }} {{ user.prenom }}</td>
+                                    {% set tot = 0 %}
+                                    {% for cr in criteres %}
+									<td> 
+                                    {% for aff in affectations %}
+                                    {% if aff.critere.id == cr.id and aff.user.id == user.id %}
+
+                                        {{aff.note}}
+                                        {% set tot = tot + aff.note %}
+
+                                        {% endif %}
+                                        {% endfor %}
+
+{% endfor %}
+</td>
+ 
+
+<td class="total">{{tot}}  </td>
+</form>
+
+
+									
+										
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="10">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

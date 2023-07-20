@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Affectationnotes;
 use App\Entity\Evaluation;
 use App\Entity\User;
 
 use App\Form\EvaluationType;
+use App\Repository\CritereRepository;
 use App\Repository\UserRepository;
 use App\Repository\EvaluationRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -70,10 +73,36 @@ class EvaluationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_evaluation_show', methods: ['GET'])]
-    public function show(Evaluation $evaluation): Response
-    {
+    public function show(Evaluation $evaluation,EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
+    {  $criteres= $critereRepository
+        ->createQueryBuilder('u')
+
+        ->where('u.enabled = :bool')
+        ->setParameter('bool', 1)
+        ->andWhere('u.idEvaluation = :id')
+        ->setParameter('id', $evaluation->getId())
+        ->getQuery()
+        ->getResult();
+        $users=$userRepository
+        ->createQueryBuilder('u')
+
+       
+        ->where('u.roles LIKE :roles')
+        ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
+        ->getQuery()
+        ->getResult();
+       
+        
+        $repo= $entityManager->getRepository(Affectationnotes::class);
+        $aff = $repo->createQueryBuilder('p')
+           
+            ->getQuery()
+            ->getResult();
         return $this->render('evaluation/show.html.twig', [
             'evaluation' => $evaluation,
+            'users'=>$users,
+            'criteres'=>$criteres,
+            'affectations'=>$aff
         ]);
     }
 
