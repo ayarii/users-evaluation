@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Affectationnotes;
+use App\Entity\Critere;
 use App\Entity\Evaluation;
 use App\Entity\User;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -134,7 +135,7 @@ class EvaluationController extends AbstractController
            
             ->getQuery()
             ->getResult();
-        $spreadsheet = new Spreadsheet();
+      
        
         $totalPon=0;
         // Populate the table headers
@@ -182,6 +183,53 @@ class EvaluationController extends AbstractController
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="table_export.csv"');
     
+        return $response;
+    }
+    #[Route('/{userId}/{evId}/toPdf', name: 'app_evaluation_pdf', methods: ['GET', 'POST'])]
+    public function toPDF(Request $request,$userId,$evId,EntityManagerInterface $entityManager,UserRepository $userRepository,CritereRepository $critereRepository, EvaluationRepository $evaluationRepository): Response
+    {    $criteres= $critereRepository
+        ->createQueryBuilder('u')
+
+        ->where('u.enabled = :bool')
+        ->setParameter('bool', 1)
+        ->andWhere('u.idEvaluation = :id')
+        ->setParameter('id', $evId)
+        ->getQuery()
+        ->getResult();
+        $user=$userRepository
+        ->find($userId);
+        $repo= $entityManager->getRepository(Affectationnotes::class);
+        $affectations = $repo->createQueryBuilder('u')
+        ->andWhere('u.user = :id')
+        ->setParameter('id', $userId)
+        ->getQuery()
+        ->getResult();
+          // dd($affectations);
+      
+        $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'id'=>$evId]);
+
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf();
+
+        // Load the HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Set the PDF options (e.g., paper size, orientation, etc.)
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Get the generated PDF content
+        $pdfOutput = $dompdf->output();
+
+        // Create a Response object with the PDF content
+        $response = new Response($pdfOutput);
+
+        // Set appropriate headers for PDF download
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="output.pdf"');
+
         return $response;
     }
     #[Route('/{id}/edit', name: 'app_evaluation_edit', methods: ['GET', 'POST'])]

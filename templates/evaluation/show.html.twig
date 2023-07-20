@@ -112,7 +112,7 @@
  
 
 <td class="total">{{tot}}  </td>
-<td > <a href=""> pdf </a> </td>
+<td > <a href="{{ path('app_evaluation_pdf', {'userId': user.id,'evId': evaluation.id}) }}"> pdf </a> </td>
 </form>
 
 
