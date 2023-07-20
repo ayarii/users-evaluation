@@ -71,6 +71,7 @@
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
+					<a href="{{ path('app_evaluation_excel', {'id': evaluation.id}) }}"> excel</a>
 					
 				<div class="card-body">
 					<table id="example1" class="table table-bordered table-hover table-striped">
@@ -85,6 +86,7 @@
 								{% set tot = tot + cr.ponderation %}
 								{% endfor %}
                                 <th> SCORE TOTAL / {{tot}} </th>
+								 <th> Action</th>
 								
 							</tr>
 						</thead>
@@ -110,6 +112,7 @@
  
 
 <td class="total">{{tot}}  </td>
+<td > <a href=""> pdf </a> </td>
 </form>
 
 

@@ -5,7 +5,8 @@ namespace App\Controller;
 use App\Entity\Affectationnotes;
 use App\Entity\Evaluation;
 use App\Entity\User;
-
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Form\EvaluationType;
 use App\Repository\CritereRepository;
 use App\Repository\UserRepository;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Dompdf\Dompdf;
 #[Route('/evaluation')]
 class EvaluationController extends AbstractController
 {
@@ -102,10 +103,87 @@ class EvaluationController extends AbstractController
             'evaluation' => $evaluation,
             'users'=>$users,
             'criteres'=>$criteres,
-            'affectations'=>$aff
+            'affectations'=>$aff,
+            
         ]);
     }
+    #[Route('/{id}/toexcel', name: 'app_evaluation_excel', methods: ['GET', 'POST'])]
+    public function toExcel(EntityManagerInterface $entityManager,Request $request, Evaluation $evaluation, CritereRepository $critereRepository,UserRepository $userRepository,EvaluationRepository $evaluationRepository): Response
+    {
+        $criteres= $critereRepository
+        ->createQueryBuilder('u')
 
+        ->where('u.enabled = :bool')
+        ->setParameter('bool', 1)
+        ->andWhere('u.idEvaluation = :id')
+        ->setParameter('id', $evaluation->getId())
+        ->getQuery()
+        ->getResult();
+        $users=$userRepository
+        ->createQueryBuilder('u')
+
+       
+        ->where('u.roles LIKE :roles')
+        ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
+        ->getQuery()
+        ->getResult();
+       
+        
+        $repo= $entityManager->getRepository(Affectationnotes::class);
+        $affectations = $repo->createQueryBuilder('p')
+           
+            ->getQuery()
+            ->getResult();
+        $spreadsheet = new Spreadsheet();
+       
+        $totalPon=0;
+        // Populate the table headers
+        $csvData = array();
+        $headerRow = array('Utilisateur');
+        foreach ($criteres as $critere) {
+            $headerRow[] = $critere->getLibelle() . ' / ' . $critere->getPonderation();
+            $totalPon=$totalPon+ $critere->getPonderation();
+        }
+       
+        $headerRow[] = 'SCORE TOTAL / ' . $totalPon;
+        $csvData[] = $headerRow;
+    
+        foreach ($users as $user) {
+            $rowData = array();
+            $rowData[] = $user->getNom() . ' ' . $user->getPrenom();
+            $total = 0;
+            foreach ($criteres as $critere) {
+                $note = 0;
+                foreach ($affectations as $affectation) {
+                  // dd( $affectation->getUser());
+                    if ($affectation->getUser()->getId() == $user->getId() && $affectation->getCritere()->getId() == $critere->getId()) {
+                        $note = $affectation->getNote();
+                       // dd($note);
+                        break;
+                    }
+                }
+                $rowData[] = $note;
+                $total += $note;
+            }
+            $rowData[] = $total;
+            $csvData[] = $rowData;
+        }
+    
+        // Create the CSV content as a string
+        $csvContent = '';
+        foreach ($csvData as $row) {
+            $csvContent .= implode(',', $row) . "\n";
+        }
+    
+        // Create a Response object with the CSV content
+        $response = new Response($csvContent);
+    
+        // Set appropriate headers for CSV download
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="table_export.csv"');
+    
+        return $response;
+    }
     #[Route('/{id}/edit', name: 'app_evaluation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Evaluation $evaluation, EvaluationRepository $evaluationRepository): Response
     {
