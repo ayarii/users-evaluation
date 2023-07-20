@@ -115,6 +115,16 @@ public function findUserCountPerEnabledStatus()
         ->getQuery()
         ->getResult();
 }
+public function isEmailEnabled(string $email): bool
+{
+    $user = $this->findOneBy(['email' => $email]);
 
+    if (!$user) {
+        // L'email n'existe pas
+        return false;
+    }
+
+    return $user->isEnabled();
+}
 
 }
