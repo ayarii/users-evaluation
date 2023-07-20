@@ -73,7 +73,7 @@
 						Education</strong>
 					<p class="text-muted">
 						B.S. in Computer Science from the University of Tennessee
-												                      at Knoxville
+																		                      at Knoxville
 					</p>
 					<hr/>
 					<strong>
@@ -97,7 +97,7 @@
 						Notes</strong>
 					<p class="text-muted">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-												                      Etiam fermentum enim neque.
+																		                      Etiam fermentum enim neque.
 					</p>
 				</div>
 			</div>
@@ -135,11 +135,11 @@
 
 								<p>
 									Lorem ipsum represents a long-held tradition for
-																		                            designers, typographers and the like. Some people
-																		                            hate it and argue for its demise, but others ignore
-																		                            the hate as they create awesome tools to help create
-																		                            filler text for everyone from bacon lovers to
-																		                            Charlie Sheen fans.
+																											                            designers, typographers and the like. Some people
+																											                            hate it and argue for its demise, but others ignore
+																											                            the hate as they create awesome tools to help create
+																											                            filler text for everyone from bacon lovers to
+																											                            Charlie Sheen fans.
 								</p>
 								<p>
 									<a href="#" class="link-black text-sm mr-2">
@@ -152,7 +152,7 @@
 										<a href="#" class="link-black text-sm">
 											<i class="far fa-comments mr-1"></i>
 											Comments
-																						                                (5)
+																																	                                (5)
 										</a>
 									</span>
 								</p>
@@ -173,11 +173,11 @@
 
 								<p>
 									Lorem ipsum represents a long-held tradition for
-																		                            designers, typographers and the like. Some people
-																		                            hate it and argue for its demise, but others ignore
-																		                            the hate as they create awesome tools to help create
-																		                            filler text for everyone from bacon lovers to
-																		                            Charlie Sheen fans.
+																											                            designers, typographers and the like. Some people
+																											                            hate it and argue for its demise, but others ignore
+																											                            the hate as they create awesome tools to help create
+																											                            filler text for everyone from bacon lovers to
+																											                            Charlie Sheen fans.
 								</p>
 								<form class="form-horizontal">
 									<div class="input-group input-group-sm mb-0">
@@ -234,7 +234,7 @@
 										<a href="#" class="link-black text-sm">
 											<i class="far fa-comments mr-1"></i>
 											Comments
-																						                                (5)
+																																	                                (5)
 										</a>
 									</span>
 								</p>
@@ -262,11 +262,11 @@
 										</h3>
 										<div class="timeline-body">
 											Etsy doostang zoodles disqus groupon greplin
-																						                                oooj voxy zoodles, weebly ning heekya handango
-																						                                imeem plugg dopplr jibjab, movity jajah plickers
-																						                                sifteo edmodo ifttt zimbra. Babblely odeo
-																						                                kaboodle quora plaxo ideeli hulu weebly
-																						                                balihoo...
+																																	                                oooj voxy zoodles, weebly ning heekya handango
+																																	                                imeem plugg dopplr jibjab, movity jajah plickers
+																																	                                sifteo edmodo ifttt zimbra. Babblely odeo
+																																	                                kaboodle quora plaxo ideeli hulu weebly
+																																	                                balihoo...
 										</div>
 										<div class="timeline-footer">
 											<a href="#" class="btn btn-primary btn-sm">Read more</a>
@@ -284,7 +284,7 @@
 										<h3 class="timeline-header border-0">
 											<a href="#">Sarah Young</a>
 											accepted your friend
-																						                                request
+																																	                                request
 										</h3>
 									</div>
 								</div>
@@ -301,8 +301,8 @@
 										</h3>
 										<div class="timeline-body">
 											Take me to your leader! Switzerland is small and
-																						                                neutral! We are more like Germany, ambitious and
-																						                                misunderstood!
+																																	                                neutral! We are more like Germany, ambitious and
+																																	                                misunderstood!
 										</div>
 										<div class="timeline-footer">
 											<a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
@@ -368,7 +368,20 @@
 							<button class="btn btn-primary">{{ button_label|default('mise à jour') }}</button>
 							<br>
 							<br>
+							<hr>
+
 							{{ form_end(form) }}
+
+							{{ form_start(formpass, {'attr': {'novalidate': 'novalidate'}}) }}
+							{{form_label(formpass.password)}}
+							{{form_widget(formpass.password)}}
+							{{form_errors(formpass.password,{'attr': {'class': 'invalid-feedback'}})}}
+							<br>
+							<br>
+
+							<button class="btn btn-primary">{{ button_label|default('modifier mot de passe') }}</button>
+							{{ form_end(formpass) }}
+							<br>
 						</div>
 					</div>
 				</div>
