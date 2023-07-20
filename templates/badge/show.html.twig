@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du badge
+{% endblock %}
+{% block titlepage %}Détails du badge
+{% endblock %}
+{% block page %}Détails du badge
+{% endblock %}
+
+
+{% block content %}
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ badge.id }}</td>
+			</tr>
+			<tr>
+				<th>Libelle</th>
+				<td>{{ badge.libelle }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ badge.description |raw }}</td>
+			</tr>
+			<tr>
+				<th>Statut</th>
+				{% if badge.enabled == true %}
+					<td>
+						<span class="badge badge-success">activé
+							<i class="fas fa-check text-white"></i>
+						</span>
+					</td>
+				{% else %}
+					<td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-lock text-white"></i>
+						</span>
+					</td>
+				{% endif %}
+			</tr>
+			<tr>
+				<th>Date de création</th>
+				<td>{{ badge.createdAt ? badge.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Date de la derniére mise à jour</th>
+				<td>{{ badge.updatedAt ? badge.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+
+		</tbody>
+	</table>
+	<div class="row">
+		<div class="col-md-2">
+
+			<a href="{{ path('app_badge_edit', {'id': badge.id}) }}" class="btn btn-warning">
+				<i class="fas fa-edit" style="padding-right:3px"></i>Modifier</a>
+		</div>
+		<div class="col-md-2">
+			{% if badge.enabled == true %}
+				<a href="{{ path('app_badge_desactivate', {'id': badge.id}) }}" class="btn btn-danger">
+					<i class="fas fa-lock text-white" style="padding-right:3px"></i>Bloquer</a>
+
+			{% else %}
+				<a href="{{ path('app_badge_activate', {'id': badge.id}) }}" class="btn btn-success">
+					<i class="fas fa-lock-open text-white" style="padding-right:3px"></i>Débloquer</a>
+			{% endif %}
+		</div>
+	</div>
+	<br><br>
+
+{% endblock %}

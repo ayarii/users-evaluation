@@ -35,7 +35,7 @@ class Evaluation
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @ORM\Column(name="description", type="text",  nullable=false)
      */
     #[Assert\NotBlank(null,"Vous devez saisir une description")]
     private $description;
@@ -92,7 +92,7 @@ class Evaluation
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setLibelle(?string $libelle): static
     {
         $this->libelle = $libelle;
 
@@ -104,7 +104,7 @@ class Evaluation
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -171,5 +171,8 @@ class Evaluation
         return $this;
     }
 
-
+    public function __toString()
+    {
+        return $this->getLibelle() . ": " . $this->getDescription() ;
+    }
 }

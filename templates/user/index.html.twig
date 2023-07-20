@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs
+{% endblock %}
+{% block titlepage %}Liste des Utilisateurs
+{% endblock %}
+{% block page %}Liste des Utilisateurs
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
+			<div class="card">
+				<div class="card-header">
+
+					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;">
+						<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_user_new') }}">
+							<i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
+					</div>
+					<div class="card-body">
+						<table id="example1" class="table table-bordered table-hover table-striped">
+							<thead>
+								<tr>
+									<th>Identifiant</th>
+									<th>Image</th>
+									<th>Nom</th>
+									<th>Prenom</th>
+									<th>Role</th>
+									<th>Statut</th>
+									<th>Département</th>
+									
+									<th>actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in users %}
+									<tr>
+										<td>{{ user.id }}</td>
+										<td>
+											<div >
+						<div class=" mt-3 pb-3 mb-3 d-flex">
+							<div class="image">
+								<img src="{{ asset('Photos/users/' ~ user.image) }}" width="70" height="70" class="img-circle elevation-2" alt="User Image"/>
+							</div>
+						
+						</div>
+										</td>
+
+										<td>{{ user.nom }}</td>
+										<td>{{ user.prenom }}</td>
+
+										<td>
+											{% if "ROLE_ADMIN" in user.roles %}
+												<span class="badge badge-danger">Administrateur
+													<i class="fas fa-user-shield text-white"></i>
+												</span>
+											{% endif %}
+											{% if "ROLE_Utilisateur" in user.roles %}
+												<span class="badge badge-primary">Utilisateur
+													<i class="fas fa-user text-white"></i>
+												</span>
+											{% endif %}
+											{% if "ROLE_GESTIONNAIRE" in user.roles %}
+												<span class="badge badge-warning">Gestionnaire
+													<i class="fas fa-user-tie text-white"></i>
+												</span>
+											{% endif %}
+
+
+										</td>
+										{% if user.enabled == true %}
+											<td>
+												<span class="badge badge-success">activé
+													<i class="fas fa-user-check text-white"></i>
+												</span>
+											</td>
+										{% else %}
+											<td>
+												<span class="badge badge-danger">Désactivé
+													<i class="fas fa-user-lock text-white"></i>
+												</span>
+											</td>
+										{% endif %}
+
+										<td>{{ user.idDepartement.libelle }}</td>
+
+
+										<td>
+											<a href="{{ path('app_user_show', {'id': user.id}) }}">
+												<i class="fas fa-info-circle text-info"></i>
+											</a>
+											<a href="{{ path('app_user_edit', {'id': user.id}) }}">
+												<i class="fas fa-edit text-warning"></i>
+											</a>
+											{% if user.enabled == false %}
+
+												<a href="{{ path('app_user_activate', {'id': user.id}) }}">
+													<i class="fas fa-user-check text-success"></i>
+												</a>
+												{% else %}
+
+												<a href="{{ path('app_user_desactivate', {'id': user.id}) }}">
+													<i class="fas fa-user-lock text-danger"></i>
+											{% endif %}
+
+
+										</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="10">no records found</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+							<tfoot>
+								<th>Identifiant</th>
+								<th>Image</th>
+								<th>Nom</th>
+								<th>Prenom</th>
+								<th>Role</th>
+								<th>Statut</th>
+								<th>Département</th>
+								<th>actions</th>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Session index{% endblock %}
+
+{% block content %}
+    <h1>Session index</h1>
+    <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_session_new') }}">
+        <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
+    <table class="table" id="example1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Description</th>
+                <th>DateDebut</th>
+                <th>DateFin</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Enabled</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.id }}</td>
+                <td>{{ session.libelle }}</td>
+                <td>{{ session.description }}</td>
+                <td>{{ session.dateDebut ? session.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ session.dateFin ? session.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ session.createdAt ? session.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ session.updatedAt ? session.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ session.enabled ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_session_show', {'id': session.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">	<i class="fas fa-edit text-warning"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="session")
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\SessionRepository")
  */
 class Session
 {
@@ -161,5 +160,9 @@ class Session
         return $this;
     }
 
+    public function __toString()
+    {
+        return(string)$this->getLibelle();
+     }
 
 }

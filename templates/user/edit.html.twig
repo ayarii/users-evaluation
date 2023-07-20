@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Utilisateur{% endblock %}
+{% block titlepage %}Modifier Utilisateur
+{% endblock %}
+{% block page %}Modifier Utilisateur
+{% endblock %}
+{% block content %}
+    
+
+    {{ include('user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+
+{% endblock %}

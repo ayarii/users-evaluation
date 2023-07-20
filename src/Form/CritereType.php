@@ -6,6 +6,8 @@ use App\Entity\Critere;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class CritereType extends AbstractType
 {
@@ -14,11 +16,14 @@ class CritereType extends AbstractType
         $builder
             ->add('libelle')
             ->add('ponderation')
-            ->add('description')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('enabled')
-            ->add('idEvaluation')
+            ->add('description',CKEditorType::class, array(
+                'config' => array(
+                    'uiColor' => '#ffffff',
+                    //...
+                ),
+            ))
+
+           
         ;
     }
 

@@ -1,0 +1,201 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users
+{% endblock %}
+{% block titlepage %}Users
+{% endblock %}
+
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Users</h3>
+					
+				<div class="card-body">
+					<table id="example1" class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								
+								<th>Utilisateur</th>
+								{% set tot = 0 %}
+                                {% for cr in criteres %}
+								<th> {{cr.libelle }} /{{cr.ponderation }}</th>
+                                
+								{% set tot = tot + cr.ponderation %}
+								{% endfor %}
+                                <th> SCORE TOTAL / {{tot}} </th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in users %}
+								<tr>
+									
+									<td>{{ user.nom }} {{ user.prenom }}</td>
+                                    {% for cr in criteres %}
+                                    <form id="myform-{{user.id}}" action="{{ path('app_affectationnotes_submit',{'id': cr.idevaluation.id , 'userId': user.id}) }}" method="POST">
+									<td> 
+          <input type="number" step="0.01" id="{{cr.id}}{{user.id}}" name="{{cr.id}}{{user.id}}" data-form="myform-{{ user.id }}" oninput="checkInputValue(this,{{cr.ponderation}})"  >
+  
+  
+
+
+{% endfor %}
+</td>
+ 
+
+<td class="total"> </td>
+</form>
+
+
+									
+										
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="10">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
+{% block scripts %} 
+
+ function updateRowTotal(row) {
+  const totalCell = row.querySelector('.total');
+  const inputsInRow = row.querySelectorAll('input');
+  let rowTotal = 0;
+  inputsInRow.forEach(input => {
+    rowTotal += parseFloat(input.value) || 0;
+  });
+  totalCell.textContent = rowTotal.toFixed(2);
+}
+
+const inputs = document.querySelectorAll('input[data-form]');
+
+inputs.forEach(input => {
+  	const formId = input.dataset.form;
+  	const form = document.getElementById(formId);
+ 	const userId = formId.split('-')[1]; 
+  	const critereId = input.id.replace(userId, ''); 
+
+ 
+  
+  fetchInitialValues(userId, critereId)
+    .then(initialValue => {
+      input.value = initialValue;
+	  const row = input.closest('tr');
+      updateRowTotal(row);
+    });
+
+  input.addEventListener('keydown', function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      submitFormWithAjax(form);
+	  
+ 	  fetchInitialValues(userId, critereId)
+      .then(initialValue => {
+            input.value = initialValue;
+	        input.blur();
+	        const row = input.closest('tr');
+            updateRowTotal(row);
+           });
+
+
+      }
+  }
+  );
+  
+});
+
+
+
+
+function checkInputValue(input,max) {
+  const maxLimit = max; 
+  if (input.value > maxLimit) {
+    input.value = maxLimit;
+  }
+  else if ( 0 > input.value) {
+    input.value = 0;
+  }
+}
+
+
+
+
+
+function fetchInitialValues(userId, critereId) {
+  const url = `/affectationnotes/${userId}/${critereId}`;
+
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => data.note)
+    .catch(error => {
+      console.error( error);
+      return '';
+    });
+}
+  
+
+  
+function submitFormWithAjax(form) {
+  const formData = new FormData(form);
+  const url = form.action;
+  const method = form.method;
+
+  fetch(url, {
+    method: method,
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+   
+    if (data.success) {
+      
+    
+      
+    }
+  })
+  .catch(error => {
+   
+    console.error('Form submission error:', error);
+  });
+}
+
+ 
+	
+	{% endblock %}

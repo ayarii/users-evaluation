@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Critere{% endblock %}
+{% block title %}Modifier Critere{% endblock %}
 
-{% block body %}
-    <h1>Edit Critere</h1>
+{% block content %}
 
-    {{ include('critere/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1>Modifier Critere</h1>
 
-    <a href="{{ path('app_critere_index') }}">back to list</a>
+    {{ include('critere/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a href="{{ path('app_critere_index', {'id': critere.idEvaluation.id}) }}">back to list</a>
+    
 
     {{ include('critere/_delete_form.html.twig') }}
 {% endblock %}

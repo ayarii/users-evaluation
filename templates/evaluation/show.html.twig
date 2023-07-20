@@ -2,19 +2,21 @@
 
 {% block title %}Evaluation{% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Evaluation</h1>
 
     <table class="table">
         <tbody>
-            
+
+          
+
             <tr>
                 <th>Libelle</th>
                 <td>{{ evaluation.libelle }}</td>
             </tr>
             <tr>
                 <th>Description</th>
-                <td>{{ evaluation.description }}</td>
+                <td>{{ evaluation.description |raw }}</td>
             </tr>
             <tr>
                 <th>CreatedAt</th>
@@ -28,11 +30,18 @@
                 <th>Enabled</th>
                 <td>{{ evaluation.enabled ? 'Yes' : 'No' }}</td>
             </tr>
+             <tr>
+                <th>Critères</th>
+                <td> <a href="{{ path('app_critere_index', {'id': evaluation.id}) }}" >liste des critères</a></td>
+            </tr>
         </tbody>
     </table>
-
+{% if app.user.roles[0]=="ROLE_GESTIONNAIRE"%}
     <a href="{{ path('app_evaluation_index') }}">back to list</a>
-
+{% endif %}
+{% if app.user.roles[0]=="ROLE_ADMIN"%}
+    <a href="{{ path('app_evaluation_admin') }}">back to list</a>
+{% endif %}
     <a href="{{ path('app_evaluation_edit', {'id': evaluation.id}) }}">edit</a>
 
     {{ include('evaluation/_delete_form.html.twig') }}

@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Utilisateur
+{% endblock %}
+{% block titlepage %}Détails Utilisateur
+{% endblock %}
+{% block page %}Détails Utilisateur
+{% endblock %}
+
+{% block content %}
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Image</th>
+				<td>
+					<div class="text-center">
+						<img class="profile-user-img img-fluid img-circle" src="{{asset('/Photos/users/' ~ user.image)}}" alt="User profile picture"/>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>Identifiant</th>
+				<td>{{ user.id }}</td>
+			</tr>
+			<tr>
+				<th>Nom</th>
+				<td>{{ user.nom }}</td>
+			</tr>
+			<tr>
+				<th>Prenom</th>
+				<td>{{ user.prenom }}</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>{{ user.email }}</td>
+			</tr>
+			<tr>
+				<th>Departement</th>
+				<td>{{ user.idDepartement.libelle }}</td>
+			</tr>
+			<tr>
+				<th>Statut</th>
+				{% if user.enabled == true %}
+					<td>
+						<span class="badge badge-success">activé
+							<i class="fas fa-user-check text-white"></i>
+						</span>
+					</td>
+				{% else %}
+					<td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-user-lock text-white"></i>
+						</span>
+					</td>
+				{% endif %}
+			</tr>
+			
+			<tr>
+				<th>Role</th>
+				<td>
+					{% if "ROLE_ADMIN" in user.roles %}
+						<span class="badge badge-danger">Administrateur
+							<i class="fas fa-user-shield text-white"></i>
+						</span>
+					{% endif %}
+					{% if "ROLE_Utilisateur" in user.roles %}
+						<span class="badge badge-primary">Utilisateur
+							<i class="fas fa-user text-white"></i>
+						</span>
+					{% endif %}
+					{% if "ROLE_GESTIONNAIRE" in user.roles %}
+						<span class="badge badge-warning">Gestionnaire
+							<i class="fas fa-user-tie text-white"></i>
+						</span>
+					{% endif %}
+
+
+				</td>
+			</tr>
+			<tr>
+				<th>Date de création</th>
+				<td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Date de derniére mise à jour</th>
+				<td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+		</tbody>
+	</table>
+<div class="row">
+		<div class="col-md-2">
+	<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Modifier</a>
+    </div>
+		<div class="col-md-2">
+	{% if user.enabled == true %}
+				<a href="{{ path('app_user_desactivate', {'id': user.id}) }}" class="btn btn-danger"> <i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Bloquer</a>
+
+	{% else %}
+		<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success"> <i class="fas fa-user-check text-white" style="padding-right:3px"></i>Débloquer</a>
+	{% endif %}
+    </div>
+	</div>
+    <br><br>
+{% endblock %}
