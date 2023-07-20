@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use DateTime;
 
 /**
@@ -12,7 +14,9 @@ use DateTime;
  *
  * @ORM\Table(name="badge")
  * @ORM\Entity
+ *
  */
+#[UniqueEntity(fields: ['libelle'], message: 'ce badge existe déjà!')]
 class Badge
 {
     /**
@@ -29,7 +33,7 @@ class Badge
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
-    #[Assert\NotBlank(null,"Libelle Obligatoire!")]
+    #[Assert\NotBlank(null, "Libelle Obligatoire!")]
     private $libelle;
 
     /**
@@ -37,8 +41,32 @@ class Badge
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    #[Assert\NotBlank(null,"Description Obligatoire!")]
+    #[Assert\NotBlank(null, "Description Obligatoire!")]
     private $description;
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     * 
+     * @ORM\Column(name ="image",type = "string", length=255, nullable=false)
+     * 
+     * @Assert\NotBlank(message="Image Obligatoire!")
+     */
+    private $image;
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     * 
+     * @ORM\Column(name ="action",type = "string", length=255, nullable=false)
+     * 
+     * 
+     */
+    #[Assert\NotBlank(null, "Action Obligatoire!")]
+    private $action;
+
 
     /**
      * @var \DateTime
@@ -60,6 +88,8 @@ class Badge
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
+
+
 
     public function getId(): ?int
     {
@@ -86,6 +116,29 @@ class Badge
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getAction(): ?string
+    {
+        return $this->action;
+    }
+    public function setAction(?string $action): static
+    {
+        $this->action = $action;
 
         return $this;
     }
@@ -125,7 +178,7 @@ class Badge
 
         return $this;
     }
-      /**
+    /**
      * @ORM\PrePersist
      */
     public function prePersist(): void
@@ -141,6 +194,4 @@ class Badge
     {
         $this->updatedAt = new DateTime();
     }
-
-
 }
