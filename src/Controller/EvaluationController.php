@@ -76,7 +76,23 @@ class EvaluationController extends AbstractController
 
     #[Route('/{id}', name: 'app_evaluation_show', methods: ['GET'])]
     public function show(Evaluation $evaluation,EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
-    {  $criteres= $critereRepository
+    { $repo= $entityManager->getRepository(Affectationnotes::class);
+        $affe = $repo
+        ->createQueryBuilder('an')
+        ->select('an, SUM(an.note) AS totalNote')
+        ->join(Critere::class,'c')
+        ->where('an.critere = c.id')
+        ->andWhere('c.idEvaluation = :evaluationId')
+        ->groupBy('an.user')
+        ->orderBy('totalNote', 'DESC')
+        ->setMaxResults(3)
+        ->setParameter('evaluationId', $evaluation->getId())
+
+            ->getQuery()
+            ->getResult();
+       //dd($affe);
+        
+        $criteres= $critereRepository
         ->createQueryBuilder('u')
 
         ->where('u.enabled = :bool')
@@ -105,6 +121,7 @@ class EvaluationController extends AbstractController
             'users'=>$users,
             'criteres'=>$criteres,
             'affectations'=>$aff,
+            'topAffs'=>$affe
             
         ]);
     }

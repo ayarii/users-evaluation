@@ -3,7 +3,26 @@
 {% block title %}Evaluation{% endblock %}
 
 {% block content %}
+<style>
+.cardt-container {
+  display: flex;
+  flex-wrap: wrap; /* To wrap cards to the next line if they overflow */
+}
+.cardt {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 25%;
+  margin: 40px;
+}
 
+.cardt:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+</style>
     <h1>Evaluation</h1>
 {% if app.user.roles[0]=="ROLE_GESTIONNAIRE"%}
     <a href="{{ path('app_evaluation_index') }}">back to list</a>
@@ -48,6 +67,12 @@
 
 
     <div class="row">
+	{% set tot = 0 %}
+                                {% for cr in criteres %}
+								
+                                
+								{% set tot = tot + cr.ponderation %}
+								{% endfor %}
 		<div class="col-12">
 			<br>
 			{% for type, messages in app.flashes %}
@@ -69,6 +94,23 @@
 			{% endfor %}
 
 			<br>
+
+{% if topAffs is not empty%}
+			 <h2 style="color:green;"> <b>TOP 3 USERS <i class="fas fa-award"></i> </b></h2>
+			 <div class="cardt-container">
+{% for affT in topAffs %}
+<div class="cardt">
+
+  <img src="{{ asset('Photos/users/' ~ affT[0].user.image) }}" class="img-circle elevation-2" alt="userImage" style="width:100%">
+  <div class="container">
+    <h4><b> {{affT[0].user.nom}} {{affT[0].user.prenom}}</b></h4> 
+    <p style="font-weight: bold;color:green;"> Score Total: {{affT.totalNote}} /{{tot}} </p> 
+  </div>
+</div>
+{% endfor %}
+
+</div>
+{% endif %}
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
@@ -80,11 +122,11 @@
 							<tr>
 								
 								<th>Utilisateur</th>
-								{% set tot = 0 %}
+								
                                 {% for cr in criteres %}
 								<th> {{cr.libelle }} /{{cr.ponderation }}</th>
                                 
-								{% set tot = tot + cr.ponderation %}
+								
 								{% endfor %}
                                 <th> SCORE TOTAL / {{tot}} </th>
 								 <th> Action</th>
