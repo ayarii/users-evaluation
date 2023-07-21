@@ -95,7 +95,7 @@
 
 			<br>
 
-
+{% if topAffs is not empty%}
 			 <h2 style="color:green;"> <b>TOP 3 USERS <i class="fas fa-award"></i> </b></h2>
 			 <div class="cardt-container">
 {% for affT in topAffs %}
@@ -108,7 +108,9 @@
   </div>
 </div>
 {% endfor %}
+
 </div>
+{% endif %}
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
