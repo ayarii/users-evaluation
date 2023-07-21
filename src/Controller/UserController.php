@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\EditPasswordType;
 use App\Form\EditProfileType;
 use App\Form\UserType;
+use App\Repository\AffectationBadgeRepository;
 use App\Repository\UserRepository;
 use App\Service\DefaultImageGenerator as ServiceDefaultImageGenerator;
 use App\Service\SendMailService;
@@ -100,10 +101,12 @@ class UserController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user,AffectationBadgeRepository $affbadrepo): Response
     {
+       $badges= $affbadrepo->findBadgesByUserId($user->getId());
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'badges' => $badges
         ]);
     }
 
