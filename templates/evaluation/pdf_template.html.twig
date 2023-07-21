@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluation Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 5px;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Les détails de l'évaluation</h1>
+    <p><strong>Nom et prénom:</strong> {{user.nom}} {{user.prenom}}</p>
+
+    <h2>Note de chaque critère:</h2>
+      <table class="table">
+        <tbody>
+{% set tot = 0 %}
+ {% set totPon = 0 %}         
+{% for cr in criteres %}
+
+            <tr>
+                <th>{{cr.libelle}}  / {{cr.ponderation}}</th>
+                {% set totPon = totPon + cr.ponderation %}
+                {% for aff in affectations %}
+                
+                {% if aff.critere.idEvaluation.id == id and cr.id == aff.critere.id %}
+                <td>{{aff.note}}</td>
+                {% set tot = tot + aff.note %}
+                {% endif %}
+                {% endfor %} 
+          </tr>
+           
+            {% endfor %} 
+              <tr>
+                <th>Total / {{ totPon }}</th>
+                <td>{{tot}}</td>
+                
+          </tr>
+        
+        </tbody>
+    </table>
+
+    
+</body>
+</html>
