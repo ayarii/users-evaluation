@@ -3,6 +3,7 @@
 {% block title %}Evaluation{% endblock %}
 
 {% block content %}
+
     <h1>Evaluation</h1>
 
     <table class="table">
@@ -71,7 +72,7 @@
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
-					<a href="{{ path('app_evaluation_excel', {'id': evaluation.id}) }}"> excel</a>
+					<a class="btn btn-primary d-inline-flex align-items-center" style="margin-top:50px;" href="{{ path('app_evaluation_excel', {'id': evaluation.id}) }}"> Exporter en Excel</a>
 					
 				<div class="card-body">
 					<table id="example1" class="table table-bordered table-hover table-striped">
@@ -112,7 +113,7 @@
  
 
 <td class="total">{{tot}}  </td>
-<td > <a href="{{ path('app_evaluation_pdf', {'userId': user.id,'evId': evaluation.id}) }}"> pdf </a> </td>
+<td > <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_evaluation_pdf', {'userId': user.id,'evId': evaluation.id}) }}"> pdf </a> </td>
 </form>
 
 

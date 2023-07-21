@@ -54,11 +54,12 @@
       <table class="table">
         <tbody>
 {% set tot = 0 %}
-          
+ {% set totPon = 0 %}         
 {% for cr in criteres %}
 
             <tr>
-                <th>{{cr.libelle}}</th>
+                <th>{{cr.libelle}}  / {{cr.ponderation}}</th>
+                {% set totPon = totPon + cr.ponderation %}
                 {% for aff in affectations %}
                 
                 {% if aff.critere.idEvaluation.id == id and cr.id == aff.critere.id %}
@@ -70,7 +71,7 @@
            
             {% endfor %} 
               <tr>
-                <th>Total</th>
+                <th>Total / {{ totPon }}</th>
                 <td>{{tot}}</td>
                 
           </tr>
