@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Badge;
 use App\Form\BadgeType;
+use App\Repository\AffectationBadgeRepository;
 use App\Repository\BadgeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,10 +71,12 @@ class BadgeController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/{id}', name: 'app_badge_show', methods: ['GET'])]
-    public function show(Badge $badge): Response
+    public function show(Badge $badge,AffectationBadgeRepository $affbadrepo): Response
     {
+        $users= $affbadrepo->findUsersByBadgeId($badge->getId());
         return $this->render('badge/show.html.twig', [
             'badge' => $badge,
+            'users'=> $users
         ]);
     }
 

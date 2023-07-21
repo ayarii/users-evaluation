@@ -63,4 +63,25 @@ class AffectationBadgeRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function findBadgesByUserId($userId)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('b.id', 'b.libelle', 'b.image')
+            ->leftJoin('a.idbadge', 'b')
+            ->andWhere('a.iduser = :iduser')
+            ->setParameter('iduser', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUsersByBadgeId($badgeId)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('u.id', 'u.nom','u.prenom' ,'u.image')
+            ->leftJoin('a.iduser', 'u')
+            ->andWhere('a.idbadge = :idbadge')
+            ->setParameter('idbadge', $badgeId)
+            ->getQuery()
+            ->getResult();
+    }
 }
