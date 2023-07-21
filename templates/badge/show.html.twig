@@ -13,8 +13,12 @@
 	<table class="table">
 		<tbody>
 			<tr>
-				<th>Id</th>
-				<td>{{ badge.id }}</td>
+				<th>Image</th>
+				<td>
+					<div class="text-center">
+						<img class="profile-user-img img-fluid img-circle" src="{{asset('/Photos/badges/' ~ badge.image)}}" alt="User profile picture"/>
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<th>Libelle</th>
@@ -23,6 +27,10 @@
 			<tr>
 				<th>Description</th>
 				<td>{{ badge.description |raw }}</td>
+			</tr>
+			<tr>
+				<th>Action</th>
+				<td>{{ badge.action}}</td>
 			</tr>
 			<tr>
 				<th>Statut</th>

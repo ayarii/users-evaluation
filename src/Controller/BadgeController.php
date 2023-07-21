@@ -41,6 +41,18 @@ class BadgeController extends AbstractController
             $badge->setCreatedAt(new \DateTime());
             $badge->setUpdatedAt(new \DateTime());
             $badge->setEnabled(1);
+
+
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+            $imageData = $form->get('libelle')->getData()  . '.' . $imageFile->guessExtension();
+            $imageFile->move(
+                $this->getParameter('badges_directory'),
+                $imageData
+            );
+            $badge->setImage($imageData);
+        }
             $badgeRepository->save($badge, true);
             $this->addFlash('success', 'Badge ajouté avec succés!');
 
@@ -77,6 +89,16 @@ class BadgeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $badge->setUpdatedAt(new \DateTime());
+
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+            $imageData = $form->get('libelle')->getData() . '-' . $badge->getId() . '.' . $imageFile->guessExtension();
+            $imageFile->move(
+                $this->getParameter('badges_directory'),
+                $imageData
+            );
+            $badge->setImage($imageData);
+        }
             $badgeRepository->save($badge, true);
             $this->addFlash('success', 'Badge mise à jour avec succés!');
             return $this->redirectToRoute('app_badge_index', [], Response::HTTP_SEE_OTHER);

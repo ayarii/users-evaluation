@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\EditPasswordType;
 use App\Form\EditProfileType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -108,12 +109,16 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request, User $user, ServiceDefaultImageGenerator $defaultImageGenerator): Response
+    public function profile(Request $request,Request $requestpass,User $user, ServiceDefaultImageGenerator $defaultImageGenerator, UserPasswordEncoderInterface $userPasswordHasher): Response
     {
 
         $form = $this->createForm(EditProfileType::class, $user);
 
         $form->handleRequest($request);
+
+        $formpass = $this->createForm(EditPasswordType::class, $user);
+
+        $formpass->handleRequest($requestpass);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle form submission and update the entity
@@ -127,17 +132,30 @@ class UserController extends AbstractController
                 );
                 $user->setImage($imageData);
             }
-
             // Persist changes to the database
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
-
+            dump($this->get('session')->getFlashBag()->all());
             $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
             return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        } elseif ($formpass->isSubmitted() && $formpass->isValid()) {
+
+            $user->setPassword($userPasswordHasher->encodePassword(
+                $user,
+                $formpass->get('password')->getData()
+            ));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Votre mot de passe à été mise à jour avec succés!');
+           // dd($this->get('session')->getFlashBag()->all());
+            return $this->redirectToRoute('app_logout', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
+        //dump($this->get('session')->getFlashBag()->all());
         return $this->render('user/profile.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
+            'formpass' => $formpass->createView(),
         ]);
     }
 
@@ -186,6 +204,7 @@ class UserController extends AbstractController
         return $this->renderForm('user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
+
         ]);
     }
 
@@ -241,7 +260,7 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Utilisateur activé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-    
+
     /**
      * 
      * @IsGranted("ROLE_ADMIN")
