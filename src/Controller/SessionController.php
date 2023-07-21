@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Form\SessionType;
+use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +35,9 @@ class SessionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $date=new \DateTime();
+            $session->setCreatedAt($date);
+            $session->setUpdatedAt($date);
             $entityManager->persist($session);
             $entityManager->flush();
 
@@ -60,6 +65,8 @@ class SessionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $date=new \DateTime();
+            $session->setUpdatedAt($date);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_session_index', [], Response::HTTP_SEE_OTHER);
@@ -80,5 +87,23 @@ class SessionController extends AbstractController
         }
 
         return $this->redirectToRoute('app_session_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/activer/{id}', name: 'app_session_activer')]
+    public function activer(SessionRepository $repository,$id,ManagerRegistry $doctrine){
+ $session=$repository->find($id);
+ $session->setEnabled(true);
+ $em=$doctrine->getManager();
+ $em->flush();
+ return $this->redirectToRoute("app_session_index");
+
+    }
+    #[Route('/desactiver/{id}', name: 'app_session_desactiver')]
+    public function desactiver(SessionRepository $repository,$id,ManagerRegistry $doctrine){
+        $session=$repository->find($id);
+        $session->setEnabled(false);
+        $em=$doctrine->getManager();
+        $em->flush();
+        return $this->redirectToRoute("app_session_index");
+
     }
 }

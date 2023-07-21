@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use \DateTime;
+use PHPUnit\TextUI\XmlConfiguration\Logging\Text;
 
 /**
  * Departement
@@ -33,7 +35,7 @@ class Departement
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @ORM\Column(name="description", type="text",nullable=false)
      */
     private $description;
 
@@ -61,7 +63,7 @@ class Departement
     /**
      * @var Session
      *
-     * @ORM\ManyToOne(targetEntity="Session")
+     * @ORM\ManyToOne(targetEntity="Session", inversedBy="Departement", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_session", referencedColumnName="id")
      * })
@@ -85,17 +87,22 @@ class Departement
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return string
+     */
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -147,6 +154,6 @@ class Departement
 
     public function __toString()
     {
-        return $this->getLibelle() . ": " . $this->getDescription() ;
+        return $this->getLibelle();
     }
 }

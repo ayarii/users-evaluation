@@ -2,7 +2,7 @@
 
 {% block title %}Departement{% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Departement</h1>
 
     <table class="table">
@@ -34,9 +34,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_departement_index') }}">back to list</a>
+    <a href="{{ path('app_departement_index') }}" class="btn btn-success"><i class="fas fa-edit" style="padding-right:3px"></i>Back to list</a>
+    <br>
 
-    <a href="{{ path('app_departement_edit', {'id': departement.id}) }}">edit</a>
+    <a href="{{ path('app_departement_edit', {'id': departement.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Edit</a>
 
     {{ include('departement/_delete_form.html.twig') }}
 {% endblock %}

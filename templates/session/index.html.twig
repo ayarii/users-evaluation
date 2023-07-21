@@ -6,35 +6,54 @@
     <h1>Session index</h1>
     <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_session_new') }}">
         <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
-    <table class="table" id="example1">
+    <table id="example1" class="table table-bordered table-hover table-striped">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>Description</th>
-                <th>DateDebut</th>
-                <th>DateFin</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>Enabled</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+
+            <th>Libelle</th>
+            <th>DateDebut</th>
+            <th>DateFin</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>Enabled</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for session in sessions %}
             <tr>
-                <td>{{ session.id }}</td>
+
                 <td>{{ session.libelle }}</td>
-                <td>{{ session.description }}</td>
                 <td>{{ session.dateDebut ? session.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ session.dateFin ? session.dateFin|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ session.createdAt ? session.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ session.updatedAt ? session.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ session.enabled ? 'Yes' : 'No' }}</td>
+                {% if session.enabled == true %}
+                    <td>
+												<span class="badge badge-success">Activé
+													<i class="fas fa-check text-white"></i>
+												</span>
+                    </td>
+                {% else %}
+                    <td>
+												<span class="badge badge-danger">Désactivé
+													<i class="fas fa-ban text-white"></i>
+												</span>
+                    </td>
+                {% endif %}
                 <td>
                     <a href="{{ path('app_session_show', {'id': session.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">	<i class="fas fa-edit text-warning"></i>
-                    </a>
+                    <a href="{{ path('app_session_edit', {'id': session.id}) }}"><i class="fas fa-edit text-warning"></i>
+                        {% if session.enabled == false %}
+
+                        <a href="{{ path('app_session_activer', {'id': session.id}) }}">
+                            <i class="fas fa-unlock  text-success"></i>
+                        </a>
+                        {% else %}
+
+                        <a href="{{ path('app_session_desactiver', {'id': session.id}) }}">
+                            <i class="fas fa-ban text-danger"></i>
+                            {% endif %} </a>
                 </td>
             </tr>
         {% else %}

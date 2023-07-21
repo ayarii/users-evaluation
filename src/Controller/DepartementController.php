@@ -6,10 +6,12 @@ use App\Entity\Departement;
 use App\Form\DepartementType;
 use App\Repository\DepartementRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/departement')]
 class DepartementController extends AbstractController
@@ -24,13 +26,16 @@ class DepartementController extends AbstractController
     }
 
     #[Route('/new', name: 'app_departement_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_departement_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $departement = new Departement();
         $form = $this->createForm(DepartementType::class, $departement);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $date=new \DateTime();
+            $departement->setCreatedAt($date);
+            $departement->setUpdatedAt($date);
             $entityManager->persist($departement);
             $entityManager->flush();
             return $this->redirectToRoute('app_departement_index', [], Response::HTTP_SEE_OTHER);
@@ -58,8 +63,10 @@ class DepartementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
 
+            $date=new \DateTime();
+            $departement->setUpdatedAt($date);
+            $entityManager->flush();
             return $this->redirectToRoute('app_departement_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -79,4 +86,23 @@ class DepartementController extends AbstractController
 
         return $this->redirectToRoute('app_departement_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/activer/{id}', name: 'app_departement_activer')]
+    public function activer(DepartementRepository $repository,$id,ManagerRegistry $doctrine){
+        $departement=$repository->find($id);
+        $departement->setEnabled(true);
+        $em=$doctrine->getManager();
+        $em->flush();
+        return $this->redirectToRoute("app_departement_index");
+
+    }
+    #[Route('/desactiver/{id}', name: 'app_departement_desactiver')]
+    public function desactiver(DepartementRepository $repository,$id,ManagerRegistry $doctrine){
+        $departement=$repository->find($id);
+        $departement->setEnabled(false);
+        $em=$doctrine->getManager();
+        $em->flush();
+        return $this->redirectToRoute("app_departement_index");
+
+    }
+
 }
