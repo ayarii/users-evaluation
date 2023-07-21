@@ -47,9 +47,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_session_index') }}" class="btn btn-success"><i class="fas fa-edit" style="padding-right:3px"></i>back to list</a>
+    <a href="{{ path('app_session_index') }}" class="btn btn-success"><i class="fas fa-edit" style="padding-right:3px"></i>Back to list</a>
 
-    <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Modifier</a>
+    <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Edit</a>
 
 
     {{ include('session/_delete_form.html.twig') }}

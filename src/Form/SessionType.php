@@ -16,8 +16,6 @@ class SessionType extends AbstractType
             ->add('description')
             ->add('dateDebut')
             ->add('dateFin')
-            ->add('createdAt')
-            ->add('updatedAt')
             ->add('enabled')
         ;
     }

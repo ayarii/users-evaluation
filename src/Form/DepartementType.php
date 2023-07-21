@@ -14,8 +14,6 @@ class DepartementType extends AbstractType
         $builder
             ->add('libelle')
             ->add('description')
-            ->add('createdAt')
-            ->add('updatedAt')
             ->add('enabled')
             ->add('idSession')
         ;

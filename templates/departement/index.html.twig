@@ -1,30 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block title %}Departement index{% endblock %}
 
+{% block content %}
     <h1>Departement index</h1>
+    <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_departement_new') }}">
+        <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
 
-    <table class="table" id="example1">
+    <table id="example1" class="table table-bordered table-hover table-striped">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>Description</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>Enabled</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+
+            <th>Libelle</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>Enabled</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for departement in departements %}
             <tr>
-                <td>{{ departement.id }}</td>
+
                 <td>{{ departement.libelle }}</td>
-                <td>{{ departement.description }}</td>
                 <td>{{ departement.createdAt ? departement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ departement.updatedAt ? departement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ departement.enabled ? 'Yes' : 'No' }}</td>
+                {% if departement.enabled == true %}
+                    <td>
+												<span class="badge badge-success">activé
+													<i class="fas fa-user-check text-white"></i>
+												</span>
+                    </td>
+                {% else %}
+                    <td>
+												<span class="badge badge-danger">Désactivé
+													<i class="fas fa-user-lock text-white"></i>
+												</span>
+                    </td>
+                {% endif %}
                 <td>
-                    <a href="{{ path('app_departement_show', {'id': departement.id}) }}">show</a>
-                    <a href="{{ path('app_departement_edit', {'id': departement.id}) }}">edit</a>
+                    <a href="{{ path('app_departement_show', {'id': departement.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+                    <a href="{{ path('app_departement_edit', {'id': departement.id}) }}"><i class="fas fa-edit text-warning"></i></a>
+                    {% if departement.enabled == false %}
+                    <a href="{{ path('app_departement_activer', {'id': departement.id}) }}">
+                        <i class="fas fa-unlock  text-success"></i>
+                    </a>
+                    {% else %}
+
+                    <a href="{{ path('app_departement_desactiver', {'id': departement.id}) }}">
+                        <i class="fas fa-ban text-danger"></i>
+                        {% endif %} </a>
+
                 </td>
             </tr>
         {% else %}
@@ -35,4 +60,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_departement_new') }}">Create new</a>
+{% endblock %}
