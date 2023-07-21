@@ -107,6 +107,9 @@ width:50px;
   });
   totalCell.textContent = rowTotal.toFixed(2);
 }
+ 
+ const keyValueMap = new Map();
+
 
 const inputs = document.querySelectorAll('input[data-form]');
 
@@ -125,9 +128,14 @@ inputs.forEach(input => {
       updateRowTotal(row);
     });
 
+
   input.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
+	  const valuesArray = Array.from(keyValueMap.values());
+const hasValue = valuesArray.includes(false);
+	if(hasValue === true) { alert(`verifiez les notes`);}
+	else{
       submitFormWithAjax(form);
 	  
  	  fetchInitialValues(userId, critereId)
@@ -140,7 +148,7 @@ inputs.forEach(input => {
 
 
       }
-  }
+  }}
   );
   
 });
@@ -148,15 +156,25 @@ inputs.forEach(input => {
 
 
 
-function checkInputValue(input,max) {
-  const maxLimit = max; 
-  if (input.value > maxLimit) {
-    input.value = maxLimit;
+ function checkInputValue(input, max) {
+    const maxLimit = max;
+    if (input.value > maxLimit) {
+      alert(`La note doit etre inférieure à ${maxLimit}`);
+	    input.style.border='3px solid red'
+	  keyValueMap.set(input.id, false);
+    
+      return false; 
+    } else if (input.value < 0) {
+      alert('la note ne peut pas etre négative');
+	    input.style.border='3px solid red'
+  
+      keyValueMap.set(input.id, false);
+    }
+	  input.style.border=''
+    keyValueMap.set(input.id, true);
+
+    
   }
-  else if ( 0 > input.value) {
-    input.value = 0;
-  }
-}
 
 
 
