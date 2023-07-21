@@ -316,6 +316,16 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
+									<a href="{{path('app_affectation_badge_index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'app_affectation_badge_index'  %}active{% endif %}">
+										<i class="nav-icon fas fa-id-badge"></i>
+										<p>
+											Affectation Badges
+
+										</p>
+									</a>
+
+								</li>
+								<li class="nav-item">
 									<a href="{{ path('app_evaluation_admin') }}" class="nav-link">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>

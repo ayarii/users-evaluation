@@ -135,7 +135,7 @@ class UserController extends AbstractController
             // Persist changes to the database
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
-            dump($this->get('session')->getFlashBag()->all());
+           // dump($this->get('session')->getFlashBag()->all());
             $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
             return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         } elseif ($formpass->isSubmitted() && $formpass->isValid()) {
