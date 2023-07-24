@@ -69,4 +69,90 @@
                 </div>
               </div>
             </div>
+
+<div class="row" style="padding-top:20px">
+<div class="col-12 col-sm-6 col-xl-4 mb-4">
+<div class="card border-0 shadow">
+				<div class="card-header border-bottom d-flex align-items-center justify-content-between">
+					<h2 class="fs-5 fw-bold mb-0">Badge par session</h2>
+				</div>
+			<div class="card-body">
+    <canvas id="badgesChart" width="100" height="200"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const badgesData = {{ badgesData|json_encode|raw }};
+
+        const ctx1 = document.getElementById('badgesChart').getContext('2d');
+        const badgesChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Nombre des badge',
+                        data:  {
+labels: badgesData.labels,
+datasets: [
+{
+data: badgesData.data,
+backgroundColor: badgesData.colors
+}
+]
+},
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+
+
+				</div>
+			</div>
+
+
+
+
+			<div class="card border-0 shadow">
+				<div class="card-header border-bottom d-flex align-items-center justify-content-between">
+					<h2 class="fs-5 fw-bold mb-0">Utilisateurs par Département</h2>
+				</div>
+				<div class="card-body">
+
+					<canvas id="usersChart" width="100" height="200"></canvas>
+
+					<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+					<script>
+						const usersData = {{ usersData|json_encode|raw }};
+
+const ctx2 = document.getElementById('usersChart').getContext('2d');
+const usersChart = new Chart(ctx2, {
+type: 'doughnut',
+data: {
+labels: usersData.labels,
+datasets: [
+{
+data: usersData.data,
+backgroundColor: usersData.colors
+}
+]
+}
+});
+					</script>
+
+
+				</div>
+			</div>
+		</div>
+
+
 {% endblock %}
