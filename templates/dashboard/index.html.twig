@@ -1,138 +1,109 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Tableau de Bord {% endblock %}
+{% block title %}
+	Tableau de Bord
+{% endblock %}
 {% block titlepage %}Tableau de Bord
 {% endblock %}
 {% block page %}Tableau de Bord
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-            <div class="row">
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-info">
-                  <div class="inner">
-                   <h3>{{ nbutilisateurs }}</h3>
-                    <p>Utilisateurs</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="{{path('app_user_index')}}" class="small-box-footer"
-                    >Plus D'informations <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
-
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-success">
-                  <div class="inner">
-                    <h3>{{ nsessions }}<sup style="font-size: 20px"></sup></h3>
-                    <p>SESSIONS</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                  </div>
-                  <a href="{{path('app_session_index')}}" class="small-box-footer"
-                    >Plus D'informations <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
-
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-warning">
-                  <div class="inner">
-                    <h3>44</h3>
-                    <p> Bounce Rate </p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                  </div>
-                  <a href="#" class="small-box-footer"
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
-
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-danger">
-                  <div class="inner">
-                    <h3>65</h3>
-                    <p>Unique Visitors</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                  </div>
-                  <a href="#" class="small-box-footer"
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-
-<div class="row" style="padding-top:20px">
-<div class="col-12 col-sm-6 col-xl-4 mb-4">
-<div class="card border-0 shadow">
-				<div class="card-header border-bottom d-flex align-items-center justify-content-between">
-					<h2 class="fs-5 fw-bold mb-0">Badge par session</h2>
-				</div>
-			<div class="card-body">
-    <canvas id="badgesChart" width="100" height="200"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const badgesData = {{ badgesData|json_encode|raw }};
-
-        const ctx1 = document.getElementById('badgesChart').getContext('2d');
-        const badgesChart = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'Nombre des badge',
-                        data:  {
-labels: badgesData.labels,
-datasets: [
-{
-data: badgesData.data,
-backgroundColor: badgesData.colors
-}
-]
-},
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-</div>
-
-
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-info">
+					<div class="inner">
+						<h3>{{ nbutilisateurs }}</h3>
+						<p>Utilisateurs</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-bag"></i>
+					</div>
+					<a href="{{path('app_user_index')}}" class="small-box-footer">Plus D'informations
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
 				</div>
 			</div>
 
-
-
-
-			<div class="card border-0 shadow">
-				<div class="card-header border-bottom d-flex align-items-center justify-content-between">
-					<h2 class="fs-5 fw-bold mb-0">Utilisateurs par Département</h2>
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-success">
+					<div class="inner">
+						<h3>{{ nsessions }}<sup style="font-size: 20px"></sup>
+						</h3>
+						<p>SESSIONS</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-stats-bars"></i>
+					</div>
+					<a href="{{path('app_session_index')}}" class="small-box-footer">Plus D'informations
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
 				</div>
-				<div class="card-body">
+			</div>
 
-					<canvas id="usersChart" width="100" height="200"></canvas>
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-warning">
+					<div class="inner">
+						<h3>44</h3>
+						<p>
+							Bounce Rate
+						</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-person-add"></i>
+					</div>
+					<a href="#" class="small-box-footer">More info
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
 
-					<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-					<script>
-						const usersData = {{ usersData|json_encode|raw }};
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-danger">
+					<div class="inner">
+						<h3>65</h3>
+						<p>Unique Visitors</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-pie-graph"></i>
+					</div>
+					<a href="#" class="small-box-footer">More info
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="padding-top:20px">
+			<div class="col-sm-6 col-xl-6 mb-4">
+      <div class="card border-0 shadow" >
+		<div class="card-header d-sm-flex flex-row align-items-center flex-0">
+			<div class="d-block mb-3 mb-sm-0">
+				<div class="fs-5 fw-normal mb-2">Nombre des badges par session</div>
+			</div>
+			
+		</div>
+		<div class="card-body p-2">
+			<canvas id="badgeChart"  width="200" height="200"></canvas>
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		</div>
+	</div>
+      
+      </div>
+
+			<div class="col-12 col-sm-6 col-xl-6 mb-4">
+				<div class="card border-0 shadow">
+					<div class="card-header border-bottom d-flex align-items-center justify-content-between">
+						<h2 class="fs-5 fw-bold mb-0">Utilisateurs par Département</h2>
+					</div>
+					<div class="card-body">
+
+						<canvas id="usersChart" width="100" height="100"></canvas>
+
+						<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+						<script>
+							const usersData = {{ usersData|json_encode|raw }};
 
 const ctx2 = document.getElementById('usersChart').getContext('2d');
 const usersChart = new Chart(ctx2, {
@@ -147,12 +118,39 @@ backgroundColor: usersData.colors
 ]
 }
 });
-					</script>
 
 
+			var badgeData = {{ badgesData|json_encode|raw }};
+      console.log(badgeData);
+var badgeChart = new Chart(document.getElementById('badgeChart'), {
+type: 'line',
+data: {
+
+datasets: [
+{
+label: 'Nombre des badges',
+data: badgeData,
+fill: false,
+borderColor: 'rgb(75, 192, 192)',
+tension: 0.1
+}
+]
+},
+options: {
+scales: {
+y: {
+beginAtZero: true
+}
+}
+}
+});
+
+						</script>
+
+					</div>
 				</div>
 			</div>
 		</div>
-
+	</div>
 
 {% endblock %}

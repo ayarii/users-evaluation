@@ -32,8 +32,7 @@ class DashboardController extends AbstractController
 
         $badgesData =[];
         $badgesData = $this->getchartUsersPerBadges($repoaff);
-
-
+///dd($badgesData);
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'nbutilisateurs' => $nbutilisateurs,
@@ -73,11 +72,7 @@ class DashboardController extends AbstractController
     {
         $badgesData = $repouser->CountByBadgeForSession('session2023');
 
-        $chartData = [
-            'labels' => [],
-            'data' => [],
-            'colors' => []
-        ];
+        $chartData = [];
         $totalBadges = 0;
         foreach ($badgesData as $data) {
             $totalBadges += $data['count_users'];
@@ -85,11 +80,10 @@ class DashboardController extends AbstractController
         
 
         foreach ($badgesData as $data) {
-            $chartData['labels'][] = $data['badge_libelle'];
-            $chartData['data'][] = $data['count_users'];
-            $chartData['colors'][] = $this->getRandomColor();
+            $chartData[$data['badge_libelle']] = $data['count_users'];
+           
         }
-//dd($chartData);
+
         return $chartData;
     }
 
