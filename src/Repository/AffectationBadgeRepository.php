@@ -84,4 +84,21 @@ public function findBadgesByUserId($userId)
             ->getQuery()
             ->getResult();
     }
+
+    
+    public function CountByBadgeForSession(string $sessionLibelle)
+    {
+        $queryBuilder = $this->createQueryBuilder('ab')
+            ->select('b.libelle AS badge_libelle, COUNT(u.id) AS count_users') // Assuming the property name is 'badges' for the ManyToMany relationship with Badge
+            ->join('ab.iduser', 'u')
+            ->join('ab.idbadge', 'b')
+            ->join('u.idDepartement', 'd')
+            ->join('d.idSession', 's')
+            ->where('s.libelle = :sessionLibelle')
+            ->setParameter('sessionLibelle', $sessionLibelle)
+            ->groupBy('b.libelle');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
 }
