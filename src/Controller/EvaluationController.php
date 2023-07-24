@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Affectationnotes;
 use App\Entity\Critere;
+use App\Entity\Departement;
 use App\Entity\Evaluation;
+use App\Entity\Session;
 use App\Entity\User;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Form\EvaluationType;
 use App\Repository\CritereRepository;
+use App\Repository\DepartementRepository;
 use App\Repository\UserRepository;
 use App\Repository\EvaluationRepository;
 use DateTime;
@@ -19,6 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Dompdf\Dompdf;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
 #[Route('/evaluation')]
 class EvaluationController extends AbstractController
 {
@@ -75,8 +81,9 @@ class EvaluationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_evaluation_show', methods: ['GET'])]
-    public function show(Evaluation $evaluation,EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
-    { $repo= $entityManager->getRepository(Affectationnotes::class);
+    public function show($id,EntityManagerInterface $entityManager,EvaluationRepository $evRepo,CritereRepository $critereRepository,UserRepository $userRepository): Response
+    {
+         $repo= $entityManager->getRepository(Affectationnotes::class);
         $affe = $repo
         ->createQueryBuilder('an')
         ->select('an, SUM(an.note) AS totalNote')
@@ -86,11 +93,10 @@ class EvaluationController extends AbstractController
         ->groupBy('an.user')
         ->orderBy('totalNote', 'DESC')
         ->setMaxResults(3)
-        ->setParameter('evaluationId', $evaluation->getId())
+        ->setParameter('evaluationId', $id)
 
             ->getQuery()
             ->getResult();
-       //dd($affe);
         
         $criteres= $critereRepository
         ->createQueryBuilder('u')
@@ -98,7 +104,7 @@ class EvaluationController extends AbstractController
         ->where('u.enabled = :bool')
         ->setParameter('bool', 1)
         ->andWhere('u.idEvaluation = :id')
-        ->setParameter('id', $evaluation->getId())
+        ->setParameter('id', $id)
         ->getQuery()
         ->getResult();
         $users=$userRepository
@@ -116,6 +122,7 @@ class EvaluationController extends AbstractController
            
             ->getQuery()
             ->getResult();
+           $evaluation= $evRepo->find($id);
         return $this->render('evaluation/show.html.twig', [
             'evaluation' => $evaluation,
             'users'=>$users,
@@ -124,6 +131,107 @@ class EvaluationController extends AbstractController
             'topAffs'=>$affe
             
         ]);
+    }
+    #[Route('/stat', name: 'app_evaluation_stats', methods: ['GET'])]
+    public function Stats(EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
+    { $repo= $entityManager->getRepository(Session::class);
+        $sessions = $repo
+        ->createQueryBuilder('sess')
+       
+            ->getQuery()
+            ->getResult();
+      
+       
+        return $this->render('evaluation/statCritere.html.twig', [
+            'sessions' => $sessions,
+           
+            
+        ]);
+    }
+    #[Route('/getDep', name: 'app_evaluation_dep', methods: ['GET'])]
+    public function getDep(DepartementRepository $depRepository,Request $request,NormalizerInterface $normalizer): Response
+    {
+        
+        $parentId = $request->query->get('parentId');
+          $childDropdownOptions = $depRepository
+        ->createQueryBuilder('dep')
+       ->where('dep.idSession = :id')
+       ->setParameter('id',$parentId)
+            ->getQuery()
+            ->getResult();
+            $AffNormalises = $normalizer->normalize($childDropdownOptions, 'json', ['childDropdownOptions' => "childDropdownOptions"]);
+            return new Response(json_encode($AffNormalises));
+
+    }
+    #[Route('/getEv', name: 'app_evaluation_getEv', methods: ['GET'])]
+    public function getEv(EntityManagerInterface $entityManager,Request $request,NormalizerInterface $normalizer): Response
+    {
+        
+        $parentId = $request->query->get('parentId');
+          $repo= $entityManager->getRepository(Evaluation::class);
+          $childDropdownOptions = $repo
+        ->createQueryBuilder('ev')
+        ->join(User::class,'u')
+       ->where('ev.idUser = u.id')
+       ->andWhere('u.idDepartement = :id')
+       ->setParameter('id',$parentId)
+            ->getQuery()
+            ->getResult();
+            $AffNormalises = $normalizer->normalize($childDropdownOptions, 'json', ['childDropdownOptions' => "childDropdownOptions"]);
+            return new Response(json_encode($AffNormalises));
+     
+    }
+    #[Route('/getCr', name: 'app_evaluation_getCr', methods: ['GET'])]
+    public function getCr(CritereRepository $critereRepository,Request $request,NormalizerInterface $normalizer): Response
+    {
+        
+        $parentId = $request->query->get('parentId');
+          $childDropdownOptions = $critereRepository
+        ->createQueryBuilder('cr')
+       
+       ->where('cr.idEvaluation = :id')
+       ->setParameter('id',$parentId)
+            ->getQuery()
+            ->getResult();
+            $AffNormalises = $normalizer->normalize($childDropdownOptions, 'json', ['childDropdownOptions' => "childDropdownOptions"]);
+            return new Response(json_encode($AffNormalises));
+     
+    }
+    #[Route('/getCrStat', name: 'app_evaluation_getCrStat', methods: ['GET'])]
+    public function getCrStat(EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository,Request $request,NormalizerInterface $normalizer): Response
+    {
+        
+        $parentId = $request->query->get('parentId');
+          $repo= $entityManager->getRepository(Affectationnotes::class);
+         $nbA = $repo
+        ->createQueryBuilder('aff')
+        ->select('Count(aff.user) AS nbA')
+       ->where('aff.critere = :id')
+       ->setParameter('id',$parentId)
+       ->join(Critere::class,'cr')
+       ->andWhere('aff.critere = cr.id')
+       ->andWhere('(cr.ponderation / 2 ) > aff.note')
+      
+            ->getQuery()
+            ->getResult();
+            $nbF = $repo
+            ->createQueryBuilder('aff')
+            ->select('Count(aff.user) AS nbA')
+           ->where('aff.critere = :id')
+           ->setParameter('id',$parentId)
+           ->join(Critere::class,'cr')
+           ->andWhere('aff.critere = cr.id')
+           ->andWhere('(cr.ponderation / 2 ) <= aff.note')
+          
+                ->getQuery()
+                ->getResult();
+           
+                $response = [
+                    'nbA' => $nbA,
+                    'nbF' => $nbF
+                ];
+                return new JsonResponse($response);
+     
     }
     #[Route('/{id}/toexcel', name: 'app_evaluation_excel', methods: ['GET', 'POST'])]
     public function toExcel(EntityManagerInterface $entityManager,Request $request, Evaluation $evaluation, CritereRepository $critereRepository,UserRepository $userRepository,EvaluationRepository $evaluationRepository): Response

@@ -1,77 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Tableau de Bord {% endblock %}
-{% block titlepage %}Tableau de Bord
-{% endblock %}
-{% block page %}Tableau de Bord
-{% endblock %}
+{% block title %}Evaluation{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-            <div class="row">
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-info">
-                  <div class="inner">
-                    <h3>{{ nbutilisateurs }}</h3>
-                    <p>Utilisateurs</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="{{path('app_user_index')}}" class="small-box-footer"
-                    >Plus D'informations <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
 
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-success">
-                  <div class="inner">
-                    <h3>53<sup style="font-size: 20px">%</sup></h3>
-                    <p>Bounce Rate</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                  </div>
-                  <a href="#" class="small-box-footer"
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
 
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-warning">
-                  <div class="inner">
-                    <h3>44</h3>
-                    <p>User Registrations</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                  </div>
-                  <a href="#" class="small-box-footer"
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
-
-              <div class="col-lg-3 col-6">
-                <div class="small-box bg-danger">
-                  <div class="inner">
-                    <h3>65</h3>
-                    <p>Unique Visitors</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                  </div>
-                  <a href="#" class="small-box-footer"
-                    >More info <i class="fas fa-arrow-circle-right"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div style="border-style: outset;">
-            <div style="margin-left:200px;">
-             <select class="form-select" id="parentDropdown">
+<select id="parentDropdown">
     <option value="">Choisir une session</option>
     {% for sess in sessions %}
           <option value="{{sess.id}}"> {{sess.libelle}}</option>
@@ -79,20 +13,17 @@
    
 </select>
 
-    <select class="form-select" id="childDropdownDep">
+    <select id="childDropdownDep">
         <option value="">Choisir un département</option>
     </select>
-       <select class="form-select" id="childDropdownEv">
+       <select id="childDropdownEv">
         <option value="">Choisir une évaluation</option>
     </select>
-    <select class="form-select" id="childDropdownCr">
+    <select id="childDropdownCr">
         <option value="">Choisir un critère</option>
     </select>
-    </div>
-<div style="width:400px;height:400px;margin-left:300px; ">
+<div style="width:400px;height:400px;">
     <canvas id="myPieChart" width="100" height="100"></canvas>
-
-</div>
 </div>
 
 {% endblock %}
@@ -115,7 +46,7 @@
                         labels: ['>Moyenne', '< Moyenne'],
                         datasets: [{
                             data: [data.nbF[0].nbA, data.nbA[0].nbA],
-                            backgroundColor: ['#4da6ff','#cc0044'],
+                            backgroundColor: ['red', 'blue'],
                         }]
                     };
 

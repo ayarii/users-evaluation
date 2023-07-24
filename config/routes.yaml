@@ -1,3 +1,6 @@
 index:
     path: /
     controller: App\Controller\DashboardController::index
+app_evaluation_show:
+    path: /evaluation/{id}
+    controller: App\Controller\EvaluationController::show
