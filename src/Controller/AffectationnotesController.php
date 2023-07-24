@@ -99,7 +99,6 @@ class AffectationnotesController extends AbstractController
        
         if ($form->isSubmitted() && $form->isValid()) {
            $eval= $form["eval"]->getData();
-        //  dd($eval);
             return $this->redirectToRoute('app_affectationnotes_showUsers', ['id'=>$eval->getId()], Response::HTTP_SEE_OTHER);
         }
 
@@ -143,10 +142,7 @@ class AffectationnotesController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        // Process the form data as per your requirements
-
-        // Redirect or render a response
-        
+       
 
     
         return $this->render('affectationnotes/showUsers.html.twig', [
@@ -159,8 +155,7 @@ class AffectationnotesController extends AbstractController
     }
     #[Route('/submit/{id}/{userId}', name: 'app_affectationnotes_submit', methods: ['GET', 'POST'])]
     public function submit(Evaluation $evaluation,$userId,$id,Request $request, EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
-    {   //dd($request->request->get("userId"));
-        
+    {  
         $criteres= $critereRepository
         ->createQueryBuilder('u')
 
@@ -186,28 +181,27 @@ class AffectationnotesController extends AbstractController
                $affectation= $entityManager->getRepository(Affectationnotes::class)->findOneBy(['user' => $userId , 'critere'=>$cr->getId()]);
                if($affectation==null){ $aff = new Affectationnotes();
                 $aff->setCritere($critereRepository->find($cr->getId()) );
-                //dd($request->request->get($cr->getId().$userId));
+              
                 $aff->setNote(floatval($request->request->get($cr->getId().$userId)));
-              // dd( ($request->request->get($cr->getId()."-".$userId)));
+            
                 $aff->setUser($userRepository->find($userId) );
                 $aff->setEnabled(1);
                 $entityManager->persist($aff);
                 $entityManager->flush();}
                 else{$affectation->setCritere($critereRepository->find($cr->getId()) );
-                    //dd($request->request->get($cr->getId().$userId));
+                   
                     $affectation->setNote(floatval($request->request->get($cr->getId().$userId)));
-                  // dd( ($request->request->get($cr->getId()."-".$userId)));
+                
                     $affectation->setUser($userRepository->find($userId) );
                     $affectation->setEnabled(1);
                     $entityManager->persist($affectation);
                     $entityManager->flush();}
-                //dd($aff);
+               
                
             }
             return $this->json([
                 'success' => true,
                 'message' => 'Form submitted successfully!',
-                // You can add any additional data you want to return to the client
             ]);
 
     }
@@ -248,16 +242,7 @@ class AffectationnotesController extends AbstractController
         
         $repo= $entityManager->getRepository(Affectationnotes::class);
        $aff = $repo->findOneBy(['user' => $userId,'critere' => $critereId]);
-        // ->createQueryBuilder('u')
-
-        // ->where('u.enabled = :bool')
-        // ->setParameter('bool', 1)
-        // ->andWhere('u.user = :id')
-        // ->setParameter('id',$userId)
-        // ->andWhere('u.critere = :id')
-        // ->setParameter('id',$critereId)
-        // ->getQuery()
-        // ->getResult();
+       
         $AffNormalises = $normalizer->normalize($aff, 'json', ['affectation' => "affectation"]);
         return new Response(json_encode($AffNormalises));
     }

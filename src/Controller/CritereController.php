@@ -81,7 +81,6 @@ class CritereController extends AbstractController
 
             return $this->redirectToRoute('app_critere_index', ['id'=>$critere->getIdEvaluation()->getId()], Response::HTTP_SEE_OTHER);
         }
-       // dd($critere->getIdEvaluation()->getId());
 
         return $this->renderForm('critere/edit.html.twig', [
             'critere' => $critere,

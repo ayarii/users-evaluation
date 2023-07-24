@@ -52,7 +52,6 @@ class EvaluationController extends AbstractController
     {
         $evaluation = new Evaluation();
         $form = $this->createForm(EvaluationType::class, $evaluation);
-       // $evaluation->setIdUser($userRepository->find("JDKSNCJ"));
        $user=new User();
         $user=$userRepository->find($this->getUser());
         $evaluation->setIdUser($user);
@@ -90,7 +89,6 @@ class EvaluationController extends AbstractController
 
             ->getQuery()
             ->getResult();
-       //dd($affe);
         
         $criteres= $critereRepository
         ->createQueryBuilder('u')
@@ -173,10 +171,8 @@ class EvaluationController extends AbstractController
             foreach ($criteres as $critere) {
                 $note = 0;
                 foreach ($affectations as $affectation) {
-                  // dd( $affectation->getUser());
                     if ($affectation->getUser()->getId() == $user->getId() && $affectation->getCritere()->getId() == $critere->getId()) {
                         $note = $affectation->getNote();
-                       // dd($note);
                         break;
                     }
                 }
@@ -187,16 +183,13 @@ class EvaluationController extends AbstractController
             $csvData[] = $rowData;
         }
     
-        // Create the CSV content as a string
         $csvContent = '';
         foreach ($csvData as $row) {
             $csvContent .= implode(',', $row) . "\n";
         }
     
-        // Create a Response object with the CSV content
         $response = new Response($csvContent);
     
-        // Set appropriate headers for CSV download
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="table_export.csv"');
     
@@ -221,29 +214,23 @@ class EvaluationController extends AbstractController
         ->setParameter('id', $userId)
         ->getQuery()
         ->getResult();
-          // dd($affectations);
       
         $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'id'=>$evId]);
 
-        // Create a new Dompdf instance
+       
         $dompdf = new Dompdf();
 
-        // Load the HTML content into Dompdf
+        
         $dompdf->loadHtml($html);
 
-        // (Optional) Set the PDF options (e.g., paper size, orientation, etc.)
         $dompdf->setPaper('A4', 'portrait');
 
-        // Render the PDF
         $dompdf->render();
 
-        // Get the generated PDF content
         $pdfOutput = $dompdf->output();
 
-        // Create a Response object with the PDF content
         $response = new Response($pdfOutput);
 
-        // Set appropriate headers for PDF download
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Disposition', 'attachment; filename="output.pdf"');
 

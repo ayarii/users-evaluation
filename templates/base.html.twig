@@ -345,6 +345,26 @@ m.parentNode.insertBefore(n, m);
 									</a>
 
 								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_departement_index') }}" class="nav-link">
+										<i class="nav-icon fas fa-sitemap"></i>
+										<p>
+											Departements
+
+										</p>
+									</a>
+
+								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_session_index') }}" class="nav-link">
+										<i class="nav-icon fas fa-calendar-alt"></i>
+										<p>
+											Sessions
+
+										</p>
+									</a>
+
+								</li>
 							{% endif %}
 							{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
 								<li class="nav-item">
@@ -369,28 +389,7 @@ m.parentNode.insertBefore(n, m);
 								</li>
 
 							{% endif %}
-							{% if app.user.roles[0]=="ROLE_ADMIN" %}
-								<li class="nav-item">
-									<a href="{{ path('app_departement_index') }}" class="nav-link">
-										<i class="nav-icon fas fa-sitemap"></i>
-										<p>
-											Departements
-
-										</p>
-									</a>
-
-								</li>
-								<li class="nav-item">
-									<a href="{{ path('app_session_index') }}" class="nav-link">
-										<i class="nav-icon fas fa-calendar-alt"></i>
-										<p>
-											Sessions
-
-										</p>
-									</a>
-
-								</li>
-							{% endif %}
+							
 							<li class="nav-header">Profil</li>
 							<li class="nav-item">
 								<a href="{{ path('app_user_profile', {'id': app.user.id}) }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_user_profile'  %}active{% endif %}">
