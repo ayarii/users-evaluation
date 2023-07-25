@@ -46,10 +46,12 @@
     </style>
 </head>
 <body>
-    <h1>Les détails de l'évaluation</h1>
+    <h1>Les détails de : {{evaluation.libelle}}</h1>
+     <h1>Département : {{app.user.idDepartement}}</h1>
+     <h1>Session : {{app.user.idDepartement.idSession}}</h1>
     <p><strong>Nom et prénom:</strong> {{user.nom}} {{user.prenom}}</p>
 
-    <h2>Note de chaque critère:</h2>
+   
       <table class="table">
         <tbody>
 {% set tot = 0 %}
@@ -61,7 +63,7 @@
                 {% set totPon = totPon + cr.ponderation %}
                 {% for aff in affectations %}
                 
-                {% if aff.critere.idEvaluation.id == id and cr.id == aff.critere.id %}
+                {% if aff.critere.idEvaluation.id == evaluation.id and cr.id == aff.critere.id %}
                 <td>{{aff.note}}</td>
                 {% set tot = tot + aff.note %}
                 {% endif %}
