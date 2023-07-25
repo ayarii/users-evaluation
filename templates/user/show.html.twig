@@ -8,7 +8,28 @@
 {% endblock %}
 
 {% block content %}
+	<style>
+		.cardt-container {
+			display: flex;
+			flex-wrap: wrap; /* To wrap cards to the next line if they overflow */
+		}
+		.cardt {
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			transition: 0.3s;
+			width: 10%;
+			height: 25%;
+			margin: 40px;
+			border-radius: 50%
+		}
 
+		.cardt:hover {
+			box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+		}
+
+		.container {
+			padding: 2px 16px;
+		}
+	</style>
 	<table class="table">
 		<tbody>
 			<tr>
@@ -55,7 +76,7 @@
 					</td>
 				{% endif %}
 			</tr>
-			
+
 			<tr>
 				<th>Role</th>
 				<td>
@@ -88,18 +109,41 @@
 			</tr>
 		</tbody>
 	</table>
-<div class="row">
+	<div class="row">
 		<div class="col-md-2">
-	<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Modifier</a>
-    </div>
+			<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning">
+				<i class="fas fa-edit" style="padding-right:3px"></i>Modifier</a>
+		</div>
 		<div class="col-md-2">
-	{% if user.enabled == true %}
-				<a href="{{ path('app_user_desactivate', {'id': user.id}) }}" class="btn btn-danger"> <i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Bloquer</a>
+			{% if user.enabled == true %}
+				<a href="{{ path('app_user_desactivate', {'id': user.id}) }}" class="btn btn-danger">
+					<i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Bloquer</a>
 
-	{% else %}
-		<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success"> <i class="fas fa-user-check text-white" style="padding-right:3px"></i>Débloquer</a>
-	{% endif %}
-    </div>
+			{% else %}
+				<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success">
+					<i class="fas fa-user-check text-white" style="padding-right:3px"></i>Débloquer</a>
+			{% endif %}
+		</div>
 	</div>
-    <br><br>
+	<br><br>
+
+	{% if badges is not empty %}
+		<h2 style="color:#eeba0b;">
+			<b>Badges
+				<i class="fas fa-award"></i>
+			</b>
+		</h2>
+		<div class="cardt-container">
+			{% for badge in badges %}
+				<div class="cardt">
+
+					<img src="{{ asset('Photos/badges/' ~ badge.image) }}" class="img-circle elevation-2" alt="badgeImage" style="width:100%">
+
+				</div>
+			{% endfor %}
+
+		</div>
+	{% endif %}
+
+
 {% endblock %}

@@ -9,12 +9,37 @@
 
 
 {% block content %}
+<style>
+		.cardt-container {
+			display: flex;
+			flex-wrap: wrap; /* To wrap cards to the next line if they overflow */
+		}
+		.cardt {
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			transition: 0.3s;
+			width: 15%;
+			height: 25%;
+			margin: 40px;
+			
+		}
 
+		.cardt:hover {
+			box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+		}
+
+		.container {
+			padding: 2px 16px;
+		}
+	</style>
 	<table class="table">
 		<tbody>
 			<tr>
-				<th>Id</th>
-				<td>{{ badge.id }}</td>
+				<th>Image</th>
+				<td>
+					<div class="text-center">
+						<img class="profile-user-img img-fluid img-circle" src="{{asset('/Photos/badges/' ~ badge.image)}}" alt="User profile picture"/>
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<th>Libelle</th>
@@ -23,6 +48,10 @@
 			<tr>
 				<th>Description</th>
 				<td>{{ badge.description |raw }}</td>
+			</tr>
+			<tr>
+				<th>Action</th>
+				<td>{{ badge.action}}</td>
 			</tr>
 			<tr>
 				<th>Statut</th>
@@ -69,5 +98,27 @@
 		</div>
 	</div>
 	<br><br>
+
+	{% if users is not empty %}
+		<h2 style="color:#0077b6;">
+			<b>Utilisateurs
+				<i class="fas fa-users"></i>
+			</b>
+		</h2>
+		<div class="cardt-container">
+			{% for user in users %}
+				<div class="cardt">
+
+					<img src="{{ asset('Photos/users/' ~ user.image) }}" class="img-circle elevation-2" alt="badgeImage" style="width:100%">
+					<div class="container">
+						<h3>{{ user.prenom }}
+							{{ user.nom }}</h3>
+					</div>
+
+				</div>
+			{% endfor %}
+
+		</div>
+	{% endif %}
 
 {% endblock %}

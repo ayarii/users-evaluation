@@ -15,6 +15,7 @@ use App\Repository\CritereRepository;
 use App\Repository\DepartementRepository;
 use App\Repository\UserRepository;
 use App\Repository\EvaluationRepository;
+use App\Repository\SessionRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,7 +86,6 @@ class EvaluationController extends AbstractController
     {
         $evaluation = new Evaluation();
         $form = $this->createForm(EvaluationType::class, $evaluation);
-       // $evaluation->setIdUser($userRepository->find("JDKSNCJ"));
        $user=new User();
         $user=$userRepository->find($this->getUser());
         $evaluation->setIdUser($user);
@@ -175,6 +175,7 @@ class EvaluationController extends AbstractController
             
         ]);
     }
+
     #[Route('/getDep', name: 'app_evaluation_dep', methods: ['GET'])]
     public function getDep(DepartementRepository $depRepository,Request $request,NormalizerInterface $normalizer): Response
     {
@@ -332,7 +333,7 @@ class EvaluationController extends AbstractController
         return $response;
     }
     #[Route('/{userId}/{evId}/toPdf', name: 'app_evaluation_pdf', methods: ['GET', 'POST'])]
-    public function toPDF(Request $request,$userId,$evId,EntityManagerInterface $entityManager,UserRepository $userRepository,CritereRepository $critereRepository, EvaluationRepository $evaluationRepository): Response
+    public function toPDF(Request $request,$userId,$evId,EntityManagerInterface $entityManager,UserRepository $userRepository,CritereRepository $critereRepository, EvaluationRepository $evaluationRepository,DepartementRepository $depRepo,SessionRepository $sessRepo): Response
     {    $criteres= $critereRepository
         ->createQueryBuilder('u')
 
@@ -342,6 +343,8 @@ class EvaluationController extends AbstractController
         ->setParameter('id', $evId)
         ->getQuery()
         ->getResult();
+        $evaluation= $evaluationRepository->find($evId);
+      
         $user=$userRepository
         ->find($userId);
         $repo= $entityManager->getRepository(Affectationnotes::class);
@@ -350,11 +353,14 @@ class EvaluationController extends AbstractController
         ->setParameter('id', $userId)
         ->getQuery()
         ->getResult();
-          // dd($affectations);
       
-        $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'id'=>$evId]);
+        $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'evaluation'=>$evaluation]);
 
+
+       
         $dompdf = new Dompdf();
+
+        
 
         $dompdf->loadHtml($html);
 

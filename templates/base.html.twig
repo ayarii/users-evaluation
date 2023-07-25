@@ -316,6 +316,16 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
+									<a href="{{path('app_affectation_badge_index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'app_affectation_badge_index'  %}active{% endif %}">
+										<i class="nav-icon fas fa-id-badge"></i>
+										<p>
+											Affectation Badges
+
+										</p>
+									</a>
+
+								</li>
+								<li class="nav-item">
 									<a href="{{ path('app_evaluation_admin') }}" class="nav-link">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
@@ -330,6 +340,26 @@ m.parentNode.insertBefore(n, m);
 										<i style='font-size:24px;' class='far'>&#xf328;  </i>
 										<p style=" margin-left:10px;">
 											   Affectation des notes
+
+										</p>
+									</a>
+
+								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_departement_index') }}" class="nav-link">
+										<i class="nav-icon fas fa-sitemap"></i>
+										<p>
+											Departements
+
+										</p>
+									</a>
+
+								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_session_index') }}" class="nav-link">
+										<i class="nav-icon fas fa-calendar-alt"></i>
+										<p>
+											Sessions
 
 										</p>
 									</a>
@@ -369,28 +399,7 @@ m.parentNode.insertBefore(n, m);
 								</li>
 
 							{% endif %}
-							{% if app.user.roles[0]=="ROLE_ADMIN" %}
-								<li class="nav-item">
-									<a href="{{ path('app_departement_index') }}" class="nav-link">
-										<i class="nav-icon fas fa-sitemap"></i>
-										<p>
-											Departements
-
-										</p>
-									</a>
-
-								</li>
-								<li class="nav-item">
-									<a href="{{ path('app_session_index') }}" class="nav-link">
-										<i class="nav-icon fas fa-calendar-alt"></i>
-										<p>
-											Sessions
-
-										</p>
-									</a>
-
-								</li>
-							{% endif %}
+							
 							<li class="nav-header">Profil</li>
 							<li class="nav-item">
 								<a href="{{ path('app_user_profile', {'id': app.user.id}) }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_user_profile'  %}active{% endif %}">

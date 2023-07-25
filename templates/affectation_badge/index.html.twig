@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des affectations Badges
+{% endblock %}
+{% block titlepage %}Liste des affectations Badges
+{% endblock %}
+{% block page %}Liste des affectations Badges
+{% endblock %}
+
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+                
+					<div class="card-body">
+
+						<table id="example1" class="table table-bordered table-hover table-striped">
+							<thead>
+								<tr>
+									
+                                    <th>Utilisateur</th>
+									<th>Badge</th>
+									<th>Date Affectation</th>
+									<th>actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for affectation_badge in affectation_badges %}
+									<tr>
+										
+                                        <td>{{ affectation_badge.iduser.prenom }} {{ affectation_badge.iduser.nom }}</td>
+										<td>{{ affectation_badge.idbadge.libelle }}</td>
+										<td>{{ affectation_badge.dateaffectation ? affectation_badge.dateaffectation|date('Y-m-d H:i:s') : '' }}</td>
+										<td>
+											<a href="{{ path('app_affectation_badge_show', {'id': affectation_badge.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+										</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="4">no records found</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+							<tfoot>
+								
+                                <th>Utilisateur</th>
+								<th>Badge</th>
+								<th>Date Affectation</th>
+								<th>actions</th>
+							</tfoot>
+						</table>
+                        </div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+						
+					{% endblock %}
