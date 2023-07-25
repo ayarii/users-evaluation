@@ -148,6 +148,7 @@ class AffectationnotesController extends AbstractController
         return $this->render('affectationnotes/showUsers.html.twig', [
             'criteres' =>$criteres,
             'users'=> $users,
+            'evaluation'=>$evaluation
             
             
             
