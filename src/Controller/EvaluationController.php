@@ -29,8 +29,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class EvaluationController extends AbstractController
 {
     #[Route('/', name: 'app_evaluation_index', methods: ['GET'])]
-    public function index(EvaluationRepository $evaluationRepository): Response
-    {
+    public function index(EvaluationRepository $evaluationRepository,UserRepository $userRepository): Response
+    { 
         return $this->render('evaluation/index.html.twig', [
             'evaluations' => $evaluationRepository
             ->createQueryBuilder('u')
@@ -40,7 +40,33 @@ class EvaluationController extends AbstractController
             ->andWhere('u.idUser = :id')
             ->setParameter('id', $this->getUser())
             ->getQuery()
-            ->getResult()
+            ->getResult(), 
+            'standard'=> false
+        ]);
+    }
+    #[Route('/standard', name: 'app_evaluation_standard', methods: ['GET'])]
+    public function standard(EvaluationRepository $evaluationRepository,UserRepository $userRepository): Response
+    { $admin= $userRepository
+        ->createQueryBuilder('u')
+
+       
+        ->where('u.roles LIKE :roles')
+        ->setParameter('roles', '%"'."ROLE_ADMIN".'"%')
+        ->getQuery()
+        ->getResult();
+       
+        return $this->render('evaluation/index.html.twig', [
+            'evaluations' => $evaluationRepository
+            ->createQueryBuilder('u')
+
+            ->where('u.enabled = :bool')
+            ->setParameter('bool', 1)
+            ->andWhere('u.idUser = :id')
+            ->setParameter('id', $admin[0])
+            ->getQuery()
+            ->getResult(),
+           
+            'standard'=> true
         ]);
     }
     #[Route('/admin', name: 'app_evaluation_admin', methods: ['GET'])]
@@ -48,7 +74,8 @@ class EvaluationController extends AbstractController
     {
         return $this->render('evaluation/index.html.twig', [
             'evaluations' => $evaluationRepository
-            ->findAll()
+            ->findAll(),
+            'standard'=>false
         ]);
     }
 
@@ -263,7 +290,6 @@ class EvaluationController extends AbstractController
       
        
         $totalPon=0;
-        // Populate the table headers
         $csvData = array();
         $headerRow = array('Utilisateur');
         foreach ($criteres as $critere) {
@@ -281,10 +307,8 @@ class EvaluationController extends AbstractController
             foreach ($criteres as $critere) {
                 $note = 0;
                 foreach ($affectations as $affectation) {
-                  // dd( $affectation->getUser());
                     if ($affectation->getUser()->getId() == $user->getId() && $affectation->getCritere()->getId() == $critere->getId()) {
                         $note = $affectation->getNote();
-                       // dd($note);
                         break;
                     }
                 }
@@ -295,16 +319,13 @@ class EvaluationController extends AbstractController
             $csvData[] = $rowData;
         }
     
-        // Create the CSV content as a string
         $csvContent = '';
         foreach ($csvData as $row) {
             $csvContent .= implode(',', $row) . "\n";
         }
     
-        // Create a Response object with the CSV content
         $response = new Response($csvContent);
     
-        // Set appropriate headers for CSV download
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="table_export.csv"');
     
@@ -333,25 +354,18 @@ class EvaluationController extends AbstractController
       
         $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'id'=>$evId]);
 
-        // Create a new Dompdf instance
         $dompdf = new Dompdf();
 
-        // Load the HTML content into Dompdf
         $dompdf->loadHtml($html);
 
-        // (Optional) Set the PDF options (e.g., paper size, orientation, etc.)
         $dompdf->setPaper('A4', 'portrait');
 
-        // Render the PDF
         $dompdf->render();
 
-        // Get the generated PDF content
         $pdfOutput = $dompdf->output();
 
-        // Create a Response object with the PDF content
         $response = new Response($pdfOutput);
 
-        // Set appropriate headers for PDF download
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Disposition', 'attachment; filename="output.pdf"');
 

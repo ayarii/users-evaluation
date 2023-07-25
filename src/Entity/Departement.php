@@ -90,11 +90,11 @@ class Departement
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(string $description): void
     {
         $this->description = $description;
 
-        return $this;
+       
     }
 
     public function getCreatedAt(): ?\DateTimeInterface

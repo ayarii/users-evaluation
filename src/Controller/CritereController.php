@@ -9,6 +9,7 @@ use App\Form\CritereType;
 use App\Repository\CritereRepository;
 
 use App\Repository\EvaluationRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,7 @@ class CritereController extends AbstractController
 {
 
     #[Route('/evaluation/{id}', name: 'app_critere_index', methods: ['GET'])]
-    public function index($id,CritereRepository $critereRepository): Response
+    public function index($id,CritereRepository $critereRepository,EvaluationRepository $evRepository,UserRepository $userRepository): Response
     {
         return $this->render('critere/index.html.twig', [
             'criteres' => $critereRepository
@@ -31,7 +32,18 @@ class CritereController extends AbstractController
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult(),
-            'id'=>$id
+           
+            'evaluation'=>$evRepository->find($id),
+            'admin'=> $userRepository
+            ->createQueryBuilder('u')
+    
+           
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'."ROLE_ADMIN".'"%')
+            ->getQuery()
+            ->getResult()
+           
+
 
         ]);
     }
@@ -62,10 +74,19 @@ class CritereController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_critere_show', methods: ['GET'])]
-    public function show(Critere $critere): Response
+    public function show(Critere $critere,UserRepository $userRepository): Response
     {
         return $this->render('critere/show.html.twig', [
             'critere' => $critere,
+            'admin'=> $userRepository
+            ->createQueryBuilder('u')
+    
+           
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'."ROLE_ADMIN".'"%')
+            ->getQuery()
+            ->getResult()
+           
         ]);
     }
 

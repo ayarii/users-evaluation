@@ -65,7 +65,7 @@
         </tbody>
     </table>
 
-
+{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
     <div class="row">
 	{% set tot = 0 %}
                                 {% for cr in criteres %}
@@ -177,4 +177,5 @@
 		</div>
 	</div>
 </div>
+{% endif %}
 {% endblock %}
