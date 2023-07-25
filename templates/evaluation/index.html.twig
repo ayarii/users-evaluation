@@ -34,9 +34,14 @@
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Evaluation List</h3>
+					
+					{% if standard == false %}
+						
+					
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
 					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_evaluation_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
 				</div>
+				{% endif %}
 				<div class="card-body">
 					<table id="example1" class="table table-bordered table-hover table-striped">
 						<thead>
@@ -60,7 +65,7 @@
 									<td>{{ ev.updatedAt ? ev.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 									<td>
 										<a href="{{ path('app_evaluation_show', {'id': ev.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-										<a href="{{ path('app_evaluation_edit', {'id': ev.id}) }}"><i class="fas fa-edit text-warning"></i></a>
+									{% if ev.idUser == app.user %}	<a href="{{ path('app_evaluation_edit', {'id': ev.id}) }}"><i class="fas fa-edit text-warning"></i></a> {% endif %}
 									</td>
 								</tr>
 							{% else %}

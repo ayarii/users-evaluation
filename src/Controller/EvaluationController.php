@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Affectationnotes;
 use App\Entity\Critere;
+use App\Entity\Departement;
 use App\Entity\Evaluation;
+use App\Entity\Session;
 use App\Entity\User;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -28,8 +30,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class EvaluationController extends AbstractController
 {
     #[Route('/', name: 'app_evaluation_index', methods: ['GET'])]
-    public function index(EvaluationRepository $evaluationRepository): Response
-    {
+    public function index(EvaluationRepository $evaluationRepository,UserRepository $userRepository): Response
+    { 
         return $this->render('evaluation/index.html.twig', [
             'evaluations' => $evaluationRepository
             ->createQueryBuilder('u')
@@ -39,7 +41,33 @@ class EvaluationController extends AbstractController
             ->andWhere('u.idUser = :id')
             ->setParameter('id', $this->getUser())
             ->getQuery()
-            ->getResult()
+            ->getResult(), 
+            'standard'=> false
+        ]);
+    }
+    #[Route('/standard', name: 'app_evaluation_standard', methods: ['GET'])]
+    public function standard(EvaluationRepository $evaluationRepository,UserRepository $userRepository): Response
+    { $admin= $userRepository
+        ->createQueryBuilder('u')
+
+       
+        ->where('u.roles LIKE :roles')
+        ->setParameter('roles', '%"'."ROLE_ADMIN".'"%')
+        ->getQuery()
+        ->getResult();
+       
+        return $this->render('evaluation/index.html.twig', [
+            'evaluations' => $evaluationRepository
+            ->createQueryBuilder('u')
+
+            ->where('u.enabled = :bool')
+            ->setParameter('bool', 1)
+            ->andWhere('u.idUser = :id')
+            ->setParameter('id', $admin[0])
+            ->getQuery()
+            ->getResult(),
+           
+            'standard'=> true
         ]);
     }
     #[Route('/admin', name: 'app_evaluation_admin', methods: ['GET'])]
@@ -47,7 +75,8 @@ class EvaluationController extends AbstractController
     {
         return $this->render('evaluation/index.html.twig', [
             'evaluations' => $evaluationRepository
-            ->findAll()
+            ->findAll(),
+            'standard'=>false
         ]);
     }
 
@@ -79,8 +108,9 @@ class EvaluationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_evaluation_show', methods: ['GET'])]
-    public function show(Evaluation $evaluation,EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
-    { $repo= $entityManager->getRepository(Affectationnotes::class);
+    public function show($id,EntityManagerInterface $entityManager,EvaluationRepository $evRepo,CritereRepository $critereRepository,UserRepository $userRepository): Response
+    {
+         $repo= $entityManager->getRepository(Affectationnotes::class);
         $affe = $repo
         ->createQueryBuilder('an')
         ->select('an, SUM(an.note) AS totalNote')
@@ -90,7 +120,7 @@ class EvaluationController extends AbstractController
         ->groupBy('an.user')
         ->orderBy('totalNote', 'DESC')
         ->setMaxResults(3)
-        ->setParameter('evaluationId', $evaluation->getId())
+        ->setParameter('evaluationId', $id)
 
             ->getQuery()
             ->getResult();
@@ -101,7 +131,7 @@ class EvaluationController extends AbstractController
         ->where('u.enabled = :bool')
         ->setParameter('bool', 1)
         ->andWhere('u.idEvaluation = :id')
-        ->setParameter('id', $evaluation->getId())
+        ->setParameter('id', $id)
         ->getQuery()
         ->getResult();
         $users=$userRepository
@@ -119,6 +149,7 @@ class EvaluationController extends AbstractController
            
             ->getQuery()
             ->getResult();
+           $evaluation= $evRepo->find($id);
         return $this->render('evaluation/show.html.twig', [
             'evaluation' => $evaluation,
             'users'=>$users,
@@ -128,7 +159,23 @@ class EvaluationController extends AbstractController
             
         ]);
     }
-    
+    #[Route('/stat', name: 'app_evaluation_stats', methods: ['GET'])]
+    public function Stats(EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
+    { $repo= $entityManager->getRepository(Session::class);
+        $sessions = $repo
+        ->createQueryBuilder('sess')
+       
+            ->getQuery()
+            ->getResult();
+      
+       
+        return $this->render('evaluation/statCritere.html.twig', [
+            'sessions' => $sessions,
+           
+            
+        ]);
+    }
+
     #[Route('/getDep', name: 'app_evaluation_dep', methods: ['GET'])]
     public function getDep(DepartementRepository $depRepository,Request $request,NormalizerInterface $normalizer): Response
     {
@@ -244,7 +291,6 @@ class EvaluationController extends AbstractController
       
        
         $totalPon=0;
-        // Populate the table headers
         $csvData = array();
         $headerRow = array('Utilisateur');
         foreach ($criteres as $critere) {
@@ -310,10 +356,12 @@ class EvaluationController extends AbstractController
       
         $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'evaluation'=>$evaluation]);
 
+
        
         $dompdf = new Dompdf();
 
         
+
         $dompdf->loadHtml($html);
 
         $dompdf->setPaper('A4', 'portrait');

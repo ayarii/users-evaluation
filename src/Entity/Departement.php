@@ -95,12 +95,14 @@ class Departement
         return $this->description;
     }
 
+
     /**
      * @param string $description
      */
     public function setDescription(string $description): void
     {
         $this->description = $description;
+
     }
 
 
