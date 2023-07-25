@@ -5,10 +5,10 @@
 {% block titlepage %}Users
 {% endblock %}
 
+
 {% block content %}
 <style> input{
-	width:50px;
-
+width:50px;
 
 } </style>
 	<div class="row">
@@ -33,7 +33,6 @@
 			{% endfor %}
 
 			<br>
-			<h1> Evaluation: {{evaluation.libelle}}</h1>
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
@@ -62,15 +61,17 @@
                                     {% for cr in criteres %}
                                     <form id="myform-{{user.id}}" action="{{ path('app_affectationnotes_submit',{'id': cr.idevaluation.id , 'userId': user.id}) }}" method="POST">
 									<td> 
-       								   <input type="number" step="0.01" id="{{cr.id}}{{user.id}}" name="{{cr.id}}{{user.id}}" data-form="myform-{{ user.id }}" oninput="checkInputValue(this,{{cr.ponderation}})" max="{{cr.ponderation}}"  >
+          <input type="number" step="0.01" id="{{cr.id}}{{user.id}}" name="{{cr.id}}{{user.id}}" data-form="myform-{{ user.id }}" oninput="checkInputValue(this,{{cr.ponderation}})"  >
+  
   
 
-								{% endfor %}
-									</td>
+
+{% endfor %}
+</td>
  
 
-									<td class="total"> </td>
-									</form>
+<td class="total"> </td>
+</form>
 
 
 									
@@ -96,6 +97,7 @@
 
 {% endblock %}
 {% block scripts %} 
+
  function updateRowTotal(row) {
   const totalCell = row.querySelector('.total');
   const inputsInRow = row.querySelectorAll('input');
@@ -106,7 +108,7 @@
   totalCell.textContent = rowTotal.toFixed(2);
 }
  
- let keyValueMap = new Map();
+ const keyValueMap = new Map();
 
 
 const inputs = document.querySelectorAll('input[data-form]');
@@ -154,7 +156,6 @@ const hasValue = valuesArray.includes(false);
 
 
 
-
  function checkInputValue(input, max) {
     const maxLimit = max;
     if (input.value > maxLimit) {
@@ -162,7 +163,7 @@ const hasValue = valuesArray.includes(false);
 	    input.style.border='3px solid red'
 	  keyValueMap.set(input.id, false);
     
-      
+      return false; 
     } else if (input.value < 0) {
       alert('la note ne peut pas etre négative');
 	    input.style.border='3px solid red'
@@ -216,4 +217,7 @@ function submitFormWithAjax(form) {
     console.error('Form submission error:', error);
   });
 }
+
+ 
+	
 	{% endblock %}
