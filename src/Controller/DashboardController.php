@@ -20,8 +20,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class DashboardController extends AbstractController
 {
    
-   public function index(UserRepository $repouser,SessionRepository $total,AffectationBadgeRepository $repoaff): Response
-    {
+   public function index(UserRepository $repouser,SessionRepository $total,AffectationBadgeRepository $repoaff,SessionRepository $repoSess): Response
+    {    $sessions = $repoSess
+        ->createQueryBuilder('sess')
+       
+            ->getQuery()
+            ->getResult();
+      
         $utilisateurs = $repouser->findAll();
         $nbutilisateurs = count($utilisateurs);
         $sessions = $total->findAll();
@@ -39,6 +44,7 @@ class DashboardController extends AbstractController
             'nsessions' => $nsessions,
             'usersData' => $usersData,
             'badgesData' => $badgesData,
+            'sessions'=>$sessions
 
         ]);
     }
