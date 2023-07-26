@@ -117,11 +117,11 @@
 		<div class="col-md-2">
 			{% if user.enabled == true %}
 				<a href="{{ path('app_user_desactivate', {'id': user.id}) }}" class="btn btn-danger">
-					<i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Bloquer</a>
+					<i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Désactiver</a>
 
 			{% else %}
 				<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success">
-					<i class="fas fa-user-check text-white" style="padding-right:3px"></i>Débloquer</a>
+					<i class="fas fa-user-check text-white" style="padding-right:3px"></i>Activer</a>
 			{% endif %}
 		</div>
 	</div>

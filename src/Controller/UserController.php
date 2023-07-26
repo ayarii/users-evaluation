@@ -281,12 +281,12 @@ class UserController extends AbstractController
         $mail->send(
 
             $user->getEmail(),
-            'Blockage de compte !',
+            'Désactivation de compte !',
             'emailBlockUser',
             $context
         );
 
-        $this->addFlash('success', 'Utilisateur bloqué avec succés!');
+        $this->addFlash('success', 'Utilisateur désactivé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }
