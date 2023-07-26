@@ -37,26 +37,20 @@ class UserType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'invalid_message_parameters' => [
-                    '%class%' => 'is-invalid',
-                ],
+               
             ])
             ->add('nom', TextType::class,  [
                 
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'invalid_message_parameters' => [
-                    '%class%' => 'is-invalid',
-                ],
+             
             ])
             ->add('prenom', TextType::class,  [
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'invalid_message_parameters' => [
-                    '%class%' => 'is-invalid',
-                ],
+              
             ])
             ->add('email', EmailType::class, [
                 'constraints' => [
@@ -68,9 +62,7 @@ class UserType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'invalid_message_parameters' => [
-                    '%class%' => 'is-invalid',
-                ],
+               
                 'choices' => [
                     'Utilisateur' => 'ROLE_Utilisateur',
                     'Gestionnaire' => 'ROLE_GESTIONNAIRE',
@@ -122,17 +114,17 @@ class UserType extends AbstractType
     }
     public function validateEmail($email, ExecutionContextInterface $context)
     {
-        // Vérifier si l'email existe dans la table "user"
+        
         $userRepository = $this->entityManager->getRepository(User::class);
         $user = $userRepository->findOneBy(['email' => $email]);
 
         if (!$user) {
-            // L'email n'existe pas
+            
             return;
         }
 
         if ($user->isEnabled()) {
-            // L'email est bloqué
+          
             $context->buildViolation('L\'email saisi est bloqué.')
                 ->atPath('email')
                 ->addViolation();
