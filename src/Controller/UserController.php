@@ -48,9 +48,9 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        //dd($user);
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            //dd($user);
+           
             $id = $form->get('id')->getData();
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
@@ -74,7 +74,7 @@ class UserController extends AbstractController
             ));
             $user->setId($id);
             $user->setEnabled(1);
-            //dd($user);
+            
             $userRepository->save($user, true);
             $password = $form->get('password')->getData();
             $context = compact('user', 'password');
@@ -112,7 +112,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request,Request $requestpass,User $user, ServiceDefaultImageGenerator $defaultImageGenerator, UserPasswordEncoderInterface $userPasswordHasher): Response
+    public function profile(Request $request,Request $requestpass,User $user, UserRepository $userRepository, ServiceDefaultImageGenerator $defaultImageGenerator, UserPasswordEncoderInterface $userPasswordHasher): Response
     {
 
         $form = $this->createForm(EditProfileType::class, $user);
@@ -124,7 +124,7 @@ class UserController extends AbstractController
         $formpass->handleRequest($requestpass);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle form submission and update the entity
+            
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
@@ -135,10 +135,7 @@ class UserController extends AbstractController
                 );
                 $user->setImage($imageData);
             }
-            // Persist changes to the database
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
-           // dump($this->get('session')->getFlashBag()->all());
+            $userRepository->save($user,true);  
             $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
             return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         } elseif ($formpass->isSubmitted() && $formpass->isValid()) {
@@ -147,14 +144,13 @@ class UserController extends AbstractController
                 $user,
                 $formpass->get('password')->getData()
             ));
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
+            $userRepository->save($user,true);
             
             $this->addFlash('success', 'Votre mot de passe à été mise à jour avec succés!');
-           // dd($this->get('session')->getFlashBag()->all());
+           
             return $this->redirectToRoute('app_logout', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
-        //dump($this->get('session')->getFlashBag()->all());
+        
         return $this->render('user/profile.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
@@ -189,7 +185,7 @@ class UserController extends AbstractController
                 $user,
                 $form->get('password')->getData()
             ));
-            //dd($user);
+           
             $password = $form->get('password')->getData();
             $context = compact('password', 'user');
             $mail->send(
@@ -245,12 +241,11 @@ class UserController extends AbstractController
     #[Route('/activate/{id}', name: 'app_user_activate', methods: ['GET'])]
     public function activate(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
+       
+        
         $user->setEnabled(1);
-        $entityManager->persist($user);
-        $entityManager->flush();
-        // }
+        $userRepository->save($user,true);
+       
         $context = compact('user');
         $mail->send(
 
@@ -271,22 +266,20 @@ class UserController extends AbstractController
     #[Route('/desactivate/{id}', name: 'app_user_desactivate', methods: ['GET'])]
     public function desactivate(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
+       
         $user->setEnabled(0);
-        $entityManager->persist($user);
-        $entityManager->flush();
-        // }
+        $userRepository->save($user,true);
+    
         $context = compact('user');
         $mail->send(
 
             $user->getEmail(),
-            'Blockage de compte !',
+            'Désactivation de compte !',
             'emailBlockUser',
             $context
         );
 
-        $this->addFlash('success', 'Utilisateur bloqué avec succés!');
+        $this->addFlash('success', 'Utilisateur désactivé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

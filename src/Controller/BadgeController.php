@@ -129,15 +129,13 @@ class BadgeController extends AbstractController
      */
 
     #[Route('/activate/{id}', name: 'app_badge_activate', methods: ['GET'])]
-    public function activate(Request $request, Badge $badge): Response
+    public function activate(Request $request, Badge $badge,BadgeRepository $badgeRepository): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
+     
         $badge->setEnabled(1);
         $badge->setUpdatedAt(new \DateTime());
-        $entityManager->persist($badge);
-        $entityManager->flush();
-        // }
+        $badgeRepository->save($badge,true);
+       
 
 
         $this->addFlash('success', 'Badge activé avec succés!');
@@ -148,17 +146,13 @@ class BadgeController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/desactivate/{id}', name: 'app_badge_desactivate', methods: ['GET'])]
-    public function desactivate(Request $request, Badge $badge): Response
+    public function desactivate(Request $request, Badge $badge,BadgeRepository $badgeRepository): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        //if ($this->isCsrfTokenValid('active' . $user->getId(), $request->request->get('_token'))) {
+        
         $badge->setEnabled(0);
         $badge->setUpdatedAt(new \DateTime());
-        $entityManager->persist($badge);
-        $entityManager->flush();
-        // }
-
-
+        $badgeRepository->save($badge,true);
+    
         $this->addFlash('success', 'Badge bloqué avec succés!');
         return $this->redirectToRoute('app_badge_index', [], Response::HTTP_SEE_OTHER);
     }

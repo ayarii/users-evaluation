@@ -89,11 +89,11 @@
 		<div class="col-md-2">
 			{% if badge.enabled == true %}
 				<a href="{{ path('app_badge_desactivate', {'id': badge.id}) }}" class="btn btn-danger">
-					<i class="fas fa-lock text-white" style="padding-right:3px"></i>Bloquer</a>
+					<i class="fas fa-lock text-white" style="padding-right:3px"></i>Désactiver</a>
 
 			{% else %}
 				<a href="{{ path('app_badge_activate', {'id': badge.id}) }}" class="btn btn-success">
-					<i class="fas fa-lock-open text-white" style="padding-right:3px"></i>Débloquer</a>
+					<i class="fas fa-lock-open text-white" style="padding-right:3px"></i>Activer</a>
 			{% endif %}
 		</div>
 	</div>
