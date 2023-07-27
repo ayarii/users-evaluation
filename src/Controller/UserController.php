@@ -112,7 +112,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request,Request $requestpass,User $user, UserRepository $userRepository, ServiceDefaultImageGenerator $defaultImageGenerator, UserPasswordEncoderInterface $userPasswordHasher): Response
+    public function profile(Request $request,Request $requestpass,User $user, UserRepository $userRepository,AffectationBadgeRepository $affbadrepo, UserPasswordEncoderInterface $userPasswordHasher): Response
     {
 
         $form = $this->createForm(EditProfileType::class, $user);
@@ -150,9 +150,12 @@ class UserController extends AbstractController
            
             return $this->redirectToRoute('app_logout', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
+        $badges= $affbadrepo->findBadgesByUserId($user->getId());
+       
         
         return $this->render('user/profile.html.twig', [
             'user' => $user,
+            'badges' => $badges,
             'form' => $form->createView(),
             'formpass' => $formpass->createView(),
         ]);

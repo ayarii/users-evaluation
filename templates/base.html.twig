@@ -266,8 +266,8 @@ m.parentNode.insertBefore(n, m);
 								<img src="{{ asset('Photos/users/' ~ app.user.image) }}" class="img-circle elevation-2" alt="User Image"/>
 							</div>
 							<div class="info">
-								<a href="#" class="d-block">{{app.user.nom}}
-									{{app.user.prenom}}</a>
+								<a href="#" class="d-block">{{app.user.prenom}}
+									{{app.user.nom}}</a>
 							</div>
 						</div>
 					{% endif %}
@@ -323,7 +323,7 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_evaluation_admin') }}" class="nav-link">
+									<a href="{{ path('app_evaluation_admin') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_evaluation_admin'  %}active{% endif %}">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
 											Evaluations
@@ -333,7 +333,7 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_affectationnotes_admin') }}" class="nav-link">
+									<a href="{{ path('app_affectationnotes_admin') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_affectationnotes_admin'  %}active{% endif %}">
 										<i style='font-size:24px;' class='far'>&#xf328;  </i>
 										<p style=" margin-left:10px;">
 											   Affectation des notes
@@ -343,7 +343,7 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_departement_index') }}" class="nav-link">
+									<a href="{{ path('app_departement_index') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_departement_index'  %}active{% endif %}">
 										<i class="nav-icon fas fa-sitemap"></i>
 										<p>
 											Departements
@@ -353,7 +353,7 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_session_index') }}" class="nav-link">
+									<a href="{{ path('app_session_index') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_session_index'  %}active{% endif %}">
 										<i class="nav-icon fas fa-calendar-alt"></i>
 										<p>
 											Sessions
@@ -365,7 +365,7 @@ m.parentNode.insertBefore(n, m);
 							{% endif %}
 							{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
 								<li class="nav-item">
-									<a href="{{ path('app_evaluation_index') }}" class="nav-link">
+									<a href="{{ path('app_evaluation_index') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_evaluation_index'  %}active{% endif %}">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
 											Vos Evaluations
@@ -375,7 +375,7 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 									<li class="nav-item">
-									<a href="{{ path('app_evaluation_standard') }}" class="nav-link">
+									<a href="{{ path('app_evaluation_standard') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_evaluation_standard'  %}active{% endif %}">
 										<i class="nav-icon fas fa-chart-pie"></i>
 										<p>
 											 Evaluations Standards
@@ -385,7 +385,7 @@ m.parentNode.insertBefore(n, m);
 
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_affectationnotes_ev') }}" class="nav-link">
+									<a href="{{ path('app_affectationnotes_ev') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_affectationnotes_ev'  %}active{% endif %}">
 										<i style='font-size:24px;' class='far'>&#xf328;  </i>
 										<p style=" margin-left:10px;">
 											Affectation des notes
@@ -445,7 +445,8 @@ m.parentNode.insertBefore(n, m);
 						</div>
 						<footer class="main-footer">
 							<strong>Copyright &copy; 2023
-								<a href="https://adminlte.io/">AdminLTE.io</a>.</strong>
+								<a href="https://esprit.tn"><img src="{{asset('dist/img/logo-esprit.png')}}" alt="ESPRIT Logo" class="brand-image" width ="60" height ="40"/></a>
+</strong>
 							| made with
 							<i class="fas fa-heart text-danger"></i>
 							<div class="float-right d-none d-sm-inline-block"></div>
@@ -480,7 +481,7 @@ m.parentNode.insertBefore(n, m);
 
 					<script src="{{asset('dist/js/adminlte2167.js?v=3.2.0')}}"></script>
 
-					<script src="{{asset('dist/js/demo.js')}}"></script>
+					
 				    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 					<script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
