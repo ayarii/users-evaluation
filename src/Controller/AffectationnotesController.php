@@ -13,6 +13,7 @@ use App\Repository\CritereRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -108,13 +109,13 @@ class AffectationnotesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_affectationnotes_show', methods: ['GET'])]
-    public function show(Affectationnotes $affectationnote): Response
-    {
-        return $this->render('affectationnotes/show.html.twig', [
-            'affectationnote' => $affectationnote,
-        ]);
-    }
+    // #[Route('/{id}', name: 'app_affectationnotes_show', methods: ['GET'])]
+    // public function show(Affectationnotes $affectationnote): Response
+    // {
+    //     return $this->render('affectationnotes/show.html.twig', [
+    //         'affectationnote' => $affectationnote,
+    //     ]);
+    // }
     #[Route('/users/{id}', name: 'app_affectationnotes_showUsers', methods: ['GET', 'POST'])]
     public function showUsers(Evaluation $evaluation,EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository,Request $request): Response
     {  $criteres= $critereRepository
@@ -154,6 +155,33 @@ class AffectationnotesController extends AbstractController
             
         ]);
     }
+    #[Route('/fetch-initial-values', name: 'app_affectationnotes_fetch', methods: ['GET'])]
+    public function fetchInitialValues(EntityManagerInterface $entityManager)
+    { 
+        $initialValues = [];
+
+      
+            
+            
+
+           
+            $repo= $entityManager->getRepository(Affectationnotes::class);
+            $aff = $repo->findAll();
+            
+            foreach($aff as $a)
+          {
+            $initialValues[] = [
+                'userId' => $a->getUser()->getId(),
+                'critereId' => $a->getCritere()->getId(),
+                'note' => $a->getNote(),
+            ];
+        
+        }
+        
+        return new JsonResponse($initialValues);
+    }
+
+   
     #[Route('/submit/{id}/{userId}', name: 'app_affectationnotes_submit', methods: ['GET', 'POST'])]
     public function submit(Evaluation $evaluation,$userId,$id,Request $request, EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository): Response
     {  
