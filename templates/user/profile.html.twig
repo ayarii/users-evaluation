@@ -37,8 +37,8 @@
 					<div class="text-center">
 						<img class="profile-user-img img-fluid img-circle" src="{{asset('/Photos/users/' ~ app.user.image)}}" alt="User profile picture"/>
 					</div>
-					<h3 class="profile-username text-center">{{app.user.nom}}
-						{{app.user.prenom}}</h3>
+					<h3 class="profile-username text-center">{{app.user.prenom}}
+						{{app.user.nom}}</h3>
 					<p class="text-muted text-center">
 						{% if "ROLE_ADMIN" in app.user.roles %}
 							Administrateur
@@ -53,9 +53,22 @@
 					</p>
 					<ul class="list-group list-group-unbordered mb-3">
 						<li class="list-group-item">
+							<b>Département</b>
+							<a class="float-right">{{app.user.iddepartement.libelle}}</a>
+						</li>
+						<li class="list-group-item">
 							<b>Email</b>
 							<a class="float-right">{{app.user.email}}</a>
 						</li>
+						<li class="list-group-item">
+							<b>Date de création</b>
+							<a class="float-right">{{ app.user.createdAt ? app.user.createdAt|date('Y-m-d H:i:s') : '' }}</a>
+						</li>
+						<li class="list-group-item">
+							<b>Derniere mise à jour</b>
+							<a class="float-right">{{ app.user.updatedAt ? app.user.updatedAt|date('Y-m-d H:i:s') : '' }}</a>
+						</li>
+
 
 					</ul>
 
@@ -73,7 +86,7 @@
 						Education</strong>
 					<p class="text-muted">
 						B.S. in Computer Science from the University of Tennessee
-																		                      at Knoxville
+																								                      at Knoxville
 					</p>
 					<hr/>
 					<strong>
@@ -97,10 +110,28 @@
 						Notes</strong>
 					<p class="text-muted">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-																		                      Etiam fermentum enim neque.
+																								                      Etiam fermentum enim neque.
 					</p>
 				</div>
 			</div>
+
+			{% if badges is not empty %}
+<div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title"> <i class="fas fa-award" style="padding-right:4px"></i>Badges</h3>
+				</div>
+
+				<div class="card-body">
+					{% for badge in badges %}
+				<div class="cardt">
+
+					<img src="{{ asset('Photos/badges/' ~ badge.image) }}" width="80" height="80" class="img-circle elevation-2" alt="badgeImage">
+
+				</div>
+			{% endfor %}
+				</div>
+			</div>
+{% endif %}
 		</div>
 
 		<div class="col-md-9">
@@ -135,11 +166,11 @@
 
 								<p>
 									Lorem ipsum represents a long-held tradition for
-																											                            designers, typographers and the like. Some people
-																											                            hate it and argue for its demise, but others ignore
-																											                            the hate as they create awesome tools to help create
-																											                            filler text for everyone from bacon lovers to
-																											                            Charlie Sheen fans.
+																																				                            designers, typographers and the like. Some people
+																																				                            hate it and argue for its demise, but others ignore
+																																				                            the hate as they create awesome tools to help create
+																																				                            filler text for everyone from bacon lovers to
+																																				                            Charlie Sheen fans.
 								</p>
 								<p>
 									<a href="#" class="link-black text-sm mr-2">
@@ -152,7 +183,7 @@
 										<a href="#" class="link-black text-sm">
 											<i class="far fa-comments mr-1"></i>
 											Comments
-																																	                                (5)
+																																												                                (5)
 										</a>
 									</span>
 								</p>
@@ -173,11 +204,11 @@
 
 								<p>
 									Lorem ipsum represents a long-held tradition for
-																											                            designers, typographers and the like. Some people
-																											                            hate it and argue for its demise, but others ignore
-																											                            the hate as they create awesome tools to help create
-																											                            filler text for everyone from bacon lovers to
-																											                            Charlie Sheen fans.
+																																				                            designers, typographers and the like. Some people
+																																				                            hate it and argue for its demise, but others ignore
+																																				                            the hate as they create awesome tools to help create
+																																				                            filler text for everyone from bacon lovers to
+																																				                            Charlie Sheen fans.
 								</p>
 								<form class="form-horizontal">
 									<div class="input-group input-group-sm mb-0">
@@ -234,7 +265,7 @@
 										<a href="#" class="link-black text-sm">
 											<i class="far fa-comments mr-1"></i>
 											Comments
-																																	                                (5)
+																																												                                (5)
 										</a>
 									</span>
 								</p>
@@ -262,11 +293,11 @@
 										</h3>
 										<div class="timeline-body">
 											Etsy doostang zoodles disqus groupon greplin
-																																	                                oooj voxy zoodles, weebly ning heekya handango
-																																	                                imeem plugg dopplr jibjab, movity jajah plickers
-																																	                                sifteo edmodo ifttt zimbra. Babblely odeo
-																																	                                kaboodle quora plaxo ideeli hulu weebly
-																																	                                balihoo...
+																																												                                oooj voxy zoodles, weebly ning heekya handango
+																																												                                imeem plugg dopplr jibjab, movity jajah plickers
+																																												                                sifteo edmodo ifttt zimbra. Babblely odeo
+																																												                                kaboodle quora plaxo ideeli hulu weebly
+																																												                                balihoo...
 										</div>
 										<div class="timeline-footer">
 											<a href="#" class="btn btn-primary btn-sm">Read more</a>
@@ -284,7 +315,7 @@
 										<h3 class="timeline-header border-0">
 											<a href="#">Sarah Young</a>
 											accepted your friend
-																																	                                request
+																																												                                request
 										</h3>
 									</div>
 								</div>
@@ -301,8 +332,8 @@
 										</h3>
 										<div class="timeline-body">
 											Take me to your leader! Switzerland is small and
-																																	                                neutral! We are more like Germany, ambitious and
-																																	                                misunderstood!
+																																												                                neutral! We are more like Germany, ambitious and
+																																												                                misunderstood!
 										</div>
 										<div class="timeline-footer">
 											<a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
