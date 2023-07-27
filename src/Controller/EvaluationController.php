@@ -113,10 +113,14 @@ class EvaluationController extends AbstractController
          $repo= $entityManager->getRepository(Affectationnotes::class);
         $affe = $repo
         ->createQueryBuilder('an')
+
         ->select('an, SUM(an.note) AS totalNote')
+       
         ->join(Critere::class,'c')
         ->where('an.critere = c.id')
         ->andWhere('c.idEvaluation = :evaluationId')
+         ->andWhere('an.gestionnaire = :ges')
+        ->setParameter('ges', $this->getUser())
         ->groupBy('an.user')
         ->orderBy('totalNote', 'DESC')
         ->setMaxResults(3)
@@ -146,6 +150,8 @@ class EvaluationController extends AbstractController
         
         $repo= $entityManager->getRepository(Affectationnotes::class);
         $aff = $repo->createQueryBuilder('p')
+        ->andWhere('p.gestionnaire = :ges')
+        ->setParameter('ges', $this->getUser())
            
             ->getQuery()
             ->getResult();
@@ -308,7 +314,7 @@ class EvaluationController extends AbstractController
             foreach ($criteres as $critere) {
                 $note = 0;
                 foreach ($affectations as $affectation) {
-                    if ($affectation->getUser()->getId() == $user->getId() && $affectation->getCritere()->getId() == $critere->getId()) {
+                    if ($affectation->getUser()->getId() == $user->getId() && $affectation->getGestionnaire() == $this->getUser() && $affectation->getCritere()->getId() == $critere->getId()) {
                         $note = $affectation->getNote();
                         break;
                     }
@@ -347,13 +353,18 @@ class EvaluationController extends AbstractController
       
         $user=$userRepository
         ->find($userId);
+        
+      
         $repo= $entityManager->getRepository(Affectationnotes::class);
         $affectations = $repo->createQueryBuilder('u')
+       
+        ->where('u.gestionnaire = :ges')
+        ->setParameter('ges', $this->getUser())
         ->andWhere('u.user = :id')
         ->setParameter('id', $userId)
+        
         ->getQuery()
         ->getResult();
-      
         $html = $this->renderView('/evaluation/pdf_template.html.twig', ['affectations' => $affectations,'user'=>$user,'criteres'=>$criteres,'evaluation'=>$evaluation]);
 
 

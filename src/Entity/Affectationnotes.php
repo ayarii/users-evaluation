@@ -58,6 +58,17 @@ class Affectationnotes
      * })
      */
     private $user;
+    #[Assert\NotBlank(message: 'Gestionnaire obligatoire!')]
+
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="gestionnaire_id", referencedColumnName="id")
+     * })
+     */
+    private $gestionnaire;
 
     public function getId(): ?int
     {
@@ -92,6 +103,10 @@ class Affectationnotes
     {
         return $this->user;
     }
+    public function getGestionnaire(): ?User
+    {
+        return $this->gestionnaire;
+    }
     public function isEnabled(): ?bool
     {
         return $this->enabled;
@@ -100,6 +115,12 @@ class Affectationnotes
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+    public function setGestionnaire(?User $gestionnaire): static
+    {
+        $this->gestionnaire = $gestionnaire;
 
         return $this;
     }

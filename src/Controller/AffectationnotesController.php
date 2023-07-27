@@ -166,7 +166,7 @@ class AffectationnotesController extends AbstractController
 
            
             $repo= $entityManager->getRepository(Affectationnotes::class);
-            $aff = $repo->findAll();
+            $aff = $repo->findBy(['gestionnaire'=>$this->getUser()]);
             
             foreach($aff as $a)
           {
@@ -207,13 +207,14 @@ class AffectationnotesController extends AbstractController
                   foreach($criteres as $cr){
 
                
-               $affectation= $entityManager->getRepository(Affectationnotes::class)->findOneBy(['user' => $userId , 'critere'=>$cr->getId()]);
+               $affectation= $entityManager->getRepository(Affectationnotes::class)->findOneBy(['user' => $userId , 'critere'=>$cr->getId(),'gestionnaire'=>$this->getUser()]);
                if($affectation==null){ $aff = new Affectationnotes();
                 $aff->setCritere($critereRepository->find($cr->getId()) );
               
                 $aff->setNote(floatval($request->request->get($cr->getId().$userId)));
             
                 $aff->setUser($userRepository->find($userId) );
+                $aff->setGestionnaire($this->getUser() );
                 $aff->setEnabled(1);
                 $entityManager->persist($aff);
                 $entityManager->flush();}

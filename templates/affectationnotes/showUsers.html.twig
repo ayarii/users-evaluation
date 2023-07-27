@@ -124,10 +124,19 @@ const inputs = document.querySelectorAll('input[data-form]');
       for (const item of data) {
         const { userId, critereId, note } = item;
         const inputId = `${critereId}${userId}`;
+		
         const input = document.getElementById(inputId);
-        input.value = note;
-        const row = input.closest('tr');
-        updateRowTotal(row);
+		 try {
+          if (input !== null) {
+            input.value = note;
+            const row = input.closest('tr');
+            updateRowTotal(row);
+          } else {
+           
+          }
+        } catch (error) {
+          console.error('Error setting initial value:', error);
+        }
       }
     } else {
       console.error('Error fetching initial values: Response is not an array.');
@@ -155,7 +164,7 @@ inputs.forEach(input => {
 inputs.forEach(input => {
 	const formId = input.dataset.form;
   	const form = document.getElementById(formId);
-  input.addEventListener('keyup', function(event) {
+  input.addEventListener('keydown', function(event) {
       if (event.keyCode === 13) {
 		
         event.preventDefault();
