@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Session
  *
@@ -27,6 +27,8 @@ class Session
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
+    #[Assert\Length(min:4, max:15)]
+    #[Assert\NotBlank(message: 'Vous devez saisir un libelle!')]
     private $libelle;
 
     /**
@@ -34,6 +36,7 @@ class Session
      *
      * @ORM\Column(name="description", type="text", length=255, nullable=false)
      */
+    #[Assert\NotBlank(message: 'Vous devez saisir une description!')]
     private $description;
 
     /**

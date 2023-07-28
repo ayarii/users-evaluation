@@ -3,19 +3,24 @@
 {% block title %}Session index{% endblock %}
 
 {% block content %}
-    <h1>Session index</h1>
+    <h1>Liste Des Sessions</h1>
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;">
     <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_session_new') }}">
         <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
+        </div>
+        <div class="card-body">
     <table id="example1" class="table table-bordered table-hover table-striped">
         <thead>
         <tr>
 
             <th>Libelle</th>
-            <th>DateDebut</th>
-            <th>DateFin</th>
-            <th>CreatedAt</th>
-            <th>UpdatedAt</th>
-            <th>Enabled</th>
+            <th>Date Début</th>
+            <th>Date Fin</th>
+            <th>Date de création</th>
+            <th>Date de la derniére mise à jour </th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
         </thead>

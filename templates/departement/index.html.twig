@@ -1,20 +1,25 @@
 {% extends 'base.html.twig' %}
-{% block title %}Departement index{% endblock %}
+{% block title %}Liste Des Departements{% endblock %}
 
 {% block content %}
-    <h1>Departement index</h1>
+    <h1>Liste Des Departements</h1>
+
+    <div class="card">
+    <div class="card-header">
+    <div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;">
     <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_departement_new') }}">
         <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un nouveau</a>
-
+    </div>
+    <div class="card-body">
     <table id="example1" class="table table-bordered table-hover table-striped">
         <thead>
         <tr>
 
             <th>Libelle</th>
-            <th>CreatedAt</th>
-            <th>UpdatedAt</th>
-            <th>Enabled</th>
-            <th>actions</th>
+            <th>Date de création</th>
+            <th>Date de derniére mise à jour</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -26,14 +31,14 @@
                 <td>{{ departement.updatedAt ? departement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 {% if departement.enabled == true %}
                     <td>
-												<span class="badge badge-success">activé
-													<i class="fas fa-user-check text-white"></i>
+												<span class="badge badge-success">Activé
+													<i class="fas fa-check text-white"></i>
 												</span>
                     </td>
                 {% else %}
                     <td>
 												<span class="badge badge-danger">Désactivé
-													<i class="fas fa-user-lock text-white"></i>
+													<i class="fas fa-lock text-white"></i>
 												</span>
                     </td>
                 {% endif %}

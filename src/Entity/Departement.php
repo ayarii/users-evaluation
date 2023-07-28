@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use \DateTime;
 use PHPUnit\TextUI\XmlConfiguration\Logging\Text;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Departement
@@ -30,6 +31,8 @@ class Departement
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
      */
+    #[Assert\Length(min:4, max:15)]
+    #[Assert\NotBlank(message: 'Vous devez saisir un libelle!')]
     private $libelle;
 
     /**
@@ -37,6 +40,7 @@ class Departement
      *
      * @ORM\Column(name="description", type="text",nullable=false)
      */
+    #[Assert\NotBlank(message: 'Vous devez saisir une description!')]
     private $description;
 
     /**
@@ -68,6 +72,7 @@ class Departement
      *   @ORM\JoinColumn(name="id_session", referencedColumnName="id")
      * })
      */
+    #[Assert\NotBlank( message :"Vous devez choisir une session!")]
     private $idSession;
 
     public function getId(): ?int

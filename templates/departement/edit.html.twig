@@ -1,16 +1,15 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Modifier Departement{% endblock %}
-
 {% block page %}Modifier Departement{% endblock %}
 {% block content %}
-    <h1>Modifier Departement</h1>
-
-    {{ include('departement/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_departement_index') }}"class="btn btn-success"><i class="fas fa-edit" style="padding-right:3px"></i>>back to list</a>
-
-
-
-    {{ include('departement/_delete_form.html.twig') }}
+    <h1>Modifier Le Département </h1>
+    {{ include('departement/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    <div>
+        <a href="{{ path('app_departement_index') }}" class="btn btn-success" style="display: inline-block; margin-right: 20px;">
+            <i class="fas fa-edit" style="padding-right: 3px;"></i>Retour à la liste</a>
+        <span style="display: inline-block;">
+        {{ include('departement/_delete_form.html.twig') }}
+        </span>
+    </div>
+    <br>
 {% endblock %}

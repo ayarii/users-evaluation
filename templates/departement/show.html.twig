@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Departement{% endblock %}
+{% block title %}Les Détails Du Departement{% endblock %}
 
 {% block content %}
-    <h1>Departement</h1>
+    <h1>Les Détails du Departement</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>Identifiant</th>
                 <td>{{ departement.id }}</td>
             </tr>
             <tr>
@@ -20,24 +20,40 @@
                 <td>{{ departement.description }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Date de création</th>
                 <td>{{ departement.createdAt ? departement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Date de derniére mise à jour</th>
                 <td>{{ departement.updatedAt ? departement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Enabled</th>
-                <td>{{ departement.enabled ? 'Yes' : 'No' }}</td>
+                <th>Status</th>
+                {% if departement.enabled == true %}
+                    <td>
+						<span class="badge badge-success">Activé
+							<i class="fas fa-check text-white"></i>
+						</span>
+                    </td>
+                {% else %}
+                    <td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-lock text-white"></i>
+						</span>
+                    </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('app_departement_index') }}" class="btn btn-success"><i class="fas fa-edit" style="padding-right:3px"></i>Back to list</a>
-    <br>
-
-    <a href="{{ path('app_departement_edit', {'id': departement.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Edit</a>
-
-    {{ include('departement/_delete_form.html.twig') }}
+    <div>
+        <a href="{{ path('app_departement_index') }}" class="btn btn-success" style="display: inline-block; margin-right: 20px;">
+            <i class="fas fa-edit" style="padding-right: 3px;"></i>Retour à la liste
+        </a>
+        <a href="{{ path('app_departement_edit', {'id': departement.id}) }}" class="btn btn-warning" style="display: inline-block; margin-right: 20px;">
+            <i class="fas fa-edit" style="padding-right: 3px;"></i>Modifier
+        </a>
+        <span style="display: inline-block;">
+        {{ include('departement/_delete_form.html.twig') }}
+    </span>
+    </div>
 {% endblock %}

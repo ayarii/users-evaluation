@@ -13,7 +13,7 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>Identifiant</th>
                 <td>{{ session.id }}</td>
             </tr>
             <tr>
@@ -25,32 +25,67 @@
                 <td>{{ session.description }}</td>
             </tr>
             <tr>
-                <th>DateDebut</th>
+                <th>Date Début</th>
                 <td>{{ session.dateDebut ? session.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>DateFin</th>
+                <th>Date Fin</th>
                 <td>{{ session.dateFin ? session.dateFin|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Date de création</th>
                 <td>{{ session.createdAt ? session.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Date de la dérniére mise à jour </th>
                 <td>{{ session.updatedAt ? session.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Enabled</th>
-                <td>{{ session.enabled ? 'Yes' : 'No' }}</td>
+                <th>Status</th>
+                {% if session.enabled == true %}
+                    <td>
+						<span class="badge badge-success">Activé
+							<i class="fas fa-check text-white"></i>
+						</span>
+                    </td>
+                {% else %}
+                    <td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-lock text-white"></i>
+						</span>
+                    </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('app_session_index') }}" class="btn btn-success"><i class="fas fa-edit" style="padding-right:3px"></i>Back to list</a>
-
-    <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-warning"><i class="fas fa-edit" style="padding-right:3px"></i>Edit</a>
-
-
-    {{ include('session/_delete_form.html.twig') }}
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-2">
+            <a href="{{ path('app_session_index') }}" class="btn btn-success">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Retour à la liste
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Modifier
+            </a>
+        </div>
+        <div class="col-md-2">
+            {{ include('session/_delete_form.html.twig') }}
+        </div>
+        <div class="col-md-2">
+            {% if session.enabled == true %}
+                <a href="{{ path('app_session_desactiver', {'id': session.id}) }}" class="btn btn-danger">
+                    <i class="fas fa-lock text-white" style="padding-right: 3px"></i>Désactiver
+                </a>
+            {% else %}
+                <a href="{{ path('app_session_activer', {'id': session.id}) }}" class="btn btn-success">
+                    <i class="fas fa-check text-white" style="padding-right: 3px"></i>Activer
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <br>
 {% endblock %}
