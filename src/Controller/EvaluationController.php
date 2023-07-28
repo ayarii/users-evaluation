@@ -98,7 +98,12 @@ class EvaluationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $evaluationRepository->save($evaluation, true);
             $this->addFlash('success', 'Evaluation ajoutée avec succés!');
-            return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
+            if($this->getUser()->getRoles()[0] =="ROLE_GESTIONNAIRE"){
+              return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);  
+            }else{
+                return $this->redirectToRoute('app_evaluation_admin', [], Response::HTTP_SEE_OTHER);
+            }
+            
         }
 
         return $this->renderForm('evaluation/new.html.twig', [
