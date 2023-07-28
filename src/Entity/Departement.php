@@ -29,10 +29,11 @@ class Departement
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
+     * @ORM\Column(name="libelle", type="string", length=255, unique=true ,nullable=false)
      */
     #[Assert\Length(min:4, max:15)]
     #[Assert\NotBlank(message: 'Vous devez saisir un libelle!')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z]+$/i', message: 'Le libelle doit contenir uniquement des lettres.')]
     private $libelle;
 
     /**
@@ -40,6 +41,7 @@ class Departement
      *
      * @ORM\Column(name="description", type="text",nullable=false)
      */
+    #[Assert\Length(min:100)]
     #[Assert\NotBlank(message: 'Vous devez saisir une description!')]
     private $description;
 
@@ -75,10 +77,22 @@ class Departement
     #[Assert\NotBlank( message :"Vous devez choisir une session!")]
     private $idSession;
 
-    public function getId(): ?int
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
 
     public function getLibelle(): ?string
     {

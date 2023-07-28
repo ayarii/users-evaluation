@@ -72,9 +72,6 @@
             </a>
         </div>
         <div class="col-md-2">
-            {{ include('session/_delete_form.html.twig') }}
-        </div>
-        <div class="col-md-2">
             {% if session.enabled == true %}
                 <a href="{{ path('app_session_desactiver', {'id': session.id}) }}" class="btn btn-danger">
                     <i class="fas fa-lock text-white" style="padding-right: 3px"></i>Désactiver

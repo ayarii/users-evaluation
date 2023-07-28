@@ -25,17 +25,23 @@ class Session
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
+     * @ORM\Column(name="libelle", type="string", length=255, unique=true ,nullable=false)
      */
     #[Assert\Length(min:4, max:15)]
     #[Assert\NotBlank(message: 'Vous devez saisir un libelle!')]
+    #[Assert\Regex(
+        pattern: "/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/",
+        message: "Le libellé doit contenir à la fois des lettres et des chiffres."
+    )]
     private $libelle;
+
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", length=255, nullable=false)
      */
+    #[Assert\Length(min:100)]
     #[Assert\NotBlank(message: 'Vous devez saisir une description!')]
     private $description;
 
@@ -44,6 +50,7 @@ class Session
      *
      * @ORM\Column(name="date_debut", type="datetime", nullable=false)
      */
+    #[Assert\GreaterThan("today", message: "La date de début doit être postérieure à la date d'aujourd'hui.")]
     private $dateDebut;
 
     /**
@@ -51,6 +58,7 @@ class Session
      *
      * @ORM\Column(name="date_fin", type="datetime", nullable=false)
      */
+    #[Assert\GreaterThan(propertyPath: "dateDebut", message: 'La date de fin doit être postérieure à la date de début.')]
     private $dateFin;
 
     /**
@@ -74,10 +82,22 @@ class Session
      */
     private $enabled;
 
-    public function getId(): ?int
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
 
     public function getLibelle(): ?string
     {
