@@ -70,6 +70,7 @@ class CritereController extends AbstractController
         return $this->renderForm('critere/new.html.twig', [
             'critere' => $critere,
             'form' => $form,
+            'evaluation'=>$evaluationRepository->find($id)
         ]);
     }
 
