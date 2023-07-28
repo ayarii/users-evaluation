@@ -109,13 +109,13 @@ class AffectationnotesController extends AbstractController
         ]);
     }
 
-    // #[Route('/{id}', name: 'app_affectationnotes_show', methods: ['GET'])]
-    // public function show(Affectationnotes $affectationnote): Response
-    // {
-    //     return $this->render('affectationnotes/show.html.twig', [
-    //         'affectationnote' => $affectationnote,
-    //     ]);
-    // }
+     #[Route('/{id}', name: 'app_affectationnotes_show', methods: ['GET'])]
+     public function show(Affectationnotes $affectationnote): Response
+     {
+         return $this->render('affectationnotes/show.html.twig', [
+             'affectationnote' => $affectationnote,
+         ]);
+     }
     #[Route('/users/{id}', name: 'app_affectationnotes_showUsers', methods: ['GET', 'POST'])]
     public function showUsers(Evaluation $evaluation,EntityManagerInterface $entityManager,CritereRepository $critereRepository,UserRepository $userRepository,Request $request): Response
     {  $criteres= $critereRepository
