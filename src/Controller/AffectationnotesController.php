@@ -109,9 +109,12 @@ class AffectationnotesController extends AbstractController
         ]);
     }
 
-     #[Route('/{id}', name: 'app_affectationnotes_show', methods: ['GET'])]
-     public function show(Affectationnotes $affectationnote): Response
-     {
+     #[Route('/show/{id}', name: 'app_affectationnotes_show', methods: ['GET'])]
+     public function show($id,EntityManagerInterface $entityManager): Response
+     { $repo= $entityManager->getRepository(Affectationnotes::class);
+        $affectationnote = $repo->find($id);
+           
+           
          return $this->render('affectationnotes/show.html.twig', [
              'affectationnote' => $affectationnote,
          ]);
