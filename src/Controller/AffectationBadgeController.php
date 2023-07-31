@@ -10,10 +10,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/affectation/badge')]
 class AffectationBadgeController extends AbstractController
 {
+    /**
+     * 
+     * @IsGranted("ROLE_ADMIN")
+     */
     #[Route('/', name: 'app_affectation_badge_index', methods: ['GET'])]
     public function index(AffectationBadgeRepository $affectationBadgeRepository): Response
     {
@@ -80,6 +85,10 @@ foreach ($affectationBadges as $affectationBadge) {
     }
 */
 
+/**
+     * 
+     * @IsGranted("ROLE_ADMIN")
+     */
     #[Route('/{iduser}', name: 'app_affectation_badge_show', methods: ['GET'])]
     public function showbadges(AffectationBadge $affectationBadge,AffectationBadgeRepository $affectationBadgeRepository,$iduser): Response
     {
