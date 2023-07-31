@@ -101,4 +101,25 @@ public function findBadgesByUserId($userId)
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getUsersWithBadgeCounts()
+    {
+        $query = $this->createQueryBuilder('ab')
+            ->select('u.nom, b.image, COUNT(ab.idbadge) as badgecount')
+            ->join('ab.iduser', 'u')
+            ->join('ab.idbadge','b')
+            ->groupBy('ab.iduser, ab.idbadge')
+            ->getQuery();
+
+        return $query->getResult();
+    }
+    public function getBadgesUser(string $userId){
+        $queryBuilder = $this->createQueryBuilder('ab')
+        ->select('ab', 'u')
+        ->join('ab.iduser', 'u')
+        ->where('u.id = :userId')
+        ->setParameter('userId', $userId);
+
+    return $queryBuilder->getQuery()->getResult();
+    }
+
 }

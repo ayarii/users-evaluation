@@ -13,49 +13,69 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-header">
-                
+
 					<div class="card-body">
 
 						<table id="example1" class="table table-bordered table-hover table-striped">
 							<thead>
 								<tr>
-									
-                                    <th>Utilisateur</th>
+
+									<th>Utilisateur</th>
 									<th>Badge</th>
-									<th>Date Affectation</th>
+									
 									<th>actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								{% for affectation_badge in affectation_badges %}
-									<tr>
-										
-                                        <td>{{ affectation_badge.iduser.prenom }} {{ affectation_badge.iduser.nom }}</td>
-										<td>{{ affectation_badge.idbadge.libelle }}</td>
-										<td>{{ affectation_badge.dateaffectation ? affectation_badge.dateaffectation|date('Y-m-d H:i:s') : '' }}</td>
-										<td>
-											<a href="{{ path('app_affectation_badge_show', {'id': affectation_badge.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-										</td>
-									</tr>
-								{% else %}
-									<tr>
-										<td colspan="4">no records found</td>
-									</tr>
-								{% endfor %}
+			{% for userBadges in groupedBadges %}
+    {% set user = userBadges.user %}
+    <tr>
+        <td>{{ user.prenom }} {{ user.nom }}</td>
+        <td>
+            {% set displayedBadges = [] %}
+            {% for badge in userBadges.badges %}
+                {% set badgeId = badge.idbadge.id %}
+                {% if badgeCounts[user.id][badgeId] is defined and badgeCounts[user.id][badgeId] > 1 %}
+                    {% if badgeId not in displayedBadges %}
+                        {% set displayedBadges = displayedBadges|merge([badgeId]) %}
+						
+                        <img src="{{ asset('Photos/badges/' ~ badge.idbadge.image) }}" width="80" height="80" class="img-circle elevation-2"  alt="badgeImage">
+                        <span class="badge badge-light position-absolute bottom-0 start-100 translate-middle rounded-pill"> x {{ badgeCounts[user.id][badgeId] }}</span>
+						
+                    {% endif %}
+                {% else %}
+                    <img src="{{ asset('Photos/badges/' ~ badge.idbadge.image) }}" width="80" height="80" class="img-circle elevation-2" alt="badgeImage">
+                    <span class="badge badge-light position-absolute top-0 start-100 translate-middle rounded-pill"> x {{ badgeCounts[user.id][badgeId] }}</span>
+                {% endif %}
+            {% endfor %}
+        </td>
+   
+        <td>
+            <a href="{{ path('app_affectation_badge_show', {'iduser': user.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="4">no records found</td>
+    </tr>
+{% endfor %}
+
+
+
 							</tbody>
 							<tfoot>
-								
-                                <th>Utilisateur</th>
+
+								<th>Utilisateur</th>
 								<th>Badge</th>
-								<th>Date Affectation</th>
+							
 								<th>actions</th>
 							</tfoot>
 						</table>
-                        </div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-						
-					{% endblock %}
+
+{% endblock %}

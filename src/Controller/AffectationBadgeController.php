@@ -17,8 +17,37 @@ class AffectationBadgeController extends AbstractController
     #[Route('/', name: 'app_affectation_badge_index', methods: ['GET'])]
     public function index(AffectationBadgeRepository $affectationBadgeRepository): Response
     {
+$affectationBadges = $affectationBadgeRepository->findAll();
+$groupedBadges = [];
+$badgeCounts = []; 
+
+foreach ($affectationBadges as $affectationBadge) {
+    $userId = $affectationBadge->getIduser()->getId();
+    $badgeId = $affectationBadge->getIdbadge()->getId(); 
+
+    if (!isset($groupedBadges[$userId])) {
+        $groupedBadges[$userId] = [
+            'user' => $affectationBadge->getIduser(),
+            'badges' => [],
+        ];
+        $badgeCounts[$userId] = []; 
+    }
+
+   
+    if (!isset($badgeCounts[$userId][$badgeId])) {
+        $badgeCounts[$userId][$badgeId] = 1; 
+    } else {
+        $badgeCounts[$userId][$badgeId]++; 
+    }
+
+    $groupedBadges[$userId]['badges'][] = $affectationBadge;
+}
+
+
         return $this->render('affectation_badge/index.html.twig', [
-            'affectation_badges' => $affectationBadgeRepository->findAll(),
+           // 'affectation_badges' => $affectationBadgeRepository->findAll(),
+           'groupedBadges' => $groupedBadges,
+            'badgeCounts' => $badgeCounts,
         ]);
     }
 
@@ -42,11 +71,24 @@ class AffectationBadgeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_affectation_badge_show', methods: ['GET'])]
+ /*   #[Route('/{id}', name: 'app_affectation_badge_show', methods: ['GET'])]
     public function show(AffectationBadge $affectationBadge): Response
     {
         return $this->render('affectation_badge/show.html.twig', [
             'affectation_badge' => $affectationBadge,
+        ]);
+    }
+*/
+
+    #[Route('/{iduser}', name: 'app_affectation_badge_show', methods: ['GET'])]
+    public function showbadges(AffectationBadge $affectationBadge,AffectationBadgeRepository $affectationBadgeRepository,$iduser): Response
+    {
+        $badges = $affectationBadgeRepository->getBadgesUser($iduser);
+      //  dd($badges);
+
+        return $this->render('affectation_badge/show.html.twig', [
+            //'affectation_badge' => $affectationBadge,
+            'badges' => $badges,
         ]);
     }
 
