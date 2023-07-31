@@ -40,6 +40,7 @@ class BadgeType extends AbstractType
                 'required'=>true,
                 'mapped' => true,
                 'label' => 'Image (JPG, PNG)',
+                'data_class' => null,
                 
                 'attr' => [
                     'accept' => '.jpg,.jpeg,.png',

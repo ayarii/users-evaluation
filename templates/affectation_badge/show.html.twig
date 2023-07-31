@@ -1,31 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}AffectationBadge
+{% block title %}Badges de {{ badges[0].iduser.prenom }}
+			{{ badges[0].iduser.nom }}
+{% endblock %}
+{% block titlepage %}Badges de {{ badges[0].iduser.prenom }}
+			{{ badges[0].iduser.nom }}
+{% endblock %}
+{% block page %}Badges de {{ badges[0].iduser.prenom }}
+			{{ badges[0].iduser.nom }}
 {% endblock %}
 
+
 {% block content %}
-	<h1>AffectationBadge</h1>
 
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ affectation_badge.id }}</td>
-			</tr>
-			<tr>
-				<th>Badge</th>
-				<td>{{ affectation_badge.idbadge.libelle }}</td>
-			</tr>
-			<tr>
-				<th>Date affectation</th>
-				<td>{{ affectation_badge.dateaffectation ? affectation_badge.dateaffectation|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-		</tbody>
-	</table>
 
-	<a href="{{ path('app_affectation_badge_index') }}">back to list</a>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header  mt-3 pb-3 mb-3 ">
+	
+		<img src="{{ asset('Photos/users/' ~ badges[0].iduser.image) }}" width="80" height="80" class="img-circle elevation-2" alt="badgeImage">
+		
+		<div>
+					<div class="card-body">
 
-	<a href="{{ path('app_affectation_badge_edit', {'id': affectation_badge.id}) }}">edit</a>
+						<table id="example1" class="table table-bordered table-hover table-striped">
+							<thead>
+								<tr>
 
-	{{ include('affectation_badge/_delete_form.html.twig') }}
+									<th>Badge</th>
+									<th>Date Affectation</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								{% for badge in badges %}
+									<tr>
+										<td><img src="{{ asset('Photos/badges/' ~ badge.idbadge.image) }}" width="80" height="80" class="img-circle elevation-2" alt="badgeImage">
+											{{ badge.idbadge.libelle }}</td>
+
+										<td>{{ badge.dateaffectation ? badge.dateaffectation|date('Y-m-d H:i:s') : '' }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+							<tfoot>
+								<tr>
+
+									<th>Badge</th>
+									<th>Date Affectation</th>
+								</tr>
+							</tfoot>
+						</table>
+
+					</div>
+				</div>
+			</div>
+	
+
+
 {% endblock %}
