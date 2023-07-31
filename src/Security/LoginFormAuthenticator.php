@@ -50,7 +50,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             throw new CustomUserMessageAuthenticationException('Votre compte est désactivé!');
         }
 
-        // Verify that the provided password matches with the user's encoded password
+        
         $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $password);
 
         if (!$isPasswordValid) {
@@ -85,12 +85,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             } else if ($users->getRoles()[0] == "ROLE_GESTIONNAIRE") {
                 return new RedirectResponse($this->urlGenerator->generate('app_evaluation_index'));
             } else if ($users->getRoles()[0] == "ROLE_Utilisateur") {
-                return new RedirectResponse($this->urlGenerator->generate(''));
+                $userId = $users->getId(); 
+            $params = ['id' => $userId];
+                return new RedirectResponse($this->urlGenerator->generate('app_user_profile', $params));
             }
         }
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        
     }
 
     protected function getLoginUrl(Request $request): string

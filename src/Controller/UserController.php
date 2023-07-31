@@ -48,9 +48,9 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-           
+
             $id = $form->get('id')->getData();
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
@@ -74,7 +74,7 @@ class UserController extends AbstractController
             ));
             $user->setId($id);
             $user->setEnabled(1);
-            
+
             $userRepository->save($user, true);
             $password = $form->get('password')->getData();
             $context = compact('user', 'password');
@@ -101,19 +101,23 @@ class UserController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user,AffectationBadgeRepository $affbadrepo): Response
+    public function show(User $user, AffectationBadgeRepository $affbadrepo): Response
     {
-       $badges= $affbadrepo->findBadgesByUserId($user->getId());
+        $badges = $affbadrepo->findBadgesByUserId($user->getId());
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'badges' => $badges
         ]);
     }
 
-
+    /**
+     * 
+     * @IsGranted("ROLE_USER")
+     */
     #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request,Request $requestpass,User $user, UserRepository $userRepository,AffectationBadgeRepository $affbadrepo, UserPasswordEncoderInterface $userPasswordHasher): Response
+    public function profile(Request $request, Request $requestpass, User $user, UserRepository $userRepository, AffectationBadgeRepository $affbadrepo, UserPasswordEncoderInterface $userPasswordHasher): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $form = $this->createForm(EditProfileType::class, $user);
 
@@ -124,8 +128,9 @@ class UserController extends AbstractController
         $formpass->handleRequest($requestpass);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $imageFile = $form->get('image')->getData();
+           
             if ($imageFile) {
                 $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
 
@@ -133,9 +138,11 @@ class UserController extends AbstractController
                     $this->getParameter('users_directory'),
                     $imageData
                 );
+                $user->setImage("");
                 $user->setImage($imageData);
             }
-            $userRepository->save($user,true);  
+            
+            $userRepository->save($user, true);
             $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
             return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         } elseif ($formpass->isSubmitted() && $formpass->isValid()) {
@@ -144,15 +151,16 @@ class UserController extends AbstractController
                 $user,
                 $formpass->get('password')->getData()
             ));
-            $userRepository->save($user,true);
-            
+            $userRepository->save($user, true);
+
             $this->addFlash('success', 'Votre mot de passe à été mise à jour avec succés!');
-           
+
             return $this->redirectToRoute('app_logout', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
-        $badges= $affbadrepo->findBadgesByUserId($user->getId());
-       
-        
+
+        $badges = $affbadrepo->findBadgesByUser($user->getId());
+
+
         return $this->render('user/profile.html.twig', [
             'user' => $user,
             'badges' => $badges,
@@ -188,7 +196,7 @@ class UserController extends AbstractController
                 $user,
                 $form->get('password')->getData()
             ));
-           
+
             $password = $form->get('password')->getData();
             $context = compact('password', 'user');
             $mail->send(
@@ -244,11 +252,11 @@ class UserController extends AbstractController
     #[Route('/activate/{id}', name: 'app_user_activate', methods: ['GET'])]
     public function activate(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
     {
-       
-        
+
+
         $user->setEnabled(1);
-        $userRepository->save($user,true);
-       
+        $userRepository->save($user, true);
+
         $context = compact('user');
         $mail->send(
 
@@ -269,10 +277,10 @@ class UserController extends AbstractController
     #[Route('/desactivate/{id}', name: 'app_user_desactivate', methods: ['GET'])]
     public function desactivate(Request $request, User $user, UserRepository $userRepository, SendMailService $mail): Response
     {
-       
+
         $user->setEnabled(0);
-        $userRepository->save($user,true);
-    
+        $userRepository->save($user, true);
+
         $context = compact('user');
         $mail->send(
 

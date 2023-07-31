@@ -122,4 +122,16 @@ public function findBadgesByUserId($userId)
     return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findBadgesByUser($userId)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('b.id', 'b.libelle', 'b.image','COUNT(a.id) as badgeCount')
+            ->leftJoin('a.idbadge', 'b')
+            ->andWhere('a.iduser = :iduser')
+            ->setParameter('iduser', $userId)
+            ->groupBy('a.idbadge')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

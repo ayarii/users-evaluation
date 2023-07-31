@@ -123,7 +123,7 @@ class UserType extends AbstractType
             return;
         }
 
-        if ($user->isEnabled()) {
+        if (!$user->isEnabled()) {
           
             $context->buildViolation('L\'email saisi est bloqué.')
                 ->atPath('email')

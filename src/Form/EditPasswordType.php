@@ -14,14 +14,17 @@ class EditPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('password', PasswordType::class, [
+            ->add('password', PasswordType::class, [
 
-            'required' => true,
-            'label'=>'Mot de passe'
-            
+                'required' => true,
+                'label' => 'Mot de passe',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Entrez un nouveau mot de passe...'
+                ],
 
-        ])
-        ;
+
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
