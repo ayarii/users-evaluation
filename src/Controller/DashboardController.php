@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\AffectationBadge;
 use App\Repository\AffectationBadgeRepository;
+use App\Repository\BadgeRepository;
 use App\Repository\DepartementRepository;
 
 use App\Repository\SessionRepository;
@@ -27,7 +28,7 @@ class DashboardController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
 
-   public function index(UserRepository $repouser,SessionRepository $total,AffectationBadgeRepository $repoaff,SessionRepository $repoSess): Response
+   public function index(UserRepository $repouser,SessionRepository $total,AffectationBadgeRepository $repoaff,SessionRepository $repoSess,BadgeRepository $repobadge): Response
     {    $sessions = $repoSess
 
         ->createQueryBuilder('sess')
@@ -40,6 +41,8 @@ class DashboardController extends AbstractController
         $nbutilisateurs = count($utilisateurs);
         $sessions = $total->findAll();
         $nsessions = count($sessions);
+        $badges = $repobadge->findAll();
+        $nbadges = count($badges);
 
         $usersData = [];
         $usersData = $this->getchartUsersPerDepatments($repouser);
@@ -50,6 +53,7 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'nbutilisateurs' => $nbutilisateurs,
+            'nbbadges' => $nbadges,
 
             'nsessions' => $nsessions,
             'usersData' => $usersData,
