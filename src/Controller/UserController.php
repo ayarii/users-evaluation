@@ -110,64 +110,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * 
-     * @IsGranted("ROLE_USER")
-     */
-    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request, Request $requestpass, User $user, UserRepository $userRepository, AffectationBadgeRepository $affbadrepo, UserPasswordEncoderInterface $userPasswordHasher): Response
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $form = $this->createForm(EditProfileType::class, $user);
-
-        $form->handleRequest($request);
-
-        $formpass = $this->createForm(EditPasswordType::class, $user);
-
-        $formpass->handleRequest($requestpass);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $imageFile = $form->get('image')->getData();
-           
-            if ($imageFile) {
-                $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
-
-                $imageFile->move(
-                    $this->getParameter('users_directory'),
-                    $imageData
-                );
-                $user->setImage("");
-                $user->setImage($imageData);
-            }
-            
-            $userRepository->save($user, true);
-            $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
-            return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
-        } elseif ($formpass->isSubmitted() && $formpass->isValid()) {
-
-            $user->setPassword($userPasswordHasher->encodePassword(
-                $user,
-                $formpass->get('password')->getData()
-            ));
-            $userRepository->save($user, true);
-
-            $this->addFlash('success', 'Votre mot de passe à été mise à jour avec succés!');
-
-            return $this->redirectToRoute('app_logout', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
-        }
-
-        $badges = $affbadrepo->findBadgesByUser($user->getId());
-
-
-        return $this->render('user/profile.html.twig', [
-            'user' => $user,
-            'badges' => $badges,
-            'form' => $form->createView(),
-            'formpass' => $formpass->createView(),
-        ]);
-    }
 
     /**
      * 
@@ -292,5 +235,62 @@ class UserController extends AbstractController
 
         $this->addFlash('success', 'Utilisateur désactivé avec succés!');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+      /**
+     * 
+     * @IsGranted("ROLE_USER")
+     */
+    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET', 'POST'])]
+    public function profile(Request $request, Request $requestpass, User $user, UserRepository $userRepository, AffectationBadgeRepository $affbadrepo, UserPasswordEncoderInterface $userPasswordHasher): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $form = $this->createForm(EditProfileType::class, $user);
+
+        $form->handleRequest($request);
+
+        $formpass = $this->createForm(EditPasswordType::class, $user);
+
+        $formpass->handleRequest($requestpass);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
+
+                $imageFile->move(
+                    $this->getParameter('users_directory'),
+                    $imageData
+                );
+                $user->setImage($imageData);
+            }
+            $userRepository->save($user, true);
+            $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
+            return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        } elseif ($formpass->isSubmitted() && $formpass->isValid()) {
+
+            $user->setPassword($userPasswordHasher->encodePassword(
+                $user,
+                $formpass->get('password')->getData()
+            ));
+            $userRepository->save($user, true);
+
+            $this->addFlash('success', 'Votre mot de passe à été mise à jour avec succés!');
+
+            return $this->redirectToRoute('app_logout', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        $badges = $affbadrepo->findBadgesByUser($user->getId());
+
+
+        return $this->render('user/profile.html.twig', [
+            'user' => $user,
+            'badges' => $badges,
+            'form' => $form->createView(),
+            'formpass' => $formpass->createView(),
+        ]);
     }
 }
