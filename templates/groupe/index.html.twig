@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Groupe index
+{% endblock %}
+
+{% block page %}Groupe index
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<br>
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center">
+						{% if type == 'success'%}
+							<i class="fas fa-check-circle" style="padding-right: 10px"></i>
+						{% elseif type == 'danger'%}
+							<i class="fas fa-times-circle" style="padding-right: 10px"></i>
+						{% endif %}
+						<div>
+							{{ message }}
+						</div>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+
+			<br>
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Groupe List</h3>
+					
+					
+						
+					
+					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_groupe_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un groupe</a>
+				</div>
+				<div class="card-body">
+					<table id="example1" class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								
+								<th>Libelle</th>
+								
+								
+								<th>actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for groupe in groupes %}
+								<tr>
+									
+									<td>{{ groupe.libelle }}</td>
+									
+									
+								
+									<td>
+										<a href="{{ path('app_groupe_show', {'id': groupe.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+										<a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}"><i class="fas fa-edit text-warning"></i></a> 
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="10">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<th>Libelle</th>
+							
+								
+								<th>actions</th>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}

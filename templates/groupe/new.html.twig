@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau groupe{% endblock %}
+{% block titlepage %}Ajouter un nouveau groupe
+{% endblock %}
+{% block page %}Ajouter un nouveau groupe
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('groupe/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
