@@ -145,9 +145,10 @@ class EvaluationController extends AbstractController
         ->getResult();
         $users=$userRepository
         ->createQueryBuilder('u')
-
+        ->andWhere('u.idGroupe = :id')
+        ->setParameter('id', $userRepository->find($this->getUser())->getIdGroupe())
        
-        ->where('u.roles LIKE :roles')
+        ->andWhere('u.roles LIKE :roles')
         ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
         ->getQuery()
         ->getResult();
@@ -287,8 +288,9 @@ class EvaluationController extends AbstractController
         $users=$userRepository
         ->createQueryBuilder('u')
 
-       
-        ->where('u.roles LIKE :roles')
+        ->andWhere('u.idGroupe = :id')
+        ->setParameter('id', $userRepository->find($this->getUser())->getIdGroupe())
+        ->andWhere('u.roles LIKE :roles')
         ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
         ->getQuery()
         ->getResult();

@@ -133,9 +133,11 @@ class AffectationnotesController extends AbstractController
         $users=$userRepository
         ->createQueryBuilder('u')
 
-       
-        ->where('u.roles LIKE :roles')
+        ->andWhere('u.idGroupe = :id')
+        ->setParameter('id', $userRepository->find($this->getUser())->getIdGroupe())
+        ->andWhere('u.roles LIKE :roles')
         ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
+        
         ->getQuery()
         ->getResult();
        
@@ -197,14 +199,7 @@ class AffectationnotesController extends AbstractController
         ->setParameter('id', $evaluation->getId())
         ->getQuery()
         ->getResult();
-        $users=$userRepository
-        ->createQueryBuilder('u')
-
        
-        ->where('u.roles LIKE :roles')
-        ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
-        ->getQuery()
-        ->getResult();
           
 
                   foreach($criteres as $cr){
