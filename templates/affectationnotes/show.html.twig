@@ -1,35 +1,102 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Affectation des Notes{% endblock %}
+{% block title %}Zffectation{% endblock %}
 
 {% block content %}
-    <h1>Affectation des Notes</h1>
+
+    <h1>Affectation</h1>
+    
+
+
 
     <table class="table">
         <tbody>
+
+          
+
             <tr>
-                <th>Utilisateur</th>
-                <td>{{ affectationnote.user.nom }} {{ affectationnote.user.prenom }}</td>
+                <th>Libelle</th>
+                <td>{{ evaluation.libelle }}</td>
             </tr>
             <tr>
-                <th>Critère</th>
-                <td>{{ affectationnote.critere.libelle }}</td>
+                <th>Description</th>
+                <td>{{ evaluation.description |raw }}</td>
             </tr>
-            <tr>
-                <th>Note</th>
-                <td>{{ affectationnote.note }}</td>
-            </tr>
+           
         </tbody>
     </table>
-{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
-    <a href="{{ path('app_affectationnotes_index') }}">back to list</a>
-    {% endif %}
-    {% if app.user.roles[0]=="ROLE_ADMIN" %}
-     <a href="{{ path('app_affectationnotes_admin') }}">back to list</a>
-     {% endif %}
-{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
-    <a href="{{ path('app_affectationnotes_edit', {'id': affectationnote.id}) }}">edit</a>
-    {% endif %}
 
-    {{ include('affectationnotes/_delete_form.html.twig') }}
+
+   
+	{% set tot = 0 %}
+                                {% for cr in criteres %}
+								
+                                
+								{% set tot = tot + cr.ponderation %}
+								{% endfor %}
+	
+			<br>
+
+
+			<div class="card">
+				<div class="card-header">
+					
+					
+				<div class="card-body">
+					<table id="example1" class="table table-bordered table-hover table-striped">
+						<thead>
+							<tr>
+								
+								<th>Utilisateur</th>
+								
+                                {% for cr in criteres %}
+								<th> {{cr.libelle }} /{{cr.ponderation }}</th>
+                                
+								
+								{% endfor %}
+                                <th> SCORE TOTAL / {{tot}} </th>
+								 <th> Action</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							
+								<tr>
+									
+									<td>{{ user.nom }} {{ user.prenom }}</td>
+                                    {% set tot = 0 %}
+                                    {% for cr in criteres %}
+									<td> 
+                                    {% for aff in affectations %}
+                                    {% if aff.critere.id == cr.id and aff.user.id == user.id %}
+
+                                        {{aff.note}}
+                                        {% set tot = tot + aff.note %}
+
+                                        {% endif %}
+                                        {% endfor %}
+{% endfor %}
+
+</td>
+ 
+
+<td class="total">{{tot}}  </td>
+<td > <a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_evaluation_pdf', {'userId': user.id,'evId': evaluation.id}) }}"> pdf </a> </td>
+
+
+									
+										
+								</tr>
+							
+							
+						</tbody>
+						<tfoot>
+							
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

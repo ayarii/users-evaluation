@@ -111,7 +111,39 @@ class EvaluationController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{idEv}/{idUser}', name: 'app_evaluation_showDetails', methods: ['GET'])]
+    public function showDetailsForAdmin($idEv,$idUser,EntityManagerInterface $entityManager,EvaluationRepository $evRepo,CritereRepository $critereRepository,UserRepository $userRepository): Response
+    {
+       
+        $repo= $entityManager->getRepository(Affectationnotes::class);
+        $criteres= $critereRepository
+        ->createQueryBuilder('u')
 
+        ->where('u.enabled = :bool')
+        ->setParameter('bool', 1)
+        ->andWhere('u.idEvaluation = :id')
+        ->setParameter('id', $idEv)
+        ->getQuery()
+        ->getResult();
+        $user=$userRepository
+        ->find($idUser);
+        
+        $aff = $repo->createQueryBuilder('p')
+        ->andWhere('p.user = :id')
+        ->setParameter('id', $idUser)
+           
+            ->getQuery()
+            ->getResult();
+           $evaluation= $evRepo->find($idEv);
+        return $this->render('affectationnotes/show.html.twig', [
+            'evaluation' => $evaluation,
+            'user'=>$user,
+            'criteres'=>$criteres,
+            'affectations'=>$aff,
+            
+            
+        ]);
+    }
     #[Route('/{id}', name: 'app_evaluation_show', methods: ['GET'])]
     public function show($id,EntityManagerInterface $entityManager,EvaluationRepository $evRepo,CritereRepository $critereRepository,UserRepository $userRepository): Response
     {
@@ -154,7 +186,6 @@ class EvaluationController extends AbstractController
         ->getResult();
        
         
-        $repo= $entityManager->getRepository(Affectationnotes::class);
         $aff = $repo->createQueryBuilder('p')
         ->andWhere('p.gestionnaire = :ges')
         ->setParameter('ges', $this->getUser())
@@ -347,7 +378,8 @@ class EvaluationController extends AbstractController
     }
     #[Route('/{userId}/{evId}/toPdf', name: 'app_evaluation_pdf', methods: ['GET', 'POST'])]
     public function toPDF(Request $request,$userId,$evId,EntityManagerInterface $entityManager,UserRepository $userRepository,CritereRepository $critereRepository, EvaluationRepository $evaluationRepository,DepartementRepository $depRepo,SessionRepository $sessRepo): Response
-    {    $criteres= $critereRepository
+    { //  dd($userId,$evId);
+         $criteres= $critereRepository
         ->createQueryBuilder('u')
 
         ->where('u.enabled = :bool')
@@ -365,8 +397,7 @@ class EvaluationController extends AbstractController
         $repo= $entityManager->getRepository(Affectationnotes::class);
         $affectations = $repo->createQueryBuilder('u')
        
-        ->where('u.gestionnaire = :ges')
-        ->setParameter('ges', $this->getUser())
+      
         ->andWhere('u.user = :id')
         ->setParameter('id', $userId)
         

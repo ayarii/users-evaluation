@@ -57,7 +57,8 @@
 									
 									<td>{{aff.totalNote }}</td>
 									<td>
-												</td>
+										<a href="{{ path('app_evaluation_showDetails', {'idEv': aff[0].critere.idEvaluation.id ,'idUser':  aff[0].user.id  }) }}"><i class="fas fa-info-circle text-info"></i></a>
+									</td>
 								</tr>
 							{% else %}
 								<tr>
