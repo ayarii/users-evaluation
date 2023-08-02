@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Affectation des Notes
-{% endblock %}
-{% block titlepage %}Affectation des Notes
+
+{% block title %}Groupe index
 {% endblock %}
 
+{% block page %}Groupe index
+{% endblock %}
 
 {% block content %}
 	<div class="row">
@@ -31,33 +32,36 @@
 			<br>
 			<div class="card">
 				<div class="card-header">
-					<h3 class="card-title">Affectation des Notes</h3>
-                    
+					<h3 class="card-title">Groupe List</h3>
+					
+					
+						
+					
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
-                   
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_groupe_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter un groupe</a>
 				</div>
 				<div class="card-body">
 					<table id="example1" class="table table-bordered table-hover table-striped">
 						<thead>
 							<tr>
 								
-								<th>Evaluation</th>
-								<th>Utilisateur</th>
-                                <th>Score</th>
+								<th>Libelle</th>
+								
 								
 								<th>actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							{% for aff in affectationnotes %}
+							{% for groupe in groupes %}
 								<tr>
-									<td>{{ aff[0].critere.idEvaluation.libelle }}</td>
-									<td>{{ aff[0].user.nom }} {{ aff[0].user.prenom }}</td>
+									
+									<td>{{ groupe.libelle }}</td>
 									
 									
-									<td>{{aff.totalNote }}</td>
+								
 									<td>
-										<a href="{{ path('app_evaluation_showDetails', {'idEv': aff[0].critere.idEvaluation.id ,'idUser':  aff[0].user.id  }) }}"><i class="fas fa-info-circle text-info"></i></a>
+										<a href="{{ path('app_groupe_show', {'id': groupe.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+										<a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}"><i class="fas fa-edit text-warning"></i></a> 
 									</td>
 								</tr>
 							{% else %}
@@ -67,9 +71,9 @@
 							{% endfor %}
 						</tbody>
 						<tfoot>
-							<th>Evaluation</th>
-								<th>Utilisateur</th>
-                                <th>Score</th>
+							<th>Libelle</th>
+							
+								
 								<th>actions</th>
 						</tfoot>
 					</table>

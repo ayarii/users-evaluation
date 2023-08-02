@@ -1,0 +1,14 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+{{form_label(form.libelle)}}
+{{form_widget(form.libelle)}}
+
+<br>
+
+
+
+
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+<br>
+<br>
+{{ form_end(form) }}

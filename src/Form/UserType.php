@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Departement;
+use App\Entity\Groupe;
 use App\Entity\User;
 use App\Repository\DepartementRepository;
 use Symfony\Component\Form\AbstractType;
@@ -102,6 +103,18 @@ class UserType extends AbstractType
                 'choice_label' => function (Departement $departement) {
 
                     return $departement->getLibelle();
+                },
+            ])
+            ->add('idGroupe', EntityType::class, [
+                'class' => Groupe::class,
+                'label' => 'Groupe',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                
+                'choice_label' => function (Groupe $groupe) {
+
+                    return $groupe->getLibelle();
                 },
             ]);
     }

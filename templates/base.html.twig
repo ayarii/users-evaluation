@@ -302,6 +302,15 @@ m.parentNode.insertBefore(n, m);
 										</p>
 									</a>
 								</li>
+									<li class="nav-item ">
+									<a href="{{path('app_groupe_index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'app_groupe_index'  %}active{% endif %}">
+										<i class="nav-icon fas fa-users"></i>
+										<p>
+											Groupes
+
+										</p>
+									</a>
+								</li>
 								<li class="nav-item">
 									<a href="{{path('app_badge_index')}}" class="nav-link {% if app.request.attributes.get('_route') == 'app_badge_index'  %}active{% endif %}">
 										<i class="nav-icon fas fa-trophy"></i>

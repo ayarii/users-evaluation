@@ -25,22 +25,24 @@ class AffectationnotesController extends AbstractController
     #[Route('/admin', name: 'app_affectationnotes_admin', methods: ['GET'])]
     public function indexAdmin(EntityManagerInterface $entityManager): Response
     { 
-        $affectationnotes = $entityManager
-            ->getRepository(Affectationnotes::class)
-            
-            ->createQueryBuilder('u')
-
-            ->where('u.enabled = :bool')
-            ->setParameter('bool', 1)
-           
-            ->getQuery()
-            ->getResult();
-            
-
+        $repo= $entityManager->getRepository(Affectationnotes::class);
+        $affe = $repo
+        ->createQueryBuilder('an')
+        ->select('an, u, e, c, SUM(an.note) AS totalNote')
+        ->join('an.user', 'u')
+        ->join('an.critere', 'c')
+        ->join('c.idEvaluation', 'e')
+        ->where('u.roles LIKE :roles')
+        ->setParameter('roles', '%"ROLE_Utilisateur"%')
+        ->groupBy('an.user, c.idEvaluation')
+        ->getQuery()
+        ->getResult();
+        
+//dd($affe);
     
 
         return $this->render('affectationnotes/index.html.twig', [
-            'affectationnotes' => $affectationnotes,
+            'affectationnotes' => $affe,
         ]);
     }
     #[Route('/', name: 'app_affectationnotes_index', methods: ['GET'])]
@@ -133,9 +135,11 @@ class AffectationnotesController extends AbstractController
         $users=$userRepository
         ->createQueryBuilder('u')
 
-       
-        ->where('u.roles LIKE :roles')
+        ->andWhere('u.idGroupe = :id')
+        ->setParameter('id', $userRepository->find($this->getUser())->getIdGroupe())
+        ->andWhere('u.roles LIKE :roles')
         ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
+        
         ->getQuery()
         ->getResult();
        
@@ -197,14 +201,7 @@ class AffectationnotesController extends AbstractController
         ->setParameter('id', $evaluation->getId())
         ->getQuery()
         ->getResult();
-        $users=$userRepository
-        ->createQueryBuilder('u')
-
        
-        ->where('u.roles LIKE :roles')
-        ->setParameter('roles', '%"'."ROLE_Utilisateur".'"%')
-        ->getQuery()
-        ->getResult();
           
 
                   foreach($criteres as $cr){

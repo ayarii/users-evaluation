@@ -153,7 +153,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
      */
     #[Assert\NotBlank( message :"Vous devez choisir un département !")]
     private $idDepartement;
-
+ /**
+     * @var Groupe
+     *
+     * @ORM\ManyToOne(targetEntity="Groupe")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_groupe", referencedColumnName="id")
+     * })
+     */
+    private $idGroupe;
     public function getId(): ?string
     {
         return $this->id;
@@ -384,5 +392,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
     public function __toString()
     {
         return $this->getNom() . ": " . $this->getPrenom() ;
+    }
+    public function getIdGroupe(): ?Groupe
+    {
+        return $this->idGroupe;
+    }
+
+    public function setIdGroupe(?Groupe $idGroupe): static
+    {
+        $this->idGroupe = $idGroupe;
+
+        return $this;
     }
 }
