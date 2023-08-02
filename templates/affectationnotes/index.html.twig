@@ -34,34 +34,30 @@
 					<h3 class="card-title">Affectation des Notes</h3>
                     
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
-                    {% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}
-					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_affectationnotes_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
-                    {% endif %}
+                   
 				</div>
 				<div class="card-body">
-					<table id="example2" class="table table-bordered table-hover table-striped">
+					<table id="example1" class="table table-bordered table-hover table-striped">
 						<thead>
 							<tr>
 								
+								<th>Evaluation</th>
 								<th>Utilisateur</th>
-								<th>Critère</th>
-                                <th>Pondération du critère</th>
-								<th>Note</th>
+                                <th>Score</th>
+								
 								<th>actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for aff in affectationnotes %}
 								<tr>
+									<td>{{ aff[0].critere.idEvaluation.libelle }}</td>
+									<td>{{ aff[0].user.nom }} {{ aff[0].user.prenom }}</td>
 									
-									<td>{{ aff.user.nom }} {{ aff.user.prenom }}</td>
-									<td>{{ aff.critere.libelle }}</td>
-									<td>{{ aff.critere.ponderation }}</td>
-									<td>{{aff.note }}</td>
+									
+									<td>{{aff.totalNote }}</td>
 									<td>
-										<a href="{{ path('app_affectationnotes_show', {'id': aff.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-										{% if app.user.roles[0]=="ROLE_GESTIONNAIRE" %}<a href="{{ path('app_affectationnotes_edit', {'id': aff.id}) }}"><i class="fas fa-edit text-warning"></i></a> {% endif %}
-									</td>
+												</td>
 								</tr>
 							{% else %}
 								<tr>
@@ -70,10 +66,9 @@
 							{% endfor %}
 						</tbody>
 						<tfoot>
-							<th>Utilisateur</th>
-								<th>Critère</th>
-                                <th>Pondération du critère</th>
-								<th>Note</th>
+							<th>Evaluation</th>
+								<th>Utilisateur</th>
+                                <th>Score</th>
 								<th>actions</th>
 						</tfoot>
 					</table>
