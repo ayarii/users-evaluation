@@ -103,7 +103,7 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user, AffectationBadgeRepository $affbadrepo): Response
     {
-        $badges = $affbadrepo->findBadgesByUserId($user->getId());
+        $badges = $affbadrepo->findBadgesByUser($user->getId());
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'badges' => $badges

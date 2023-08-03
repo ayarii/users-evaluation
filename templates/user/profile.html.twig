@@ -57,6 +57,10 @@
 							<a class="float-right">{{app.user.iddepartement.libelle}}</a>
 						</li>
 						<li class="list-group-item">
+							<b>Groupe</b>
+							<a class="float-right">{{app.user.idGroupe.libelle}}</a>
+						</li>
+						<li class="list-group-item">
 							<b>Email</b>
 							<a class="float-right">{{app.user.email}}</a>
 						</li>
@@ -86,7 +90,7 @@
 						Education</strong>
 					<p class="text-muted">
 						B.S. in Computer Science from the University of Tennessee
-																														                      at Knoxville
+																																				                      at Knoxville
 					</p>
 					<hr/>
 					<strong>
@@ -110,7 +114,7 @@
 						Notes</strong>
 					<p class="text-muted">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-																														                      Etiam fermentum enim neque.
+																																				                      Etiam fermentum enim neque.
 					</p>
 				</div>
 			</div>
@@ -124,15 +128,14 @@
 
 					<div class="card-body">
 						{% for badge in badges %}
-						
-
-								<img src="{{ asset('Photos/badges/' ~ badge.image) }}" width="80" height="80" class="img-circle elevation-2" alt="badgeImage">
-								<span class="badge badge-light position-absolute bottom-0 start-100 translate-middle rounded-pill">
-									x
-									{{ badge.badgeCount }}</span>
 
 
-							
+							<img src="{{ asset('Photos/badges/' ~ badge.image) }}" width="80" height="80" class="img-circle elevation-2" alt="badgeImage">
+							<span class="badge badge-light position-absolute bottom-0 start-100 translate-middle rounded-pill">
+								x
+								{{ badge.badgeCount }}</span>
+
+
 						{% endfor %}
 					</div>
 				</div>
@@ -175,11 +178,11 @@
 										</h3>
 										<div class="timeline-body">
 											Etsy doostang zoodles disqus groupon greplin
-																																																							                                oooj voxy zoodles, weebly ning heekya handango
-																																																							                                imeem plugg dopplr jibjab, movity jajah plickers
-																																																							                                sifteo edmodo ifttt zimbra. Babblely odeo
-																																																							                                kaboodle quora plaxo ideeli hulu weebly
-																																																							                                balihoo...
+																																																																		                                oooj voxy zoodles, weebly ning heekya handango
+																																																																		                                imeem plugg dopplr jibjab, movity jajah plickers
+																																																																		                                sifteo edmodo ifttt zimbra. Babblely odeo
+																																																																		                                kaboodle quora plaxo ideeli hulu weebly
+																																																																		                                balihoo...
 										</div>
 										<div class="timeline-footer">
 											<a href="#" class="btn btn-primary btn-sm">Read more</a>
@@ -197,7 +200,7 @@
 										<h3 class="timeline-header border-0">
 											<a href="#">Sarah Young</a>
 											accepted your friend
-																																																							                                request
+																																																																		                                request
 										</h3>
 									</div>
 								</div>
@@ -214,8 +217,8 @@
 										</h3>
 										<div class="timeline-body">
 											Take me to your leader! Switzerland is small and
-																																																							                                neutral! We are more like Germany, ambitious and
-																																																							                                misunderstood!
+																																																																		                                neutral! We are more like Germany, ambitious and
+																																																																		                                misunderstood!
 										</div>
 										<div class="timeline-footer">
 											<a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
