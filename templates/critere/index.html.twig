@@ -47,8 +47,8 @@
 								<th>Libelle</th>
 								
 								<th>Pondération</th>
-								<th>Created At</th>
-                                <th>Updated At</th>
+								<th>Status</th>
+                               
 								<th>actions</th>
 							</tr>
 						</thead>
@@ -59,11 +59,43 @@
 									<td>{{ critere.libelle }}</td>
 									
 									<td>{{ critere.ponderation }}</td>
-									<td>{{ critere.createdAt ? critere.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-									<td>{{ critere.updatedAt ? critere.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+									   {% if critere.enabled == true %}
+                    <td>
+												<span class="badge badge-success">Activé
+													<i class="fas fa-check text-white"></i>
+												</span>
+                    </td>
+                {% else %}
+                    <td>
+												<span class="badge badge-danger">Désactivé
+													<i class="fas fa-ban text-white"></i>
+												</span>
+                    </td>
+                {% endif %}
 									<td>
 										<a href="{{ path('app_critere_show', {'id': critere.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-									{% if app.user == evaluation.idUser %}	<a href="{{ path('app_critere_edit', {'id': critere.id}) }}"><i class="fas fa-edit text-warning"></i></a> {% endif %}
+									{% if app.user == evaluation.idUser %}	<a href="{{ path('app_critere_edit', {'id': critere.id}) }}"><i class="fas fa-edit text-warning"></i></a> 
+									
+									
+									 {% if critere.enabled == false %}
+
+                        <a href="{{ path('app_critere_activer', {'id': critere.id}) }}">
+                            <i class="fas fa-unlock  text-success"></i>
+                        </a>
+                        {% else %}
+
+                        <a href="{{ path('app_critere_delete', {'id': critere.id}) }}">
+                            <i class="fas fa-ban text-danger"></i>
+                            {% endif %} </a>
+									
+									
+									
+									
+									{% endif %}
+									
+									
+									
+									
 									</td>
 								</tr>
 							{% else %}
@@ -76,8 +108,8 @@
 						<th>Libelle</th>
 								
 								<th>Pondération</th>
-								<th>Created At</th>
-                                <th>Updated At</th>
+								<th>Status</th>
+                                
 								<th>actions</th>
 						</tfoot>
 					</table>
