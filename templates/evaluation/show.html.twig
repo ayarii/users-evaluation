@@ -73,16 +73,28 @@
                 <td>{{ evaluation.description |raw }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Date de création</th>
                 <td>{{ evaluation.createdAt ? evaluation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Date de dernière mise à jour</th>
                 <td>{{ evaluation.updatedAt ? evaluation.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Enabled</th>
-                <td>{{ evaluation.enabled ? 'Yes' : 'No' }}</td>
+                <th>Status</th>
+                {% if evaluation.enabled == true %}
+                    <td>
+						<span class="badge badge-success">Activé
+							<i class="fas fa-check text-white"></i>
+						</span>
+                    </td>
+                {% else %}
+                    <td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-lock text-white"></i>
+						</span>
+                    </td>
+                {% endif %}
             </tr>
              <tr>
                 <th>Critères</th>

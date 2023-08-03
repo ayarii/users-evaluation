@@ -22,15 +22,15 @@
                 <td>{{ critere.description|raw }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Date de création</th>
                 <td>{{ critere.createdAt ? critere.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Date de dernière mise à jour</th>
                 <td>{{ critere.updatedAt ? critere.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Enabled</th>
+                <th>Status</th>
                 {% if critere.enabled == true %}
                     <td>
 						<span class="badge badge-success">Activé
