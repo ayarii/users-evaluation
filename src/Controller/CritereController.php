@@ -10,6 +10,7 @@ use App\Repository\CritereRepository;
 
 use App\Repository\EvaluationRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,8 +27,7 @@ class CritereController extends AbstractController
             'criteres' => $critereRepository
             ->createQueryBuilder('u')
 
-            ->where('u.enabled = :bool')
-            ->setParameter('bool', 1)
+           
             ->andWhere('u.idEvaluation = :id')
             ->setParameter('id', $id)
             ->getQuery()
@@ -110,15 +110,30 @@ class CritereController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_critere_delete', methods: ['POST'])]
-    public function delete(Request $request, Critere $critere, CritereRepository $critereRepository): Response
-    {  $entityManager = $this->getDoctrine()->getManager();
-        if ($this->isCsrfTokenValid('delete'.$critere->getId(), $request->request->get('_token'))) {
-            $critere->setEnabled(0);
-            $entityManager->persist($critere);
-            $entityManager->flush();
+  
+        #[Route('/delete/{id}', name: 'app_critere_delete', methods: ['POST','GET'])]
+        public function delete(Request $request, Critere $cr, EntityManagerInterface $entityManager): Response
+        {
+            $cr->setEnabled(0);
+                $entityManager->persist($cr);
+               
+                $entityManager->flush();
+            
+    
+                return $this->redirectToRoute("app_critere_index",['id'=>$cr->getIdEvaluation()->getId()]);
+    
         }
-        return $this->redirectToRoute('app_critere_index', ['id'=>$critere->getIdEvaluation()->getId()], Response::HTTP_SEE_OTHER);
+        #[Route('/activer/{id}', name: 'app_critere_activer', methods: ['POST','GET'])]
+        public function activer(Request $request, Critere $cr, EntityManagerInterface $entityManager): Response
+        {
+           
+                $cr->setEnabled(1);
+                $entityManager->persist($cr);
+                $entityManager->flush();
+            
+    
+                return $this->redirectToRoute("app_critere_index",['id'=>$cr->getIdEvaluation()->getId()]);
+    
         }
 
 }

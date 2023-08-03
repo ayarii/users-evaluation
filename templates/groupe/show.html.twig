@@ -15,12 +15,56 @@
                 <th>Libelle</th>
                 <td>{{ groupe.libelle }}</td>
             </tr>
+                <tr>
+                <th>Date de création</th>
+                <td>{{ groupe.createdAt ? groupe.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date de dernière mise à jour</th>
+                <td>{{ groupe.updatedAt ? groupe.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            
+               
+             <tr>
+                <th>Status</th>
+                {% if groupe.enabled == true %}
+                    <td>
+						<span class="badge badge-success">Activé
+							<i class="fas fa-check text-white"></i>
+						</span>
+                    </td>
+                {% else %}
+                    <td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-lock text-white"></i>
+						</span>
+                    </td>
+                {% endif %}
+            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_groupe_index') }}">back to list</a>
-
-    <a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}">edit</a>
-
-    {{ include('groupe/_delete_form.html.twig') }}
+    <div class="row">
+        <div class="col-md-2">
+            <a href="{{ path('app_groupe_index') }}" class="btn btn-success">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Retour à la liste
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Modifier
+            </a>
+        </div>
+        <div class="col-md-2">
+            {% if session.enabled == true %}
+                <a href="{{ path('app_groupe_delete', {'id': groupe.id}) }}" class="btn btn-danger">
+                    <i class="fas fa-lock text-white" style="padding-right: 3px"></i>Désactiver
+                </a>
+            {% else %}
+                <a href="{{ path('app_groupe_activer', {'id': groupe.id}) }}" class="btn btn-success">
+                    <i class="fas fa-check text-white" style="padding-right: 3px"></i>Activer
+                </a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

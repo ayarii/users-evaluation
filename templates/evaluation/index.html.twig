@@ -39,7 +39,7 @@
 						
 					
 					<div class="d-flex justify-content-end" style="padding-top: 15px;padding-right: 25px;" >
-					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_evaluation_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Create new</a>
+					<a class="btn btn-primary d-inline-flex align-items-center" href="{{ path('app_evaluation_new') }}"> <i class="fas fa-plus" style="padding-right:3px"></i>Ajouter une évaluation</a>
 				</div>
 				{% endif %}
 				<div class="card-body">
@@ -49,8 +49,8 @@
 								
 								<th>Libelle</th>
 								
-								<th>CreatedAt</th>
-								<th>UpdatedAt</th>
+								<th>Status</th>
+								
 								<th>actions</th>
 							</tr>
 						</thead>
@@ -59,13 +59,40 @@
 								<tr>
 									
 									<td>{{ ev.libelle }}</td>
+									   {% if ev.enabled == true %}
+                    <td>
+												<span class="badge badge-success">Activé
+													<i class="fas fa-check text-white"></i>
+												</span>
+                    </td>
+                {% else %}
+                    <td>
+												<span class="badge badge-danger">Désactivé
+													<i class="fas fa-ban text-white"></i>
+												</span>
+                    </td>
+                {% endif %}
 									
 									
-									<td>{{ ev.createdAt ? ev.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-									<td>{{ ev.updatedAt ? ev.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 									<td>
-										<a href="{{ path('app_evaluation_show', {'id': ev.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
-									{% if ev.idUser == app.user %}	<a href="{{ path('app_evaluation_edit', {'id': ev.id}) }}"><i class="fas fa-edit text-warning"></i></a> {% endif %}
+										<a href="{{ path('app_evaluation_showEv', {'id': ev.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
+									{% if ev.idUser == app.user %}	
+									<a href="{{ path('app_evaluation_edit', {'id': ev.id}) }}"><i class="fas fa-edit text-warning"></i></a> 
+									
+									
+									     {% if ev.enabled == false %}
+
+                                             <a href="{{ path('app_evaluation_activer', {'id': ev.id}) }}">
+                                                  <i class="fas fa-unlock  text-success"></i>
+                                                    </a>
+                                         {% else %}
+
+                                              <a href="{{ path('app_evaluation_delete', {'id': ev.id}) }}">
+                                                   <i class="fas fa-ban text-danger"></i>
+                                      {% endif %} </a>
+									
+									
+									{% endif %}
 									</td>
 								</tr>
 							{% else %}
@@ -77,8 +104,7 @@
 						<tfoot>
 							<th>Libelle</th>
 							
-								<th>CreatedAt</th>
-								<th>UpdatedAt</th>
+								<th>Status</th>
 								<th>actions</th>
 						</tfoot>
 					</table>

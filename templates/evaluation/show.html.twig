@@ -24,17 +24,41 @@
 }
 </style>
     <h1>Evaluation</h1>
-{% if app.user.roles[0]=="ROLE_GESTIONNAIRE"%}
-    <a href="{{ path('app_evaluation_index') }}">back to list</a>
+    <div class="row">
+    {% if app.user.roles[0]=="ROLE_GESTIONNAIRE"%}
+        <div class="col-md-2">
+            <a href="{{ path('app_evaluation_index') }}" class="btn btn-success">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Retour à la liste
+            </a>
+        </div>
+        {% elseif app.user.roles[0]=="ROLE_ADMIN"%}
+         <div class="col-md-2">
+            <a href="{{ path('app_evaluation_admin') }}" class="btn btn-success">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Retour à la liste
+            </a>
+        </div>
 
-{% elseif app.user.roles[0]=="ROLE_ADMIN"%}
-    <a href="{{ path('app_evaluation_admin') }}">back to list</a>
 {% endif %}
 {% if evaluation.idUser ==  app.user %}
-    <a href="{{ path('app_evaluation_edit', {'id': evaluation.id}) }}">edit</a>
+        <div class="col-md-2">
+            <a href="{{ path('app_evaluation_edit', {'id': evaluation.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit" style="padding-right: 3px"></i>Modifier
+            </a>
+        </div>
+        <div class="col-md-2">
+            {% if evaluation.enabled == true %}
+                <a href="{{ path('app_evaluation_delete', {'id': evaluation.id}) }}" class="btn btn-danger">
+                    <i class="fas fa-lock text-white" style="padding-right: 3px"></i>Désactiver
+                </a>
+            {% else %}
+                <a href="{{ path('app_evaluation_activer', {'id': evaluation.id}) }}" class="btn btn-success">
+                    <i class="fas fa-check text-white" style="padding-right: 3px"></i>Activer
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
 
-    {{ include('evaluation/_delete_form.html.twig') }}
-{% endif %}
     <table class="table">
         <tbody>
 
@@ -49,16 +73,28 @@
                 <td>{{ evaluation.description |raw }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Date de création</th>
                 <td>{{ evaluation.createdAt ? evaluation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Date de dernière mise à jour</th>
                 <td>{{ evaluation.updatedAt ? evaluation.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Enabled</th>
-                <td>{{ evaluation.enabled ? 'Yes' : 'No' }}</td>
+                <th>Status</th>
+                {% if evaluation.enabled == true %}
+                    <td>
+						<span class="badge badge-success">Activé
+							<i class="fas fa-check text-white"></i>
+						</span>
+                    </td>
+                {% else %}
+                    <td>
+						<span class="badge badge-danger">Désactivé
+							<i class="fas fa-lock text-white"></i>
+						</span>
+                    </td>
+                {% endif %}
             </tr>
              <tr>
                 <th>Critères</th>

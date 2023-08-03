@@ -36,8 +36,7 @@ class EvaluationController extends AbstractController
             'evaluations' => $evaluationRepository
             ->createQueryBuilder('u')
 
-            ->where('u.enabled = :bool')
-            ->setParameter('bool', 1)
+            
             ->andWhere('u.idUser = :id')
             ->setParameter('id', $this->getUser())
             ->getQuery()
@@ -144,7 +143,7 @@ class EvaluationController extends AbstractController
             
         ]);
     }
-    #[Route('/{id}', name: 'app_evaluation_show', methods: ['GET'])]
+    #[Route('/show/details/{id}', name: 'app_evaluation_showEv', methods: ['GET'])]
     public function show($id,EntityManagerInterface $entityManager,EvaluationRepository $evRepo,CritereRepository $critereRepository,UserRepository $userRepository): Response
     {
          $repo= $entityManager->getRepository(Affectationnotes::class);
@@ -426,7 +425,7 @@ class EvaluationController extends AbstractController
 
         return $response;
     }
-    #[Route('/{id}/edit', name: 'app_evaluation_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit/modif', name: 'app_evaluation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Evaluation $evaluation, EvaluationRepository $evaluationRepository): Response
     {
         $form = $this->createForm(EvaluationType::class, $evaluation);
@@ -445,15 +444,29 @@ class EvaluationController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_evaluation_delete', methods: ['POST'])]
-    public function delete(Request $request, Evaluation $evaluation, EvaluationRepository $evaluationRepository): Response
-    {  $entityManager = $this->getDoctrine()->getManager();
-        if ($this->isCsrfTokenValid('delete'.$evaluation->getId(), $request->request->get('_token'))) {
-            $evaluation->setEnabled(0);
-            $entityManager->persist($evaluation);
+  
+    #[Route('/{id}', name: 'app_evaluation_delete', methods: ['POST','GET'])]
+    public function delete(Request $request, Evaluation $ev, EntityManagerInterface $entityManager): Response
+    {
+        $ev->setEnabled(0);
+            $entityManager->persist($ev);
+           
             $entityManager->flush();
-        }
+        
 
-        return $this->redirectToRoute('app_evaluation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute("app_evaluation_index");
+
+    }
+    #[Route('/activer/act/{id}', name: 'app_evaluation_activer', methods: ['POST','GET'])]
+    public function activer(Request $request, Evaluation $ev, EntityManagerInterface $entityManager): Response
+    {
+       
+            $ev->setEnabled(1);
+            $entityManager->persist($ev);
+            $entityManager->flush();
+        
+
+            return $this->redirectToRoute("app_evaluation_index");
+
     }
 }
