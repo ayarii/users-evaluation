@@ -60,25 +60,36 @@
 				</div>
 			</div>
 
-			
+
 		</div>
 
 		<div class="row" style="padding-top:20px">
 			<div class="col-sm-6 col-xl-6 mb-4">
-      <div class="card border-0 shadow" >
-		<div class="card-header d-sm-flex flex-row align-items-center flex-0">
-			<div class="d-block mb-3 mb-sm-0">
-				<div class="fs-5 fw-normal mb-2">Nombre des badges par session</div>
+				<div class="card border-0 shadow">
+					<div class="card-header d-sm-flex flex-row align-items-center flex-0">
+						<div class="d-block mb-3 mb-sm-0">
+							<div class="fs-5 fw-normal mb-2">Nombre des badges par session</div>
+							<select class="form-select" id="session">
+								<option value="">Choisir une session</option>
+								{% for sess in sessions %}
+									<option value="{{sess.libelle}}">
+										{{sess.libelle}}</option>
+								{% endfor %}
+
+							</select>
+						</div>
+
+					</div>
+					<div class="card-body p-2">
+						<canvas id="badgeChart" width="200" height="200"></canvas>
+						<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+     
+ 
+					</div>
+				</div>
+
 			</div>
-			
-		</div>
-		<div class="card-body p-2">
-			<canvas id="badgeChart"  width="200" height="200"></canvas>
-			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		</div>
-	</div>
-      
-      </div>
 
 			<div class="col-12 col-sm-6 col-xl-6 mb-4">
 				<div class="card border-0 shadow">
@@ -108,104 +119,36 @@ backgroundColor: usersData.colors
 });
 
 
-			var badgeData = {{ badgesData|json_encode|raw }};
-      console.log(badgeData);
-var badgeChart = new Chart(document.getElementById('badgeChart'), {
-type: 'line',
-data: {
+        var ctx3 = document.getElementById('badgeChart').getContext('2d');
+       
+        var badgeChart = null
 
-datasets: [
-{
-label: 'Nombre des badges',
-data: badgeData,
-fill: false,
-borderColor: 'rgb(75, 192, 192)',
-tension: 0.1
-}
-]
-},
-options: {
-scales: {
-y: {
-beginAtZero: true
-}
-}
-}
-});
+        function updatebadgeChart() {
+            const selectedValue1 = document.getElementById('session').value;
 
-						</script>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
- <div class="card border-0 shadow">
- 	<div class="card-header d-sm-flex flex-row align-items-center flex-0">
-			<div class="d-block mb-3 mb-sm-0">
-				<div class="fs-5 fw-normal mb-2">Nombre des utilisateurs classés par critère</div>
-			</div>
-			
-		</div>
-
-            <div style="margin-left:200px;">
-             <select class="form-select" id="parentDropdown">
-    <option value="">Choisir une session</option>
-    {% for sess in sessions %}
-          <option value="{{sess.id}}"> {{sess.libelle}}</option>
-    {% endfor %}
-   
-</select>
-
-    <select class="form-select" id="childDropdownDep">
-        <option value="">Choisir un département</option>
-    </select>
-       <select class="form-select" id="childDropdownEv">
-        <option value="">Choisir une évaluation</option>
-    </select>
-    <select class="form-select" id="childDropdownCr">
-        <option value="">Choisir un critère</option>
-    </select>
-    </div>
-<div style="width:400px;height:400px;margin-left:300px; ">
-    <canvas id="myPieChart" width="100" height="100"></canvas>
-
-</div>
-</div>
-
-{% endblock %}
-{% block scripts %}
-
-   
-
-    const parentDropdown = document.getElementById('parentDropdown');
-    const childDropdownDep = document.getElementById('childDropdownDep');
-    const ctx = document.getElementById('myPieChart').getContext('2d');
-
-    let myPieChart;
- function updateChart() {
-            const selectedValue = childDropdownCr.value;
-
-            fetch(`/evaluation/getCrStat/?parentId=${selectedValue}`)
+            fetch(`/affectation/badge/usersPerBadges/${selectedValue1}`)
                 .then(response => response.json())
                 .then(data => {
-                    const chartData = {
-                        labels: ['>Moyenne', '< Moyenne'],
+                    var badgeData = {
+                        labels: [],
                         datasets: [{
-                            data: [data.nbF[0].nbA, data.nbA[0].nbA],
-                            backgroundColor: ['#4da6ff','#cc0044'],
+                            label: 'Nombre des badges',
+                            data: [],
                         }]
                     };
-
-                  
-                    if (myPieChart) {
-                        myPieChart.destroy();
-                    }
-
                    
-                    myPieChart = new Chart(ctx, {
-                        type: 'pie',
-                        data: chartData,
+                    data.forEach((e)=>{
+                        badgeData.labels.push(e.badge_libelle);
+                        badgeData.datasets[0].data.push(e.count_users);
+                    })
+                    console.log(badgeData);
+
+                    if (badgeChart != null) {
+                        badgeChart.destroy();
+                    }
+                    badgeChart = new Chart(ctx3, {
+                        type: 'line',
+                        data: badgeData,
                         options: {
                             responsive: true,
                             legend: {
@@ -219,76 +162,171 @@ beginAtZero: true
                     console.error('Error fetching data or updating the chart:', error);
                 });
         }
-    parentDropdown.addEventListener('change', function() {
-        const selectedValue = this.value;
 
-      
-        fetch(`/evaluation/getDep/?parentId=${selectedValue}`)
-            .then(response => response.json())
-            .then(data => {
-              
-               
-                let optionsHTML = '<option value="">Choisir un département</option>';
-                for (const key in data) {
-                  
-                    if (data.hasOwnProperty(key)) {
-                        optionsHTML += `<option value="${data[key].id}">${data[key].libelle}</option>`;
-                    }
-                }
-                childDropdownDep.innerHTML = optionsHTML;
-            })
-            .catch(error => {
-                console.error('Error fetching child dropdown options:', error);
-            });
-    });
+        // Add an event listener to call the updatebadgeChart function when the session value changes
+        document.getElementById('session').addEventListener('change', updatebadgeChart);
 
-  childDropdownDep.addEventListener('change', function() {
-        const selectedValue = this.value;
+        // Call the function once on page load to initialize the chart
+        updatebadgeChart();
 
-      
-        fetch(`/evaluation/getEv/?parentId=${selectedValue}`)
-            .then(response => response.json())
-            .then(data => {
-              
-               
-                let optionsHTML = '<option value="">Choisir une évaluation</option>';
-                for (const key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        optionsHTML += `<option value="${data[key].id}">${data[key].libelle}</option>`;
-                    }
-                }
-                childDropdownEv.innerHTML = optionsHTML;
-            })
-            .catch(error => {
-                console.error('Error fetching child dropdown options:', error);
-            });
-    });
-  childDropdownEv.addEventListener('change', function() {
-        const selectedValue = this.value;
 
-      
-        fetch(`/evaluation/getCr/?parentId=${selectedValue}`)
-            .then(response => response.json())
-            .then(data => {
-              
-               
-                let optionsHTML = '<option value="">Choisir un critère</option>';
-                for (const key in data) {
-                  
-                    if (data.hasOwnProperty(key)) {
-                        optionsHTML += `<option value="${data[key].id}">${data[key].libelle}</option>`;
-                    }
-                }
-                childDropdownCr.innerHTML = optionsHTML;
-            })
-            .catch(error => {
-                console.error('Error fetching child dropdown options:', error);
-            });
-    });
-    childDropdownCr.addEventListener('change', function () {
-            
-            updateChart();
-        });
-    
+						</script>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card border-0 shadow">
+		<div class="card-header d-sm-flex flex-row align-items-center flex-0">
+			<div class="d-block mb-3 mb-sm-0">
+				<div class="fs-5 fw-normal mb-2">Nombre des utilisateurs classés par critère</div>
+			</div>
+
+		</div>
+
+		<div style="margin-left:200px;">
+			<select class="form-select" id="parentDropdown">
+				<option value="">Choisir une session</option>
+				{% for sess in sessions %}
+					<option value="{{sess.id}}">
+						{{sess.libelle}}</option>
+				{% endfor %}
+
+			</select>
+
+			<select class="form-select" id="childDropdownDep">
+				<option value="">Choisir un département</option>
+			</select>
+			<select class="form-select" id="childDropdownEv">
+				<option value="">Choisir une évaluation</option>
+			</select>
+			<select class="form-select" id="childDropdownCr">
+				<option value="">Choisir un critère</option>
+			</select>
+		</div>
+		<div style="width:400px;height:400px;margin-left:300px; ">
+			<canvas id="myPieChart" width="100" height="100"></canvas>
+
+		</div>
+	</div>
+
+{% endblock %}
+{% block scripts %}
+
+
+	const parentDropdown = document.getElementById('parentDropdown');
+	    const childDropdownDep = document.getElementById('childDropdownDep');
+	    const ctx = document.getElementById('myPieChart').getContext('2d');
+	
+	    let myPieChart;
+	 function updateChart() {
+	            const selectedValue = childDropdownCr.value;
+	
+	            fetch(`/evaluation/getCrStat/?parentId=${selectedValue}`)
+	                .then(response => response.json())
+	                .then(data => {
+	                    const chartData = {
+	                        labels: ['>Moyenne', '< Moyenne'],
+	                        datasets: [{
+	                            data: [data.nbF[0].nbA, data.nbA[0].nbA],
+	                            backgroundColor: ['#4da6ff','#cc0044'],
+	                        }]
+	                    };
+	
+	                  
+	                    if (myPieChart) {
+	                        myPieChart.destroy();
+	                    }
+	
+	                   
+	                    myPieChart = new Chart(ctx, {
+	                        type: 'pie',
+	                        data: chartData,
+	                        options: {
+	                            responsive: true,
+	                            legend: {
+	                                display: true,
+	                                position: 'bottom',
+	                            },
+	                        }
+	                    });
+	                })
+	                .catch(error => {
+	                    console.error('Error fetching data or updating the chart:', error);
+	                });
+	        }
+	    parentDropdown.addEventListener('change', function() {
+	        const selectedValue = this.value;
+	
+	      
+	        fetch(`/evaluation/getDep/?parentId=${selectedValue}`)
+	            .then(response => response.json())
+	            .then(data => {
+	              
+	               
+	                let optionsHTML = '<option value="">Choisir un département</option>';
+		                for (const key in data) {
+		                  
+		                    if (data.hasOwnProperty(key)) {
+		                        optionsHTML += `<option value="${data[key].id}">${data[key].libelle}</option>`;
+		                    }
+		                }
+		                childDropdownDep.innerHTML = optionsHTML;
+		            })
+		            .catch(error => {
+		                console.error('Error fetching child dropdown options:', error);
+		            });
+		    });
+		
+		  childDropdownDep.addEventListener('change', function() {
+		        const selectedValue = this.value;
+		
+		      
+		        fetch(`/evaluation/getEv/?parentId=${selectedValue}`)
+		            .then(response => response.json())
+		            .then(data => {
+		              
+		               
+		                let optionsHTML = '<option value="">Choisir une évaluation</option>';
+		                for (const key in data) {
+		                    if (data.hasOwnProperty(key)) {
+		                        optionsHTML += `<option value="${data[key].id}">${data[key].libelle}</option>`;
+		                    }
+		                }
+		                childDropdownEv.innerHTML = optionsHTML;
+		            })
+		            .catch(error => {
+		                console.error('Error fetching child dropdown options:', error);
+		            });
+		    });
+		  childDropdownEv.addEventListener('change', function() {
+		        const selectedValue = this.value;
+		
+		      
+		        fetch(`/evaluation/getCr/?parentId=${selectedValue}`)
+		            .then(response => response.json())
+		            .then(data => {
+		              
+		               
+		                let optionsHTML = '<option value="">Choisir un critère</option>';
+		                for (const key in data) {
+		                  
+		                    if (data.hasOwnProperty(key)) {
+		                        optionsHTML += `<option value="${data[key].id}">${data[key].libelle}</option>`;
+		                    }
+		                }
+		                childDropdownCr.innerHTML = optionsHTML;
+		            })
+		            .catch(error => {
+		                console.error('Error fetching child dropdown options:', error);
+		            });
+		    });
+		    childDropdownCr.addEventListener('change', function () {
+		            
+		            updateChart();
+		        });
+
+
 
 {% endblock %}

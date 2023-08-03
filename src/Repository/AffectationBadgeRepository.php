@@ -77,7 +77,7 @@ public function findBadgesByUserId($userId)
     public function findUsersByBadgeId($badgeId)
     {
         return $this->createQueryBuilder('a')
-            ->select('u.id', 'u.nom','u.prenom' ,'u.image')
+            ->select('DISTINCT u.id', 'u.nom','u.prenom' ,'u.image')
             ->leftJoin('a.iduser', 'u')
             ->andWhere('a.idbadge = :idbadge')
             ->setParameter('idbadge', $badgeId)
