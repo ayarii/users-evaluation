@@ -15,6 +15,18 @@
                 <th>Libelle</th>
                 <td>{{ groupe.libelle }}</td>
             </tr>
+                <tr>
+                <th>CreatedAt</th>
+                <td>{{ groupe.createdAt ? groupe.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ groupe.updatedAt ? groupe.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Enabled</th>
+                <td>{{ groupe.enabled ? 'Yes' : 'No' }}</td>
+            </tr>
         </tbody>
     </table>
 

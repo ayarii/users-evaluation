@@ -47,7 +47,7 @@
 								
 								<th>Libelle</th>
 								
-								
+								<th>Status</th>
 								<th>actions</th>
 							</tr>
 						</thead>
@@ -57,11 +57,34 @@
 									
 									<td>{{ groupe.libelle }}</td>
 									
-									
+									  {% if groupe.enabled == true %}
+                    <td>
+												<span class="badge badge-success">Activé
+													<i class="fas fa-check text-white"></i>
+												</span>
+                    </td>
+                {% else %}
+                    <td>
+												<span class="badge badge-danger">Désactivé
+													<i class="fas fa-ban text-white"></i>
+												</span>
+                    </td>
+                {% endif %}
 								
 									<td>
 										<a href="{{ path('app_groupe_show', {'id': groupe.id}) }}"><i class="fas fa-info-circle text-info"></i></a>
 										<a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}"><i class="fas fa-edit text-warning"></i></a> 
+									   {% if groupe.enabled == false %}
+
+                        <a href="{{ path('app_groupe_activer', {'id': groupe.id}) }}">
+                            <i class="fas fa-unlock  text-success"></i>
+                        </a>
+                        {% else %}
+
+                        <a href="{{ path('app_groupe_delete', {'id': groupe.id}) }}">
+                            <i class="fas fa-ban text-danger"></i>
+                            {% endif %} </a>
+									
 									</td>
 								</tr>
 							{% else %}
@@ -72,7 +95,7 @@
 						</tbody>
 						<tfoot>
 							<th>Libelle</th>
-							
+							<th>Status</th>
 								
 								<th>actions</th>
 						</tfoot>

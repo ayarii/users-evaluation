@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Groupe;
 use App\Form\GroupeType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,9 @@ class GroupeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $groupe->setCreatedAt(new DateTime());
+            $groupe->setUpdatedAt(new DateTime());
+            $groupe->setEnabled(1);
             $entityManager->persist($groupe);
             $entityManager->flush();
 
@@ -60,6 +64,7 @@ class GroupeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $groupe->setUpdatedAt(new DateTime());
             $entityManager->flush();
 
             return $this->redirectToRoute('app_groupe_index', [], Response::HTTP_SEE_OTHER);
@@ -71,14 +76,28 @@ class GroupeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_groupe_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_groupe_delete', methods: ['POST','GET'])]
     public function delete(Request $request, Groupe $groupe, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$groupe->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($groupe);
+        $groupe->setEnabled(0);
+            $entityManager->persist($groupe);
+           
             $entityManager->flush();
-        }
+        
 
-        return $this->redirectToRoute('app_groupe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute("app_groupe_index");
+
+    }
+    #[Route('/activer/{id}', name: 'app_groupe_activer', methods: ['POST','GET'])]
+    public function activer(Request $request, Groupe $groupe, EntityManagerInterface $entityManager): Response
+    {
+       
+            $groupe->setEnabled(1);
+            $entityManager->persist($groupe);
+            $entityManager->flush();
+        
+
+            return $this->redirectToRoute("app_groupe_index");
+
     }
 }
