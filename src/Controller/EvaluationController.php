@@ -454,6 +454,10 @@ class EvaluationController extends AbstractController
             $entityManager->flush();
         
 
+            if($this->getUser()->getRoles()[0] == "ROLE_ADMIN"){
+                return $this->redirectToRoute("app_evaluation_admin");
+            }
+
             return $this->redirectToRoute("app_evaluation_index");
 
     }
@@ -464,7 +468,10 @@ class EvaluationController extends AbstractController
             $ev->setEnabled(1);
             $entityManager->persist($ev);
             $entityManager->flush();
-        
+
+            if($this->getUser()->getRoles()[0] == "ROLE_ADMIN"){
+                return $this->redirectToRoute("app_evaluation_admin");
+            }
 
             return $this->redirectToRoute("app_evaluation_index");
 
