@@ -60,6 +60,10 @@
 				<th>Departement</th>
 				<td>{{ user.idDepartement.libelle }}</td>
 			</tr>
+				<tr>
+				<th>Groupe</th>
+				<td>{{ user.idGroupe.libelle }}</td>
+			</tr>
 			<tr>
 				<th>Statut</th>
 				{% if user.enabled == true %}
@@ -115,6 +119,7 @@
 				<i class="fas fa-edit" style="padding-right:3px"></i>Modifier</a>
 		</div>
 		<div class="col-md-2">
+		{% if "ROLE_ADMIN" not in user.roles %}
 			{% if user.enabled == true %}
 				<a href="{{ path('app_user_desactivate', {'id': user.id}) }}" class="btn btn-danger">
 					<i class="fas fa-user-lock text-white" style="padding-right:3px"></i>Désactiver</a>
@@ -123,6 +128,7 @@
 				<a href="{{ path('app_user_activate', {'id': user.id}) }}" class="btn btn-success">
 					<i class="fas fa-user-check text-white" style="padding-right:3px"></i>Activer</a>
 			{% endif %}
+		{% endif %}
 		</div>
 	</div>
 	<br><br>
@@ -138,7 +144,9 @@
 				<div class="cardt">
 
 					<img src="{{ asset('Photos/badges/' ~ badge.image) }}" class="img-circle elevation-2" alt="badgeImage" style="width:100%">
-
+	<span class="badge badge-secondary position-absolute bottom-0 start-100 translate-middle rounded-pill">
+								x
+								{{ badge.badgeCount }}</span>
 				</div>
 			{% endfor %}
 

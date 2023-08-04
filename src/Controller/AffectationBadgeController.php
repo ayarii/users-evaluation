@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/affectation/badge')]
 class AffectationBadgeController extends AbstractController
@@ -22,36 +23,36 @@ class AffectationBadgeController extends AbstractController
     #[Route('/', name: 'app_affectation_badge_index', methods: ['GET'])]
     public function index(AffectationBadgeRepository $affectationBadgeRepository): Response
     {
-$affectationBadges = $affectationBadgeRepository->findAll();
-$groupedBadges = [];
-$badgeCounts = []; 
+        $affectationBadges = $affectationBadgeRepository->findAll();
+        $groupedBadges = [];
+        $badgeCounts = [];
 
-foreach ($affectationBadges as $affectationBadge) {
-    $userId = $affectationBadge->getIduser()->getId();
-    $badgeId = $affectationBadge->getIdbadge()->getId(); 
+        foreach ($affectationBadges as $affectationBadge) {
+            $userId = $affectationBadge->getIduser()->getId();
+            $badgeId = $affectationBadge->getIdbadge()->getId();
 
-    if (!isset($groupedBadges[$userId])) {
-        $groupedBadges[$userId] = [
-            'user' => $affectationBadge->getIduser(),
-            'badges' => [],
-        ];
-        $badgeCounts[$userId] = []; 
-    }
+            if (!isset($groupedBadges[$userId])) {
+                $groupedBadges[$userId] = [
+                    'user' => $affectationBadge->getIduser(),
+                    'badges' => [],
+                ];
+                $badgeCounts[$userId] = [];
+            }
 
-   
-    if (!isset($badgeCounts[$userId][$badgeId])) {
-        $badgeCounts[$userId][$badgeId] = 1; 
-    } else {
-        $badgeCounts[$userId][$badgeId]++; 
-    }
 
-    $groupedBadges[$userId]['badges'][] = $affectationBadge;
-}
+            if (!isset($badgeCounts[$userId][$badgeId])) {
+                $badgeCounts[$userId][$badgeId] = 1;
+            } else {
+                $badgeCounts[$userId][$badgeId]++;
+            }
+
+            $groupedBadges[$userId]['badges'][] = $affectationBadge;
+        }
 
 
         return $this->render('affectation_badge/index.html.twig', [
-           // 'affectation_badges' => $affectationBadgeRepository->findAll(),
-           'groupedBadges' => $groupedBadges,
+            // 'affectation_badges' => $affectationBadgeRepository->findAll(),
+            'groupedBadges' => $groupedBadges,
             'badgeCounts' => $badgeCounts,
         ]);
     }
@@ -76,7 +77,7 @@ foreach ($affectationBadges as $affectationBadge) {
         ]);
     }
 
- /*   #[Route('/{id}', name: 'app_affectation_badge_show', methods: ['GET'])]
+    /*   #[Route('/{id}', name: 'app_affectation_badge_show', methods: ['GET'])]
     public function show(AffectationBadge $affectationBadge): Response
     {
         return $this->render('affectation_badge/show.html.twig', [
@@ -85,15 +86,15 @@ foreach ($affectationBadges as $affectationBadge) {
     }
 */
 
-/**
+    /**
      * 
      * @IsGranted("ROLE_ADMIN")
      */
     #[Route('/{iduser}', name: 'app_affectation_badge_show', methods: ['GET'])]
-    public function showbadges(AffectationBadge $affectationBadge,AffectationBadgeRepository $affectationBadgeRepository,$iduser): Response
+    public function showbadges(AffectationBadge $affectationBadge, AffectationBadgeRepository $affectationBadgeRepository, $iduser): Response
     {
         $badges = $affectationBadgeRepository->getBadgesUser($iduser);
-      //  dd($badges);
+        //  dd($badges);
 
         return $this->render('affectation_badge/show.html.twig', [
             //'affectation_badge' => $affectationBadge,
@@ -122,11 +123,35 @@ foreach ($affectationBadges as $affectationBadge) {
     #[Route('/{id}', name: 'app_affectation_badge_delete', methods: ['POST'])]
     public function delete(Request $request, AffectationBadge $affectationBadge, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$affectationBadge->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $affectationBadge->getId(), $request->request->get('_token'))) {
             $entityManager->remove($affectationBadge);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_affectation_badge_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * 
+     * @IsGranted("ROLE_ADMIN")
+     */
+    #[Route('/usersPerBadges/{libelle}', name: 'app_affectation_badge_stat', methods: ['GET'])]
+    public function getchartUsersPerBadges($libelle, AffectationBadgeRepository $repouser, Request $request)
+    {
+
+        $badgesData = $repouser->CountByBadgeForSession($libelle);
+
+        $chartData = [];
+        $totalBadges = 0;
+        foreach ($badgesData as $data) {
+            $totalBadges += $data['count_users'];
+        }
+       
+
+        foreach ($badgesData as $data) {
+            $chartData[$data['badge_libelle']] = $data['count_users'];
+        }
+
+        return new JsonResponse($badgesData);
     }
 }

@@ -7,6 +7,7 @@ use App\Entity\AffectationBadge;
 use App\Repository\AffectationBadgeRepository;
 use App\Repository\BadgeRepository;
 use App\Repository\DepartementRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
@@ -14,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/dashboard")
@@ -47,8 +48,7 @@ class DashboardController extends AbstractController
         $usersData = [];
         $usersData = $this->getchartUsersPerDepatments($repouser);
 
-        $badgesData =[];
-        $badgesData = $this->getchartUsersPerBadges($repoaff);
+     
 
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
@@ -57,7 +57,7 @@ class DashboardController extends AbstractController
 
             'nsessions' => $nsessions,
             'usersData' => $usersData,
-            'badgesData' => $badgesData,
+            
             'sessions'=>$sessions
 
 
@@ -88,26 +88,7 @@ class DashboardController extends AbstractController
         return $chartData;
     }
 
-
-    public function getchartUsersPerBadges(AffectationBadgeRepository $repouser)
-    {
-        $badgesData = $repouser->CountByBadgeForSession('session2023');
-
-        $chartData = [];
-        $totalBadges = 0;
-        foreach ($badgesData as $data) {
-            $totalBadges += $data['count_users'];
-        }
-        
-
-        foreach ($badgesData as $data) {
-            $chartData[$data['badge_libelle']] = $data['count_users'];
-           
-        }
-
-        return $chartData;
-    }
-
+   
 
 
     private function getRandomColor()
