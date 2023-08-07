@@ -280,25 +280,52 @@ class EvaluationController extends AbstractController
        ->setParameter('id',$parentId)
        ->join(Critere::class,'cr')
        ->andWhere('aff.critere = cr.id')
-       ->andWhere('(cr.ponderation / 2 ) > aff.note')
+       ->andWhere('(cr.ponderation / 4 ) >= aff.note')
       
             ->getQuery()
             ->getResult();
-            $nbF = $repo
+           // dd($nbA);
+            $nbB = $repo
             ->createQueryBuilder('aff')
             ->select('Count(aff.user) AS nbA')
            ->where('aff.critere = :id')
            ->setParameter('id',$parentId)
            ->join(Critere::class,'cr')
            ->andWhere('aff.critere = cr.id')
-           ->andWhere('(cr.ponderation / 2 ) <= aff.note')
+           ->andWhere('(cr.ponderation / 4 ) < aff.note and (cr.ponderation / 2 ) >= aff.note')
           
                 ->getQuery()
                 ->getResult();
-           
+
+                $nbC = $repo
+                ->createQueryBuilder('aff')
+                ->select('Count(aff.user) AS nbA')
+               ->where('aff.critere = :id')
+               ->setParameter('id',$parentId)
+               ->join(Critere::class,'cr')
+               ->andWhere('aff.critere = cr.id')
+               ->andWhere('(cr.ponderation / 2 ) < aff.note and ((cr.ponderation * 3) / 4 ) >= aff.note')
+              
+                    ->getQuery()
+                    ->getResult();
+                    $nbD = $repo
+                    ->createQueryBuilder('aff')
+                    ->select('Count(aff.user) AS nbA')
+                   ->where('aff.critere = :id')
+                   ->setParameter('id',$parentId)
+                   ->join(Critere::class,'cr')
+                   ->andWhere('aff.critere = cr.id')
+                   ->andWhere('((cr.ponderation * 3) / 4 ) < aff.note ')
+                  
+                        ->getQuery()
+                        ->getResult();
+                 //   $sum=$nbA[0]['nbA']+$nbB[0]['nbA']+$nbC[0]['nbA']+$nbD[0]['nbA'];
+                  //  dd($sum);
                 $response = [
-                    'nbA' => $nbA,
-                    'nbF' => $nbF
+                    'nbA' => $nbA ,
+                    'nbB' => $nbB,
+                    'nbC' => $nbC,
+                    'nbD' => $nbD,
                 ];
                 return new JsonResponse($response);
      

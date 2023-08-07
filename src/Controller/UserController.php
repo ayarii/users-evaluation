@@ -11,6 +11,7 @@ use App\Repository\UserRepository;
 use App\Service\DefaultImageGenerator as ServiceDefaultImageGenerator;
 use App\Service\SendMailService;
 use AppBundle\Service\DefaultImageGenerator;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -254,9 +255,10 @@ class UserController extends AbstractController
         $formpass = $this->createForm(EditPasswordType::class, $user);
 
         $formpass->handleRequest($requestpass);
-
+       
         if ($form->isSubmitted() && $form->isValid()) {
-
+           
+            
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 $imageData = $form->get('nom')->getData() . '-' . $form->get('prenom')->getData() . $form->get('id')->getData() . '.' . $imageFile->guessExtension();
@@ -268,6 +270,7 @@ class UserController extends AbstractController
                 $user->setImage($imageData);
             }
             $userRepository->save($user, true);
+
             $this->addFlash('success', 'Votre profil à été mise à jour avec succés!');
             return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         } elseif ($formpass->isSubmitted() && $formpass->isValid()) {

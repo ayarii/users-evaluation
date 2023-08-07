@@ -57,6 +57,8 @@ class EditProfileType extends AbstractType
                     'placeholder' => 'choisir une image (JPG, PNG)',
                 ]
             ])
+          
+            
         ;
     }
 

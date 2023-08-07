@@ -226,11 +226,13 @@ backgroundColor: usersData.colors
 	            fetch(`/evaluation/getCrStat/?parentId=${selectedValue}`)
 	                .then(response => response.json())
 	                .then(data => {
+					
+
 	                    const chartData = {
-	                        labels: ['>Moyenne', '< Moyenne'],
+	                        labels: ['Mauvais', 'Moyen' , 'Bien' , 'Très Bien'],
 	                        datasets: [{
-	                            data: [data.nbF[0].nbA, data.nbA[0].nbA],
-	                            backgroundColor: ['#4da6ff','#cc0044'],
+	                            data: [data.nbA[0].nbA , data.nbB[0].nbA, data.nbC[0].nbA , data.nbD[0].nbA ],
+	                            backgroundColor: ['#4da6ff','#cc0044', '#cc33ff' , '#00cc99'],
 	                        }]
 	                    };
 	
