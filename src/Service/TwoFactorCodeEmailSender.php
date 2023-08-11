@@ -19,7 +19,7 @@ class TwoFactorCodeEmailSender
     {
        
         $email = (new Email())
-            ->from('usersevaluatio@example.com')
+            ->from('usersevaluation@gmail.com')
             ->to($recipientEmail)
             ->subject('Two-Factor Authentication Code')
             ->html("email/two_factor_authentication.html.twig");
